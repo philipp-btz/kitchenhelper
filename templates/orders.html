@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bestellungen</title>
+    <style>body{font-family:system-ui,Arial;margin:20px} table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:8px}</style>
+  </head>
+  <body>
+    <h1>Aktuelle Bestellungen</h1>
+    <a href="/">Neue Bestellung</a>
+    <table>
+      <thead>
+        <tr><th>Bestell-Nr.</th><th>Zeit</th><th>Gerichte</th><th>Notiz</th><th>Gedruckt</th><th>Aktion</th></tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td>{{ o.order_number }}</td>
+          <td>{{ o.created_at }}</td>
+          <td>
+            {% for it in o['items'] %}
+              <div>
+                {% if it['qty'] and it['qty'] > 1 %}{{ it['qty'] }}x {% endif %}{{ it['name'] }}{% if it['extras'] %} ({{ it['extras'] | join(', ') }}){% endif %}
+              </div>
+            {% endfor %}
+          </td>
+          <td>{{ o.notes }}</td>
+          <td>{{ '✅' if o['printed'] else '' }}</td>
+          <td>
+            <form method="post" action="/toggle_printed/{{ o.id }}" style="display:inline">
+              <button type="submit">Toggle Gedruckt</button>
+            </form>
+            <a href="/order/print/{{ o.order_number }}" target="_blank">Drucken</a>
+            <a href="/order/export/{{ o.order_number }}">Export</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">Keine Bestellungen</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

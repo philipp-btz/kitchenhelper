@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, Response
 import json
 import os
 import datetime
 import uuid
 import sqlite3
+from typing import Any, Dict, List, Optional
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
 
-def load_config():
+def load_config() -> Dict[str, Any]:
     defaults = {
         'host': '0.0.0.0',
         'port': 5099,
@@ -36,12 +37,12 @@ DB_PATH = config['db_path']
 app = Flask(__name__)
 
 
-def load_menu():
+def load_menu() -> List[Dict[str, Any]]:
     with open(MENU_PATH, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
-def init_db():
+def init_db() -> None:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute('''
@@ -56,67 +57,13 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
-    # attempt migration from legacy schema if needed
-    migrate_legacy()
+    # no legacy migration required; assume `items` JSON column is used
 
 
-def migrate_legacy():
-    """Detect legacy columns (`item`, `extras`) and migrate rows to `items` JSON column.
-
-    This will add an `items` column if missing and populate it for rows that still
-    use the old `item`/`extras` fields. It is idempotent.
-    """
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    cur.execute("PRAGMA table_info(orders)")
-    cols = [row[1] for row in cur.fetchall()]
-    has_items = 'items' in cols
-    has_item = 'item' in cols
-    has_extras = 'extras' in cols
-
-    if not has_items:
-        # add new column to hold JSON array of items
-        cur.execute("ALTER TABLE orders ADD COLUMN items TEXT")
-        conn.commit()
-        has_items = True
-
-    # If legacy single-item columns exist, migrate their values into `items` JSON
-    if has_item or has_extras:
-        cur.execute('SELECT order_number, item, extras FROM orders')
-        rows = cur.fetchall()
-        for order_number, item_name, extras_text in rows:
-            # skip if items already present
-            cur2 = conn.cursor()
-            cur2.execute('SELECT items FROM orders WHERE order_number = ?', (order_number,))
-            existing = cur2.fetchone()
-            if existing and existing[0]:
-                continue
-
-            if not item_name:
-                continue
-
-            # parse extras (may be JSON or plain string)
-            extras = []
-            if extras_text:
-                try:
-                    extras = json.loads(extras_text)
-                    if not isinstance(extras, list):
-                        extras = [extras]
-                except Exception:
-                    extras = [extras_text]
-
-            # attach printer info from menu if available
-            menu = load_menu()
-            menu_map = {m['name']: m for m in menu}
-            printer = menu_map.get(item_name, {}).get('printer') if menu_map else None
-            items_json = json.dumps([{'name': item_name, 'extras': extras, 'qty': 1, 'printer': printer}], ensure_ascii=False)
-            cur.execute('UPDATE orders SET items = ? WHERE order_number = ?', (items_json, order_number))
-        conn.commit()
-
-    conn.close()
 
 
-def save_order(order):
+
+def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     # ensure items carry `printer` metadata before saving
@@ -132,16 +79,16 @@ def save_order(order):
     return order
 
 
-def enrich_items(items):
+def enrich_items(items: Optional[List[Any]]) -> List[Dict[str, Any]]:
     """Ensure each item dict contains a `printer` attribute taken from the menu when possible."""
     if not items:
-        return items
+        return []
     try:
         menu = load_menu()
         menu_map = {m['name']: m for m in menu}
     except Exception:
         menu_map = {}
-    out = []
+    out: List[Dict[str, Any]] = []
     for it in items:
         if isinstance(it, dict):
             name = it.get('name')
@@ -156,7 +103,7 @@ def enrich_items(items):
     return out
 
 
-def update_order(order_number, items=None, notes=None, printed=None):
+def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None, printed: Optional[bool] = None) -> Optional[Dict[str, Any]]:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     fields = []
@@ -183,7 +130,7 @@ def update_order(order_number, items=None, notes=None, printed=None):
     return get_order_by_number(order_number)
 
 
-def get_orders():
+def get_orders() -> List[Dict[str, Any]]:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -192,31 +139,19 @@ def get_orders():
     conn.close()
     out = []
     for r in rows:
-        # Support legacy schema: rows may have 'items' (new) or 'item'+'extras' (old)
-        keys = r.keys()
-        if 'items' in keys:
-            items = json.loads(r['items']) if r['items'] else []
-        else:
-            # fallback to single-item representation
-            item_name = r['item'] if 'item' in keys else None
-            extras = json.loads(r['extras']) if 'extras' in keys and r['extras'] else []
-            if item_name:
-                items = [{'name': item_name, 'extras': extras, 'qty': 1}]
-            else:
-                items = []
-
+        items = json.loads(r['items']) if r['items'] else []
         out.append({
             'order_number': r['order_number'],
             'id': r['id'],
             'items': items,
-            'notes': r['notes'] if 'notes' in keys else '',
+            'notes': r['notes'],
             'created_at': r['created_at'],
             'printed': bool(r['printed'])
         })
     return out
 
 
-def get_order_by_number(order_number):
+def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -225,35 +160,25 @@ def get_order_by_number(order_number):
     conn.close()
     if not r:
         return None
-    keys = r.keys()
-    if 'items' in keys:
-        items = json.loads(r['items']) if r['items'] else []
-    else:
-        item_name = r['item'] if 'item' in keys else None
-        extras = json.loads(r['extras']) if 'extras' in keys and r['extras'] else []
-        if item_name:
-            items = [{'name': item_name, 'extras': extras, 'qty': 1}]
-        else:
-            items = []
-
+    items = json.loads(r['items']) if r['items'] else []
     return {
         'order_number': r['order_number'],
         'id': r['id'],
         'items': items,
-        'notes': r['notes'] if 'notes' in keys else '',
+        'notes': r['notes'],
         'created_at': r['created_at'],
         'printed': bool(r['printed'])
     }
 
 
 @app.route('/')
-def index():
+def index() -> Any:
     menu = load_menu()
     return render_template('index.html', menu=menu)
 
 
 @app.route('/order', methods=['POST'])
-def order():
+def order() -> Any:
     # Expect a JSON string in form field 'items' describing an array of ordered dishes
     data = request.form
     items_json = data.get('items')
@@ -288,7 +213,7 @@ def order():
 
 
 @app.route('/order/start', methods=['POST', 'GET'])
-def order_start():
+def order_start() -> Dict[str, Any]:
     # create a draft order and return its order_number and id
     draft = {
         'id': str(uuid.uuid4()),
@@ -308,7 +233,7 @@ def orders_view():
 
 
 @app.route('/toggle_printed/<order_id>', methods=['POST'])
-def toggle_printed(order_id):
+def toggle_printed(order_id: str) -> Any:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     # flip printed state
@@ -323,7 +248,7 @@ def toggle_printed(order_id):
 
 
 @app.route('/order/print/<int:order_number>')
-def order_print(order_number):
+def order_print(order_number: int) -> Any:
     order = get_order_by_number(order_number)
     if not order:
         return "Bestellung nicht gefunden", 404
@@ -331,7 +256,7 @@ def order_print(order_number):
 
 
 @app.route('/order/export/<int:order_number>')
-def order_export(order_number):
+def order_export(order_number: int) -> Response:
     order = get_order_by_number(order_number)
     if not order:
         return "Bestellung nicht gefunden", 404

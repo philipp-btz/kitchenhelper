@@ -1,0 +1,8 @@
+{
+  "host": "0.0.0.0",
+  "port": 5099,
+  "debug": true,
+  "menu_path": "menu.json",
+  "db_path": "orders.db",
+  "auto_print_on_open": true
+}

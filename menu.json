@@ -80,5 +80,10 @@
     "name": "Crepes",
     "extras": ["nutella", "zimt und Zucker", "Kinderriegel", "Herzhaft mit Schinken"],
     "printer": "side_kitchen"
+  },
+  {
+    "name": "Tiramisu",
+    "extras": ["nutella", "zimt und Zucker", "Kinderriegel", "Herzhaft mit Schinken"],
+    "printer": "side_kitchen"
   }
 ]

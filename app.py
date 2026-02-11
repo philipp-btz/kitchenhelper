@@ -4,9 +4,9 @@ import os
 import datetime
 import uuid
 import sqlite3
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
+CONFIG_PATH: str = os.path.join(os.path.dirname(__file__), 'config.json')
 
 def load_config() -> Dict[str, Any]:
     defaults = {
@@ -24,15 +24,15 @@ def load_config() -> Dict[str, Any]:
                 defaults.update(cfg)
         except Exception:
             pass
-    # normalize paths
-    defaults['menu_path'] = os.path.join(os.path.dirname(__file__), defaults['menu_path'])
-    defaults['db_path'] = os.path.join(os.path.dirname(__file__), defaults['db_path'])
+    # normalize paths (ensure values are strings before joining)
+    defaults['menu_path'] = os.path.join(os.path.dirname(__file__), str(defaults['menu_path']))
+    defaults['db_path'] = os.path.join(os.path.dirname(__file__), str(defaults['db_path']))
     return defaults
 
-config = load_config()
+config: Dict[str, Any] = load_config()
 
-MENU_PATH = config['menu_path']
-DB_PATH = config['db_path']
+MENU_PATH: str = str(config['menu_path'])
+DB_PATH: str = str(config['db_path'])
 
 app = Flask(__name__)
 
@@ -85,19 +85,20 @@ def enrich_items(items: Optional[List[Any]]) -> List[Dict[str, Any]]:
         return []
     try:
         menu = load_menu()
-        menu_map = {m['name']: m for m in menu}
+        menu_map: Dict[str, Dict[str, Any]] = {m['name']: m for m in menu}
     except Exception:
         menu_map = {}
     out: List[Dict[str, Any]] = []
-    for it in items:
-        if isinstance(it, dict):
+    for raw in items:
+        if isinstance(raw, dict):
+            it: Dict[str, Any] = cast(Dict[str, Any], raw)
             name = it.get('name')
             if name and name in menu_map:
                 it.setdefault('printer', menu_map[name].get('printer'))
             out.append(it)
         else:
             # fallback: convert to dict
-            name = str(it)
+            name = str(raw)
             printer = menu_map.get(name, {}).get('printer') if menu_map else None
             out.append({'name': name, 'extras': [], 'qty': 1, 'printer': printer})
     return out
@@ -106,8 +107,8 @@ def enrich_items(items: Optional[List[Any]]) -> List[Dict[str, Any]]:
 def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None, printed: Optional[bool] = None) -> Optional[Dict[str, Any]]:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
-    fields = []
-    params = []
+    fields: List[str] = []
+    params: List[Any] = []
     if items is not None:
         # enrich items with printer info before storing
         items = enrich_items(items)
@@ -137,9 +138,9 @@ def get_orders() -> List[Dict[str, Any]]:
     cur.execute('SELECT * FROM orders ORDER BY order_number DESC')
     rows = cur.fetchall()
     conn.close()
-    out = []
+    out: List[Dict[str, Any]] = []
     for r in rows:
-        items = json.loads(r['items']) if r['items'] else []
+        items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
         out.append({
             'order_number': r['order_number'],
             'id': r['id'],
@@ -160,7 +161,7 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
     conn.close()
     if not r:
         return None
-    items = json.loads(r['items']) if r['items'] else []
+    items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
     return {
         'order_number': r['order_number'],
         'id': r['id'],
@@ -184,7 +185,7 @@ def order() -> Any:
     items_json = data.get('items')
     notes = data.get('notes', '')
     try:
-        items = json.loads(items_json) if items_json else []
+        items = cast(List[Dict[str, Any]], json.loads(items_json)) if items_json else []
     except Exception:
         items = []
     # if order_number provided, update existing draft
@@ -198,7 +199,7 @@ def order() -> Any:
         updated = update_order(order_number, items=items, notes=notes, printed=False)
         saved = updated or {'order_number': order_number}
     else:
-        order = {
+        order: Dict[str, Any] = {
             'id': str(uuid.uuid4()),
             'items': items,
             'notes': notes,
@@ -213,9 +214,9 @@ def order() -> Any:
 
 
 @app.route('/order/start', methods=['POST', 'GET'])
-def order_start() -> Dict[str, Any]:
+def order_start() -> Any:
     # create a draft order and return its order_number and id
-    draft = {
+    draft: Dict[str, Any] = {
         'id': str(uuid.uuid4()),
         'items': [],
         'notes': '',
@@ -227,7 +228,7 @@ def order_start() -> Dict[str, Any]:
 
 
 @app.route('/orders')
-def orders_view():
+def orders_view() -> Any:
     orders = get_orders()
     return render_template('orders.html', orders=orders)
 

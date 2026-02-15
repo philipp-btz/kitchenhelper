@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, Response
 import json
 import os
 import datetime
+import time
 import uuid
 import sqlite3
 from typing import Any, Dict, List, Optional, cast
@@ -37,6 +38,8 @@ DB_PATH: str = str(config['db_path'])
 app = Flask(__name__)
 
 
+
+
 def load_menu() -> List[Dict[str, Any]]:
     with open(MENU_PATH, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -49,15 +52,16 @@ def init_db() -> None:
     CREATE TABLE IF NOT EXISTS orders (
         order_number INTEGER PRIMARY KEY AUTOINCREMENT,
         id TEXT UNIQUE,
+        customer_id TEXT,
         items TEXT,
         notes TEXT,
         created_at TEXT,
+        fulfilled TEXT DEFAULT '--',
         printed INTEGER DEFAULT 0
     )
     ''')
     conn.commit()
     conn.close()
-    # no legacy migration required; assume `items` JSON column is used
 
 
 
@@ -67,10 +71,10 @@ def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     # ensure items carry `printer` metadata before saving
-    items = enrich_items(order.get('items', []))
+    items = order.get('items', [])
     cur.execute(
-        'INSERT INTO orders (id, items, notes, created_at, printed) VALUES (?, ?, ?, ?, ?)',
-        (order['id'], json.dumps(items, ensure_ascii=False), order.get('notes', ''), order['created_at'], int(order['printed']))
+        'INSERT INTO orders (id, customer_id, items, notes, created_at, printed) VALUES (?, ?, ?, ?, ?, ?)',
+        (order['id'], order.get('customer_id'), json.dumps(items, ensure_ascii=False), order.get('notes', ''), order['created_at'], int(order['printed']))
     )
     conn.commit()
     order_number = cur.lastrowid
@@ -141,13 +145,18 @@ def get_orders() -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for r in rows:
         items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
+        # format fulfilled timestamp if present (stored as "YYYY_mm_dd-HH_MM_SS"), otherwise empty
+        fulfilled_raw = r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'
+        print("RAW FULFILLED VALUE:", fulfilled_raw)
+
         out.append({
             'order_number': r['order_number'],
             'id': r['id'],
             'items': items,
             'notes': r['notes'],
             'created_at': r['created_at'],
-            'printed': bool(r['printed'])
+            'printed': bool(r['printed']),
+            'fulfilled': fulfilled_raw,
         })
     return out
 
@@ -168,7 +177,14 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
         'items': items,
         'notes': r['notes'],
         'created_at': r['created_at'],
-        'printed': bool(r['printed'])
+        'printed': bool(r['printed']),
+        'fulfilled': (lambda raw: (
+            (lambda s: s if s else '')(  # ensure empty string instead of None
+                (lambda: (
+                    (lambda f: f.strftime("%Y-%m-%d %H:%M:%S"))(datetime.datetime.strptime(raw, "%Y_%m_%d-%H_%M_%S"))
+                )()) if raw and raw != 'no' else ''
+            )
+        ))(r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no')
     }
 
 
@@ -185,7 +201,7 @@ def order() -> Any:
     items_json = data.get('items')
     notes = data.get('notes', '')
     try:
-        items = cast(List[Dict[str, Any]], json.loads(items_json)) if items_json else []
+        items = enrich_items(cast(List[Dict[str, Any]], json.loads(items_json)) if items_json else [])
     except Exception:
         items = []
     # if order_number provided, update existing draft
@@ -196,20 +212,32 @@ def order() -> Any:
         except Exception:
             order_number = None
     if order_number:
+        print("ORDER NUMBER PROVIDED, UPDATING EXISTING ORDER", order_number)
         updated = update_order(order_number, items=items, notes=notes, printed=False)
         saved = updated or {'order_number': order_number}
     else:
-        order: Dict[str, Any] = {
-            'id': str(uuid.uuid4()),
-            'items': items,
-            'notes': notes,
-            'created_at': datetime.datetime.now().isoformat(),
-            'printed': False,
-        }
-        saved = save_order(order)
+        print("NO ORDER NUMBER, CREATING NEW ORDER")
+        order_numbers: str = ""
+        customer_id = str(uuid.uuid4())
+
+        # group items by printer and create separate order for each printer
+        for printer in set(it.get('printer') for it in items if it.get('printer')):
+            items_for_printer = [it for it in items if it.get('printer') == printer]
+            order: Dict[str, Any] = {
+                'id': str(uuid.uuid4()),
+                'items': items_for_printer,
+                'notes': notes,
+                'created_at': time.strftime("%Y_%m_%d-%H:%M:%S"),
+                'printed': False,
+                'customer_id': customer_id,
+            }
+            order_numbers = order_numbers + " + " + str(save_order(order).get('order_number'))
+
+
+    print("SAVED ORDER NUMBERS:", order_numbers)
     # if this is an AJAX request, return JSON so the client can stay on the menu page
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
-        return {'status': 'ok', 'order_number': saved.get('order_number')}
+        return {'status': 'ok', 'order_number': order_numbers.lstrip(' + ')}
     return redirect(url_for('orders_view'))
 
 
@@ -220,7 +248,7 @@ def order_start() -> Any:
         'id': str(uuid.uuid4()),
         'items': [],
         'notes': '',
-        'created_at': datetime.datetime.now().isoformat(),
+        'created_at': time.strftime("%Y_%m_%d-%H:%M:%S"),
         'printed': False,
     }
     saved = save_order(draft)
@@ -233,16 +261,16 @@ def orders_view() -> Any:
     return render_template('orders.html', orders=orders)
 
 
-@app.route('/toggle_printed/<order_id>', methods=['POST'])
-def toggle_printed(order_id: str) -> Any:
+@app.route('/fulfilled/<order_id>', methods=['POST'])
+def fulfilled(order_id: str) -> Any:
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     # flip printed state
-    cur.execute('SELECT printed FROM orders WHERE id = ?', (order_id,))
+    cur.execute('SELECT fulfilled FROM orders WHERE id = ?', (order_id,))
     row = cur.fetchone()
     if row:
-        new = 0 if row[0] else 1
-        cur.execute('UPDATE orders SET printed = ? WHERE id = ?', (new, order_id))
+        new = time.strftime("%Y_%m_%d-%H:%M:%S") if row[0] == '--' else '--'
+        cur.execute('UPDATE orders SET fulfilled = ? WHERE id = ?', (new, order_id))
         conn.commit()
     conn.close()
     return redirect(url_for('orders_view'))

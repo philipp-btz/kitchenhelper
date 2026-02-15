@@ -33,3 +33,25 @@ Jede Bestellung enthält Metadaten wie `order_number` (autoincrement), `id` (uui
 
 Für einfache Backups reicht das Kopieren der angegebenen DB-Datei.
 
+**Production / WSGI**
+
+This project includes a WSGI entrypoint at `wsgi.py` exposing the Flask app as the callable `application`.
+
+- Windows (recommended): install `waitress` and run:
+
+```powershell
+pip install -r requirements.txt
+waitress-serve --listen=*:5099 wsgi:application
+```
+
+- Linux / WSL / container: install `gunicorn` and run:
+
+```bash
+pip install -r requirements.txt
+gunicorn --bind 0.0.0.0:5099 wsgi:application
+```
+
+Make sure `config.json` has `debug` set to `false` for production and adjust `port`/`host` as needed.
+
+For containers, prefer running with Gunicorn inside the container or using a process manager + reverse proxy (e.g., Nginx).
+

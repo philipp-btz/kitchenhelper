@@ -11,7 +11,7 @@
     <a href="/">Neue Bestellung</a>
     <table>
       <thead>
-        <tr><th>Bestell-Nr.</th><th>Zeit</th><th>Gerichte</th><th>Notiz</th><th>Gedruckt</th><th>Aktion</th></tr>
+        <tr><th>Bestell-Nr.</th><th>Zeit</th><th>Gerichte</th><th>Notiz</th><th>Erledigt am</th><th>Aktion</th></tr>
       </thead>
       <tbody>
         {% for o in orders %}
@@ -26,10 +26,10 @@
             {% endfor %}
           </td>
           <td>{{ o.notes }}</td>
-          <td>{{ '✅' if o['printed'] else '' }}</td>
+          <td>{{ o.fulfilled or '—' }}</td>
           <td>
-            <form method="post" action="/toggle_printed/{{ o.id }}" style="display:inline">
-              <button type="submit">Toggle Gedruckt</button>
+            <form method="post" action="/fulfilled/{{ o.id }}" style="display:inline">
+              <button type="submit">ERLEDIGT</button>
             </form>
             <a href="/order/print/{{ o.order_number }}" target="_blank">Drucken</a>
             <a href="/order/export/{{ o.order_number }}">Export</a>

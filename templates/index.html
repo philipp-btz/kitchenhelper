@@ -208,7 +208,8 @@
             cart = [];
             notesInput.value = '';
             renderCart();
-            showToast('Bestellung aufgenommen (Nr. ' + (data.order_number||'?') + ')');
+            const orderNumber = (data.order_number !== undefined && data.order_number !== null) ? data.order_number : '?';
+            showToast('Bestellung aufgenommen (Nr. ' + orderNumber + ')');
           } else {
             showToast('Fehler beim Absenden der Bestellung', 'error');
           }

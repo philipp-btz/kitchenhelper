@@ -11,7 +11,7 @@
     <a href="/">Neue Bestellung</a>
     <table>
       <thead>
-        <tr><th>Bestell-Nr.</th><th>Zeit</th><th>Gerichte</th><th>Notiz</th><th>Erledigt am</th><th>Aktion</th></tr>
+        <tr><th>Bestell-Nr.</th><th>Zeit</th><th>Gerichte</th><th>Notiz</th><th>Gekocht</th><th>Abgeholt</th><th>Aktion</th></tr>
       </thead>
       <tbody>
         {% for o in orders %}
@@ -26,19 +26,81 @@
             {% endfor %}
           </td>
           <td>{{ o.notes }}</td>
-          <td>{{ o.fulfilled or '—' }}</td>
+          <td>{{ o.cooked or '' }}</td>
+          <td>{{ o.fulfilled or '' }}</td>
           <td>
-            <form method="post" action="/fulfilled/{{ o.id }}" style="display:inline">
-              <button type="submit">ERLEDIGT</button>
+            <form method="post" action="/cooked/{{ o.id }}" class="cooked-form" style="display:inline">
+              <button type="submit">GEKOCHT</button>
+            </form>
+            <form method="post" action="/fulfilled/{{ o.id }}" class="fulfilled-form" style="display:inline">
+              <button type="submit">ABGEHOLT</button>
             </form>
             <a href="/order/print/{{ o.order_number }}" target="_blank">Drucken</a>
             <a href="/order/export/{{ o.order_number }}">Export</a>
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="6">Keine Bestellungen</td></tr>
+        <tr><td colspan="7">Keine Bestellungen</td></tr>
         {% endfor %}
       </tbody>
     </table>
+    <script>
+      // Intercept fulfilled forms and submit via fetch to avoid page jump
+      document.querySelectorAll('.fulfilled-form').forEach(form => {
+        form.addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          const action = form.getAttribute('action');
+          try {
+            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json'}});
+            if (!resp.ok) {
+              console.error('Failed to toggle fulfilled', resp.status);
+              return;
+            }
+            const data = await resp.json();
+            if (data && data.fulfilled !== undefined) {
+              // find the table row containing this form and update the 'Erledigt am' cell
+              const tr = form.closest('tr');
+              if (tr) {
+                const cols = tr.querySelectorAll('td');
+                // fulfilled column is the 6th (0-based index 5)
+                if (cols && cols.length >= 6) {
+                  cols[5].textContent = data.fulfilled && data.fulfilled !== '--' ? data.fulfilled : '';
+                }
+              }
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      });
+
+      // cooked toggle handler
+      document.querySelectorAll('.cooked-form').forEach(form => {
+        form.addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          const action = form.getAttribute('action');
+          try {
+            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json'}});
+            if (!resp.ok) {
+              console.error('Failed to toggle cooked', resp.status);
+              return;
+            }
+            const data = await resp.json();
+            if (data && data.cooked !== undefined) {
+              const tr = form.closest('tr');
+              if (tr) {
+                const cols = tr.querySelectorAll('td');
+                // cooked column is the 5th (0-based index 4)
+                if (cols && cols.length >= 5) {
+                  cols[4].textContent = data.cooked && data.cooked !== '--' ? data.cooked : '';
+                }
+              }
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -6,6 +6,7 @@ import time
 import uuid
 import sqlite3
 from typing import Any, Dict, List, Optional, cast
+import menu_picker as mp
 
 CONFIG_PATH: str = os.path.join(os.path.dirname(__file__), 'config.json')
 
@@ -14,7 +15,7 @@ def load_config() -> Dict[str, Any]:
         'host': '0.0.0.0',
         'port': 5099,
         'debug': True,
-        'menu_path': 'menu.json',
+        'menu_path': 'backup_menu.json',
         'db_path': 'orders.db',
         'auto_print_on_open': True
     }
@@ -26,6 +27,7 @@ def load_config() -> Dict[str, Any]:
         except Exception:
             pass
     # normalize paths (ensure values are strings before joining)
+    menu_path = mp.list_menu_files()
     defaults['menu_path'] = os.path.join(os.path.dirname(__file__), str(defaults['menu_path']))
     defaults['db_path'] = os.path.join(os.path.dirname(__file__), str(defaults['db_path']))
     return defaults
@@ -34,6 +36,7 @@ config: Dict[str, Any] = load_config()
 
 MENU_PATH: str = str(config['menu_path'])
 DB_PATH: str = str(config['db_path'])
+MENU_NAME: str = "FAILED"
 
 app = Flask(__name__)
 
@@ -191,7 +194,7 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
 @app.route('/')
 def index() -> Any:
     menu = load_menu()
-    return render_template('index.html', menu=menu)
+    return render_template('index.html', menu=menu, menu_name=MENU_NAME)
 
 
 @app.route('/order', methods=['POST'])
@@ -261,6 +264,45 @@ def orders_view() -> Any:
     return render_template('orders.html', orders=orders)
 
 
+@app.route('/menus')
+def menus_view() -> Any:
+    # list available menu files from the `menu_list` folder
+    files = mp.list_menu_files()
+    menus = []
+    base_dir = os.path.join(os.path.dirname(__file__), 'menu_list')
+    for f in files:
+        menus.append({'file': f, 'title': os.path.splitext(f)[0]})
+    # optional confirmation from querystring
+    selected = request.args.get('selected')
+    return render_template('menu_selector.html', menus=menus, selected=selected)
+
+
+@app.route('/menus/select', methods=['POST'])
+def menus_select() -> Any:
+    global MENU_NAME, MENU_PATH
+    selected = request.form.get('menu_file')
+    if not selected:
+        return redirect(url_for('menus_view'))
+    src = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
+    try:
+        # Do NOT modify any files in `menu_list` — set the active menu path to the selected file instead.
+        MENU_PATH = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
+        MENU_NAME = os.path.splitext(selected)[0]
+        # persist the choice into config.json so next run uses the selected menu
+        try:
+            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+                cfg = json.load(f)
+        except Exception:
+            cfg = {}
+        cfg['menu_path'] = os.path.join('menu_list', selected)
+        with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
+            json.dump(cfg, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        return f"Fehler beim Auswählen der Speisekarte: {e}", 500
+    # redirect back to selector with confirmation
+    return redirect(url_for('menus_view', selected=MENU_NAME))
+
+
 @app.route('/fulfilled/<order_id>', methods=['POST'])
 def fulfilled(order_id: str) -> Any:
     conn = sqlite3.connect(DB_PATH)
@@ -298,10 +340,7 @@ def order_export(order_number: int) -> Response:
         qty = it.get('qty', 1)
         name = it.get('name', '')
         extras = it.get('extras', []) or []
-        if qty and qty > 1:
-            lines.append(f"{qty}x {name}")
-        else:
-            lines.append(f"{name}")
+        lines.append(f"{qty}x {name}")
         if extras:
             lines.append('Extras: ' + ', '.join(extras))
     if order['notes']:

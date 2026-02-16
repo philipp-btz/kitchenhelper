@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Speisekarte wählen</title>
+    <style>body{font-family:system-ui,Arial;margin:20px} .menu-list{max-width:720px} .menu-item{display:flex;justify-content:space-between;padding:10px;border:1px solid #ddd;border-radius:6px;margin:8px 0;background:#fff}</style>
+  </head>
+  <body>
+    <h1>Speisekarte wählen</h1>
+    <p>Wähle eine der verfügbaren Speisekarten aus dem Ordner <strong>menu_list</strong>.</p>
+    <div class="menu-list">
+      {% if selected %}
+      <div style="padding:10px;border:1px solid #cfe9c8;background:#eef9ee;border-radius:6px;margin-bottom:12px">Ausgewählte Speisekarte: <strong>{{ selected }}</strong></div>
+      {% endif %}
+      {% for m in menus %}
+      <div class="menu-item">
+        <div>{{ m.title }}</div>
+        <form method="post" action="/menus/select">
+          <input type="hidden" name="menu_file" value="{{ m.file }}" />
+          <button type="submit">Auswählen</button>
+        </form>
+      </div>
+      {% endfor %}
+      {% if not menus %}
+      <p>(keine Menü-Dateien gefunden)</p>
+      {% endif %}
+    </div>
+    <p style="margin-top:18px"><a href="/">Zurück zur Speisekarte</a></p>
+  </body>
+</html>

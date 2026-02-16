@@ -9,6 +9,7 @@
   <body>
     <h1>Speisekarte wählen</h1>
     <p>Wähle eine der verfügbaren Speisekarten aus dem Ordner <strong>menu_list</strong>.</p>
+    
     <div class="menu-list">
       {% if selected %}
       <div style="padding:10px;border:1px solid #cfe9c8;background:#eef9ee;border-radius:6px;margin-bottom:12px">Ausgewählte Speisekarte: <strong>{{ selected }}</strong></div>
@@ -26,6 +27,14 @@
       <p>(keine Menü-Dateien gefunden)</p>
       {% endif %}
     </div>
+    <section style="margin:16px 0;max-width:720px">
+      <h2>Speisekarte hochladen</h2>
+      <form method="post" action="/menus/upload" enctype="multipart/form-data">
+        <input type="file" name="menu_file" accept=".json" required />
+        <button type="submit">Hochladen</button>
+      </form>
+      <p style="font-size:90%">Dateien müssen im <code>.json</code>-Format vorliegen. Bei bestehender Datei wirst du gefragt, ob sie ersetzt werden soll.</p>
+    </section>
     <p style="margin-top:18px"><a href="/">Zurück zur Speisekarte</a></p>
   </body>
 </html>

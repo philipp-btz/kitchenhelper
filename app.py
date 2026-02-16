@@ -5,6 +5,8 @@ import datetime
 import time
 import uuid
 import sqlite3
+import tempfile
+from werkzeug.utils import secure_filename
 from typing import Any, Dict, List, Optional, cast
 import menu_picker as mp
 
@@ -36,7 +38,7 @@ config: Dict[str, Any] = load_config()
 
 MENU_PATH: str = str(config['menu_path'])
 DB_PATH: str = str(config['db_path'])
-MENU_NAME: str = "FAILED"
+MENU_NAME: str = str(os.path.splitext(os.path.basename(MENU_PATH))[0]) if MENU_PATH else "Unbekannt"
 
 app = Flask(__name__)
 
@@ -60,6 +62,7 @@ def init_db() -> None:
         notes TEXT,
         created_at TEXT,
         fulfilled TEXT DEFAULT '--',
+        cooked TEXT DEFAULT '--',
         printed INTEGER DEFAULT 0
     )
     ''')
@@ -77,7 +80,7 @@ def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     items = order.get('items', [])
     cur.execute(
         'INSERT INTO orders (id, customer_id, items, notes, created_at, printed) VALUES (?, ?, ?, ?, ?, ?)',
-        (order['id'], order.get('customer_id'), json.dumps(items, ensure_ascii=False), order.get('notes', ''), order['created_at'], int(order['printed']))
+        (order['id'], order.get('customer_id'), json.dumps(items, ensure_ascii=False), order.get('notes', 'Notes unobtainable'), order['created_at'], int(order['printed']))
     )
     conn.commit()
     order_number = cur.lastrowid
@@ -138,6 +141,21 @@ def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None
     return get_order_by_number(order_number)
 
 
+def format_timestamp(raw: Optional[str]) -> str:
+    """Format a stored timestamp string into a human-readable form.
+
+    Stored format: "YYYY_mm_dd-HH_MM_SS" (e.g. 2026_02_16-14_30_00).
+    Returns empty string for missing/placeholder values.
+    """
+    if not raw or raw == 'no' or raw == '--':
+        return ''
+    try:
+        dt = datetime.datetime.strptime(raw, "%Y_%m_%d-%H_%M_%S")
+        return dt.strftime("%Y-%m-%d %H:%M:%S")
+    except Exception:
+        return ''
+
+
 def get_orders() -> List[Dict[str, Any]]:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -148,9 +166,9 @@ def get_orders() -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for r in rows:
         items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
-        # format fulfilled timestamp if present (stored as "YYYY_mm_dd-HH_MM_SS"), otherwise empty
+        # format fulfilled and cooked timestamps if present (stored as "YYYY_mm_dd-HH_MM_SS"), otherwise marker
         fulfilled_raw = r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'
-        print("RAW FULFILLED VALUE:", fulfilled_raw)
+        cooked_raw = r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no'
 
         out.append({
             'order_number': r['order_number'],
@@ -160,6 +178,7 @@ def get_orders() -> List[Dict[str, Any]]:
             'created_at': r['created_at'],
             'printed': bool(r['printed']),
             'fulfilled': fulfilled_raw,
+            'cooked': cooked_raw,
         })
     return out
 
@@ -174,6 +193,7 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
     if not r:
         return None
     items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
+    print(f"Raw FULFILLED: {r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'}, \nRAW COOKED: {r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no'}")
     return {
         'order_number': r['order_number'],
         'id': r['id'],
@@ -181,13 +201,8 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
         'notes': r['notes'],
         'created_at': r['created_at'],
         'printed': bool(r['printed']),
-        'fulfilled': (lambda raw: (
-            (lambda s: s if s else '')(  # ensure empty string instead of None
-                (lambda: (
-                    (lambda f: f.strftime("%Y-%m-%d %H:%M:%S"))(datetime.datetime.strptime(raw, "%Y_%m_%d-%H_%M_%S"))
-                )()) if raw and raw != 'no' else ''
-            )
-        ))(r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no')
+        'fulfilled': format_timestamp(r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'),
+        'cooked': format_timestamp(r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no')
     }
 
 
@@ -209,6 +224,7 @@ def order() -> Any:
         items = []
     # if order_number provided, update existing draft
     order_number = data.get('order_number')
+    order_numbers: str = ""
     if order_number:
         try:
             order_number = int(order_number)
@@ -219,8 +235,6 @@ def order() -> Any:
         updated = update_order(order_number, items=items, notes=notes, printed=False)
         saved = updated or {'order_number': order_number}
     else:
-        print("NO ORDER NUMBER, CREATING NEW ORDER")
-        order_numbers: str = ""
         customer_id = str(uuid.uuid4())
 
         # group items by printer and create separate order for each printer
@@ -237,7 +251,6 @@ def order() -> Any:
             order_numbers = order_numbers + " + " + str(save_order(order).get('order_number'))
 
 
-    print("SAVED ORDER NUMBERS:", order_numbers)
     # if this is an AJAX request, return JSON so the client can stay on the menu page
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
         return {'status': 'ok', 'order_number': order_numbers.lstrip(' + ')}
@@ -271,7 +284,8 @@ def menus_view() -> Any:
     menus = []
     base_dir = os.path.join(os.path.dirname(__file__), 'menu_list')
     for f in files:
-        menus.append({'file': f, 'title': os.path.splitext(f)[0]})
+        if f.lower().endswith('.json'):
+            menus.append({'file': f, 'title': os.path.splitext(f)[0]})
     # optional confirmation from querystring
     selected = request.args.get('selected')
     return render_template('menu_selector.html', menus=menus, selected=selected)
@@ -303,6 +317,54 @@ def menus_select() -> Any:
     return redirect(url_for('menus_view', selected=MENU_NAME))
 
 
+@app.route('/menus/upload', methods=['POST'])
+def menus_upload() -> Any:
+    # handle JSON file uploads to the menu_list folder
+    # First, support replace/cancel actions from the confirmation page (these posts may not include a file)
+    replace = request.form.get('replace')
+    form_filename = request.form.get('filename')
+    menu_dir = os.path.join(os.path.dirname(__file__), 'menu_list')
+    os.makedirs(menu_dir, exist_ok=True)
+
+    if replace in ('1', '2') and form_filename:
+        filename = secure_filename(form_filename)
+        dest = os.path.join(menu_dir, filename)
+        tmpflag = os.path.join(menu_dir, filename + '.upload')
+        if replace == '1':
+            # user confirmed replace; move temp upload if present
+            if os.path.exists(tmpflag):
+                os.replace(tmpflag, dest)
+            return redirect(url_for('menus_view', selected=os.path.splitext(filename)[0]))
+        else:
+            # user cancelled: remove temporary upload if exists
+            if os.path.exists(tmpflag):
+                os.remove(tmpflag)
+
+            return redirect(url_for('menus_view'))
+
+    # Otherwise expect a file upload
+    if 'menu_file' not in request.files:
+        return redirect(url_for('menus_view'))
+    f = request.files['menu_file']
+    if not f or f.filename == '':
+        return redirect(url_for('menus_view'))
+    filename = secure_filename(f.filename)
+    if not filename.lower().endswith('.json'):
+        return "Nur .json Dateien erlaubt", 400
+
+    dest = os.path.join(menu_dir, filename)
+
+    # If file exists, save uploaded file to a temp and ask for confirmation
+    tmpflag = os.path.join(menu_dir, filename + '.upload')
+    if os.path.exists(dest):
+        f.save(tmpflag)
+        return render_template('menu_upload_confirm.html', filename=filename)
+
+    # otherwise save directly
+    f.save(dest)
+    return redirect(url_for('menus_view', selected=os.path.splitext(filename)[0]))
+
+
 @app.route('/fulfilled/<order_id>', methods=['POST'])
 def fulfilled(order_id: str) -> Any:
     conn = sqlite3.connect(DB_PATH)
@@ -315,6 +377,25 @@ def fulfilled(order_id: str) -> Any:
         cur.execute('UPDATE orders SET fulfilled = ? WHERE id = ?', (new, order_id))
         conn.commit()
     conn.close()
+    # If this is an AJAX request, return JSON so the client can update in place
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
+        return {'status': 'ok', 'fulfilled': (new if row else "--")}
+    return redirect(url_for('orders_view'))
+
+
+@app.route('/cooked/<order_id>', methods=['POST'])
+def cooked(order_id: str) -> Any:
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute('SELECT cooked FROM orders WHERE id = ?', (order_id,))
+    row = cur.fetchone()
+    if row:
+        new = time.strftime("%Y_%m_%d-%H:%M:%S") if row[0] == '--' else '--'
+        cur.execute('UPDATE orders SET cooked = ? WHERE id = ?', (new, order_id))
+        conn.commit()
+    conn.close()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
+        return {'status': 'ok', 'cooked': (new if row else "--")}
     return redirect(url_for('orders_view'))
 
 

@@ -11,16 +11,24 @@
     </style>
   </head>
   <body>
-    <h1>Speisekarte</h1>
+    <h1><a href="/menus" >Speisekarte: {{ menu_name }}</a></h1>
 
     <style>
       /* Layout: menu + cart side-by-side on wide screens, stacked on small screens */
       .layout{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:stretch;min-height:calc(100vh - 120px)}
-      @media (max-width:900px){ .layout{grid-template-columns:1fr;min-height:initial} }
+      /* On wide screens keep aside fixed to the right and avoid overlap by adding right margin to main column */
+      @media (min-width:900px){
+        aside#config-panel{position:fixed;right:20px;top:20px;width:360px;height:calc(100vh - 40px);overflow:auto}
+        /* margin equals aside width + right offset (360 + 20 = 380) to avoid excessive gap */
+        .layout > div:first-child{margin-right:10px}
+      }
+      /* On small screens, restore normal flow */
+      @media (max-width:900px){ .layout{grid-template-columns:1fr;min-height:initial} aside#config-panel{position:static;width:auto;height:auto;margin-right:0} .layout > div:first-child{margin-right:0} }
 
       /* menu tiles: dynamic columns that fill efficiently */
       #menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;grid-auto-flow:dense}
-      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;text-align:center}
+      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;text-align:center;box-sizing:border-box}
+        .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;text-align:center;box-sizing:border-box;position:relative}
       .dish-btn:active{background:#eee}
       /* extras as tile-buttons */
       .extra-btn{display:inline-block;padding:10px 12px;margin:6px 6px 0 0;border-radius:8px;border:1px solid #bbb;background:#e9e9e9;color:#111;font-size:14px}
@@ -34,6 +42,8 @@
       /* toast container adjustment */
       #toast-container{pointer-events:none}
       .toast-message{pointer-events:auto}
+      /* selected tile visuals: inner highlight so overall size doesn't change */
+      .dish-btn.selected-dish{box-shadow:inset 0 0 0 2px #28a745, 0 6px 18px rgba(0,0,0,0.12);transform:translateY(-3px);box-sizing:border-box}
     </style>
 
     <div class="layout">
@@ -63,7 +73,7 @@
         </div>
       </div>
 
-      <div id="cart" style="margin-top:12px">
+      <div id="cart" style="margin-top:auto">
         <h3>Aktueller Bestellkorb</h3>
         <div id="cart-items"></div>
         <div style="margin-top:8px">
@@ -80,11 +90,19 @@
     <div id="toast-container" aria-live="polite" style="position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:9999"></div>
 
     <style>
-      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px}
+      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;box-sizing:border-box}
       .dish-btn:active{background:#eee}
       #sel-extras label{display:block;margin:6px 0}
       #cart-items div{padding:6px;border-bottom:1px solid #eee}
       button{touch-action:manipulation}
+      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;box-sizing:border-box}
+      .dish-btn:active{background:#eee}
+      #sel-extras label{display:block;margin:6px 0}
+      #cart-items div{padding:6px;border-bottom:1px solid #eee}
+      /* keep default button sizing but enable touch action */
+      button{touch-action:manipulation}
+      /* make only the "Zum Bestellkorb hinzufügen" button larger */
+      /* TODO #add-to-cart {padding:12px 6px;font-size:16px;font-weight:600}
     </style>
 
     <script>
@@ -123,7 +141,6 @@
         }
         qtyEl.textContent = '1';
         selectedArea.style.display = 'block';
-        window.scrollTo({top:0,behavior:'smooth'});
       }
 
       menuGrid.addEventListener('click', (ev)=>{
@@ -132,12 +149,16 @@
         const name = btn.dataset.name;
         const extras = JSON.parse(btn.dataset.extras||'[]');
         showSelected(name, extras);
+        // visually mark selection and remove mark from others
+        document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish'));
+        btn.classList.add('selected-dish');
+        setContrastForTiles();
       });
 
       qtyIncr.addEventListener('click', ()=>{ current.qty++; qtyEl.textContent = current.qty; });
       qtyDecr.addEventListener('click', ()=>{ if (current.qty>1) current.qty--; qtyEl.textContent = current.qty; });
 
-      cancelItemBtn.addEventListener('click', ()=>{ selectedArea.style.display='none'; current=null; });
+      cancelItemBtn.addEventListener('click', ()=>{ selectedArea.style.display='none'; current=null; document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish')); setContrastForTiles(); });
 
       function sameExtras(a,b){
         if (!a && !b) return true;
@@ -173,7 +194,7 @@
         const found = cart.find(c => c.name===current.name && sameExtras(c.extras, chosen));
         if (found){ found.qty += current.qty; }
         else { cart.push({name: current.name, extras: chosen, qty: current.qty}); }
-        selectedArea.style.display='none'; current=null; renderCart();
+        selectedArea.style.display='none'; current=null; document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish')); setContrastForTiles(); renderCart();
       });
 
       function showToast(message, type){

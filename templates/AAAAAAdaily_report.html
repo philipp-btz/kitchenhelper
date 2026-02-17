@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tagesreport</title>
+    <style>body{font-family:system-ui,Arial;margin:20px} h1,h2{margin:8px 0} table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px;text-align:left}</style>
+  </head>
+  <body>
+    <h1>Tagesreport für {{ report.date }}</h1>
+    <p>Zusammenfassung der bestellten Gerichte und Extras.</p>
+    <h2>Gerichte</h2>
+    {% if report.items %}
+    <table>
+      <thead><tr><th>Gericht</th><th>Anzahl</th></tr></thead>
+      <tbody>
+        {% for name, count in report.items.items() %}
+        <tr><td>{{ name }}</td><td>{{ count }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>Keine Bestellungen an diesem Tag.</p>
+    {% endif %}
+
+    <h2>Extras</h2>
+    {% if report.extras %}
+    <table>
+      <thead><tr><th>Extra</th><th>Anzahl</th></tr></thead>
+      <tbody>
+        {% for name, count in report.extras.items() %}
+        <tr><td>{{ name }}</td><td>{{ count }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>Keine Extras an diesem Tag.</p>
+    {% endif %}
+
+    <p style="margin-top:18px"><button onclick="window.print()">Drucken</button> <a href="/orders">Zurück</a></p>
+  </body>
+</html>

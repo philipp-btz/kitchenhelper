@@ -5,10 +5,11 @@ import datetime
 import time
 import uuid
 import sqlite3
-import tempfile
 from werkzeug.utils import secure_filename
 from typing import Any, Dict, List, Optional, cast
 import menu_picker as mp
+import printutil
+import threading
 
 CONFIG_PATH: str = os.path.join(os.path.dirname(__file__), 'config.json')
 
@@ -19,7 +20,12 @@ def load_config() -> Dict[str, Any]:
         'debug': True,
         'menu_path': 'backup_menu.json',
         'db_path': 'orders.db',
-        'auto_print_on_open': True
+        'auto_print_on_open': True,
+        "printer_dict": {
+            "customer": "192.168.1.187",
+            "1": "192.168.1.187",
+            "2": "192.168.1.187"
+            }
     }
     if os.path.exists(CONFIG_PATH):
         try:
@@ -39,7 +45,7 @@ config: Dict[str, Any] = load_config()
 MENU_PATH: str = str(config['menu_path'])
 DB_PATH: str = str(config['db_path'])
 MENU_NAME: str = str(os.path.splitext(os.path.basename(MENU_PATH))[0]) if MENU_PATH else "Unbekannt"
-
+printer_dict: Dict[str, str] = config.get("printer_dict", {})
 app = Flask(__name__)
 
 
@@ -86,6 +92,7 @@ def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     order_number = cur.lastrowid
     conn.close()
     order['order_number'] = order_number
+    print(f"Saved order {order_number}: {order}")
     return order
 
 
@@ -199,6 +206,7 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
         'id': r['id'],
         'items': items,
         'notes': r['notes'],
+        "customer_id": r['customer_id'],
         'created_at': r['created_at'],
         'printed': bool(r['printed']),
         'fulfilled': format_timestamp(r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'),
@@ -214,6 +222,7 @@ def index() -> Any:
 
 @app.route('/order', methods=['POST'])
 def order() -> Any:
+    global printer_dict
     # Expect a JSON string in form field 'items' describing an array of ordered dishes
     data = request.form
     items_json = data.get('items')
@@ -233,7 +242,7 @@ def order() -> Any:
     if order_number:
         print("ORDER NUMBER PROVIDED, UPDATING EXISTING ORDER", order_number)
         updated = update_order(order_number, items=items, notes=notes, printed=False)
-        saved = updated or {'order_number': order_number}
+        order_number = updated.get('order_number') if updated else order_number
     else:
         customer_id = str(uuid.uuid4())
 
@@ -248,7 +257,23 @@ def order() -> Any:
                 'printed': False,
                 'customer_id': customer_id,
             }
-            order_numbers = order_numbers + " + " + str(save_order(order).get('order_number'))
+            order = save_order(order)
+            current_order_nr = str(order.get('order_number'))
+            try:
+                #customer_thread = threading.Thread(target=printutil.print_customer, kwargs={'order': order, 'printer_ip': printer_dict.get("customer", "")})
+                #customer_thread.start()
+                pass
+            except Exception as e:
+                print(f"Error printing customer order {current_order_nr}: {e}")
+            
+            try:
+                kitchen_thread = threading.Thread(target=printutil.print_kitchen, kwargs={'order': order, 'printer_ip': printer_dict.get(printer, "")})
+                kitchen_thread.start()
+            except Exception as e:
+                print(f"Error printing kitchen order {current_order_nr}: {e}")
+
+
+            order_numbers = order_numbers + " + " + current_order_nr
 
 
     # if this is an AJAX request, return JSON so the client can stay on the menu page
@@ -399,12 +424,98 @@ def cooked(order_id: str) -> Any:
     return redirect(url_for('orders_view'))
 
 
+@app.route('/api/cooked_unfulfilled')
+def api_cooked_unfulfilled() -> Any:
+    """Return a JSON list of order_numbers that are cooked but not yet fulfilled."""
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("SELECT order_number FROM orders WHERE cooked IS NOT NULL AND cooked != '--' AND (fulfilled IS NULL OR fulfilled = '--') ORDER BY order_number ASC")
+    rows = cur.fetchall()
+    conn.close()
+    nums = [r[0] for r in rows]
+    return {'order_numbers': nums}
+
+
+@app.route('/customer_display')
+def customer_display_view() -> Any:
+    # render the customer-facing page showing cooked-but-not-fulfilled orders
+    return render_template('customer_display.html')
+
+
+def aggregate_day(date_str: Optional[str] = None) -> Dict[str, Any]:
+    """Aggregate item and extra counts for a given day.
+
+    date_str: 'YYYY-MM-DD' (ISO) or None for today.
+    Returns dict with 'date', 'items' (name->count), 'extras' (extra->count).
+    """
+    if date_str:
+        try:
+            dt = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        except Exception:
+            dt = datetime.datetime.now()
+    else:
+        dt = datetime.datetime.now()
+    prefix = dt.strftime("%Y_%m_%d") + '-'
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute("SELECT items FROM orders WHERE created_at LIKE ?", (prefix + '%',))
+    rows = cur.fetchall()
+    conn.close()
+
+    # build nested structure: items -> {count, extras: {extra: count}}
+    items_map: Dict[str, Dict[str, Any]] = {}
+    extras_totals: Dict[str, int] = {}
+    for r in rows:
+        try:
+            items = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
+        except Exception:
+            items = []
+        for it in items:
+            name = it.get('name', 'Unbekannt')
+            qty = it.get('qty', 1)
+            extras = it.get('extras', []) or []
+            if name not in items_map:
+                items_map[name] = {'count': 0, 'extras': {}}
+            items_map[name]['count'] += qty
+            for ex in extras:
+                if ex not in items_map[name]['extras']:
+                    items_map[name]['extras'][ex] = 0
+                items_map[name]['extras'][ex] += qty
+                if ex not in extras_totals:
+                    extras_totals[ex] = 0
+                extras_totals[ex] += qty
+
+    return {
+        'date': dt.strftime("%Y-%m-%d"),
+        'item_map': items_map,
+        'extras_total': extras_totals,
+    }
+
+
+@app.route('/report/daily')
+def report_daily() -> Any:
+    # optional query param ?date=YYYY-MM-DD
+    date = request.args.get('date')
+    printutil.print_report(order=aggregate_day(date), printer_ip=printer_dict.get("customer", ""))
+    return redirect(url_for('orders_view'))
+
+
+@app.route('/api/report/daily')
+def api_report_daily() -> Any:
+    date = request.args.get('date')
+    data = aggregate_day(date)
+    return data
+
+
 @app.route('/order/print/<int:order_number>')
 def order_print(order_number: int) -> Any:
     order = get_order_by_number(order_number)
+
     if not order:
         return "Bestellung nicht gefunden", 404
-    return render_template('print.html', order=order)
+    printutil.print_customer(order=order, printer_ip=printer_dict.get("customer", ""))
+    return redirect(url_for('orders_view'))
 
 
 @app.route('/order/export/<int:order_number>')

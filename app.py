@@ -40,12 +40,63 @@ def load_config() -> Dict[str, Any]:
     defaults['db_path'] = os.path.join(os.path.dirname(__file__), str(defaults['db_path']))
     return defaults
 
+def init_db() -> None:
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS orders (
+        order_number INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT UNIQUE,
+        customer_id TEXT,
+        items LIST,
+        notes TEXT,
+        created_at TEXT,
+        fulfilled TEXT DEFAULT '--',
+        cooked TEXT DEFAULT '--',
+        printed_kitchen BOOLEAN DEFAULT 0,
+        printed_customer BOOLEAN DEFAULT 0,
+        kitchen Text
+    )
+    ''')
+    conn.commit()
+    conn.close()
+
+
+
+
+
 config: Dict[str, Any] = load_config()
 
 MENU_PATH: str = str(config['menu_path'])
 DB_PATH: str = str(config['db_path'])
 MENU_NAME: str = str(os.path.splitext(os.path.basename(MENU_PATH))[0]) if MENU_PATH else "Unbekannt"
-printer_dict: Dict[str, str] = config.get("printer_dict", {})
+
+init_db()
+
+# Clear any leftover "reserved" state (2) from previous runs so managers
+# will pick up orders normally. This resets both customer and kitchen flags.
+def _clear_reservations_on_startup() -> None:
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute("UPDATE orders SET printed_customer = 0 WHERE printed_customer = 2")
+        cur.execute("UPDATE orders SET printed_kitchen = 0 WHERE printed_kitchen = 2")
+        conn.commit()
+        conn.close()
+    except Exception:
+        import logging
+        logging.exception("Failed to clear reserved print flags on startup")
+
+
+_clear_reservations_on_startup()
+
+printer_manager_dict = {}
+for key in config.get("printer_dict", {}):
+    printer_manager_dict[key] = printutil.Quemanager(printer_ip=config["printer_dict"][key], printer_name=key)
+print("printer_manager_dict:", printer_manager_dict)
+
+printer_dict = config.get("printer_dict", {})
+
 app = Flask(__name__)
 
 
@@ -56,24 +107,6 @@ def load_menu() -> List[Dict[str, Any]]:
         return json.load(f)
 
 
-def init_db() -> None:
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    cur.execute('''
-    CREATE TABLE IF NOT EXISTS orders (
-        order_number INTEGER PRIMARY KEY AUTOINCREMENT,
-        id TEXT UNIQUE,
-        customer_id TEXT,
-        items TEXT,
-        notes TEXT,
-        created_at TEXT,
-        fulfilled TEXT DEFAULT '--',
-        cooked TEXT DEFAULT '--',
-        printed INTEGER DEFAULT 0
-    )
-    ''')
-    conn.commit()
-    conn.close()
 
 
 
@@ -85,14 +118,13 @@ def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     # ensure items carry `printer` metadata before saving
     items = order.get('items', [])
     cur.execute(
-        'INSERT INTO orders (id, customer_id, items, notes, created_at, printed) VALUES (?, ?, ?, ?, ?, ?)',
-        (order['id'], order.get('customer_id'), json.dumps(items, ensure_ascii=False), order.get('notes', 'Notes unobtainable'), order['created_at'], int(order['printed']))
+        'INSERT INTO orders (id, customer_id, items, notes, created_at, printed_kitchen, printed_customer, kitchen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        (order['id'], order.get('customer_id'), json.dumps(items, ensure_ascii=False), order.get('notes', 'Notes unobtainable'), order['created_at'], int(order['printed_kitchen']), int(order['printed_customer']), order.get('kitchen', ''))
     )
     conn.commit()
     order_number = cur.lastrowid
     conn.close()
     order['order_number'] = order_number
-    print(f"Saved order {order_number}: {order}")
     return order
 
 
@@ -183,7 +215,8 @@ def get_orders() -> List[Dict[str, Any]]:
             'items': items,
             'notes': r['notes'],
             'created_at': r['created_at'],
-            'printed': bool(r['printed']),
+            'printed_kitchen': bool(r['printed_kitchen']),
+            'printed_customer': bool(r['printed_customer']),
             'fulfilled': fulfilled_raw,
             'cooked': cooked_raw,
         })
@@ -208,7 +241,8 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
         'notes': r['notes'],
         "customer_id": r['customer_id'],
         'created_at': r['created_at'],
-        'printed': bool(r['printed']),
+        'printed_kitchen': bool(r['printed_kitchen']),
+        'printed_customer': bool(r['printed_customer']),
         'fulfilled': format_timestamp(r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'),
         'cooked': format_timestamp(r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no')
     }
@@ -222,7 +256,7 @@ def index() -> Any:
 
 @app.route('/order', methods=['POST'])
 def order() -> Any:
-    global printer_dict
+    global printer_manager_dict
     # Expect a JSON string in form field 'items' describing an array of ordered dishes
     data = request.form
     items_json = data.get('items')
@@ -254,26 +288,16 @@ def order() -> Any:
                 'items': items_for_printer,
                 'notes': notes,
                 'created_at': time.strftime("%Y_%m_%d-%H:%M:%S"),
-                'printed': False,
+                'printed_kitchen': False,
+                'printed_customer': False,
                 'customer_id': customer_id,
+                'kitchen': str(printer),
             }
             order = save_order(order)
             current_order_nr = str(order.get('order_number'))
-            try:
-                #customer_thread = threading.Thread(target=printutil.print_customer, kwargs={'order': order, 'printer_ip': printer_dict.get("customer", "")})
-                #customer_thread.start()
-                pass
-            except Exception as e:
-                print(f"Error printing customer order {current_order_nr}: {e}")
-            
-            try:
-                kitchen_thread = threading.Thread(target=printutil.print_kitchen, kwargs={'order': order, 'printer_ip': printer_dict.get(printer, "")})
-                kitchen_thread.start()
-            except Exception as e:
-                print(f"Error printing kitchen order {current_order_nr}: {e}")
-
 
             order_numbers = order_numbers + " + " + current_order_nr
+           
 
 
     # if this is an AJAX request, return JSON so the client can stay on the menu page
@@ -290,11 +314,11 @@ def order_start() -> Any:
         'items': [],
         'notes': '',
         'created_at': time.strftime("%Y_%m_%d-%H:%M:%S"),
-        'printed': False,
+        'printed_kitchen': False,
+        'printed_customer': False,
     }
     saved = save_order(draft)
     return {'order_number': saved.get('order_number'), 'id': saved.get('id')}
-
 
 @app.route('/orders')
 def orders_view() -> Any:
@@ -511,10 +535,20 @@ def api_report_daily() -> Any:
 @app.route('/order/print/<int:order_number>')
 def order_print(order_number: int) -> Any:
     order = get_order_by_number(order_number)
+    
 
     if not order:
         return "Bestellung nicht gefunden", 404
-    printutil.print_customer(order=order, printer_ip=printer_dict.get("customer", ""))
+    # Set printed_customer back to 0 for this order
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute('UPDATE orders SET printed_customer = 0 WHERE order_number = ?', (order_number,))
+        conn.commit()
+        conn.close()
+    except Exception:
+        print("Failed to reset printed_customer for order %s", order_number)
+
     return redirect(url_for('orders_view'))
 
 
@@ -545,7 +579,7 @@ def order_export(order_number: int) -> Response:
     return resp
 
 
-init_db()
+
 
 
 if __name__ == '__main__':

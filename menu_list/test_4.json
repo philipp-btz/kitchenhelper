@@ -1,0 +1,149 @@
+[
+    {
+      "id": 1,
+      "name": "Test Menu",
+      "printer": 1,
+      "bg_color": "#FF0000",
+      "extras": ["Extra Ketchup", "Extra Senf"]
+    },
+    {
+      "id": 2,
+      "name": "Currywurst",
+      "printer": 1,
+      "bg_color": "#FFCCCC",
+      "extras": ["Extra Brot", "Extra Pommes", "Keine Soße"]
+    },
+    {
+      "id": 3,
+      "name": "Burger",
+      "printer": 1,
+      "bg_color": "#FFCCCC",
+      "extras": ["Kein Käse", "Extra Käse", "Kein Salat"]
+    },
+    {
+      "id": 4,
+      "name": "Schnitzel mit Brötchen",
+      "printer": 1,
+      "bg_color": "#FFCCCC",
+      "extras": ["Extra Salat", "Extra Soße"]
+    },
+    {
+      "id": 5,
+      "name": "Pommes Frites",
+      "printer": 1,
+      "bg_color": "#FFE599",
+      "extras": ["Extra Salz", "Mayonnaise", "Ketchup"]
+    },
+    {
+      "id": 6,
+      "name": "Pizza Margherita",
+      "printer": 1,
+      "bg_color": "#F4CCCC",
+      "extras": ["Extra Käse", "Ohne Käse"]
+    },
+    {
+      "id": 7,
+      "name": "Pizza Salami",
+      "printer": 1,
+      "bg_color": "#F4CCCC",
+      "extras": ["Extra Salami", "Extra Käse"]
+    },
+    {
+      "id": 8,
+      "name": "Veggie Burger",
+      "printer": 1,
+      "bg_color": "#D9EAD3",
+      "extras": ["Extra Käse", "Kein Salat"]
+    },
+    {
+      "id": 9,
+      "name": "Falafel Wrap",
+      "printer": 1,
+      "bg_color": "#D9EAD3",
+      "extras": ["Extra Soße", "Ohne Zwiebeln"]
+    },
+    {
+      "id": 10,
+      "name": "Chicken Nuggets",
+      "printer": 1,
+      "bg_color": "#FFF2CC",
+      "extras": ["BBQ Soße", "Süß-Sauer", "Extra Portion"]
+    },
+    {
+      "id": 11,
+      "name": "Bratwurst im Brötchen",
+      "printer": 1,
+      "bg_color": "#FCE5CD",
+      "extras": ["Extra Senf", "Extra Ketchup"]
+    },
+    {
+      "id": 12,
+      "name": "Käsespätzle",
+      "printer": 1,
+      "bg_color": "#FFF2CC",
+      "extras": ["Extra Röstzwiebeln"]
+    },
+    {
+      "id": 13,
+      "name": "Gemischter Salat",
+      "printer": 1,
+      "bg_color": "#D9EAD3",
+      "extras": ["Extra Dressing", "Ohne Zwiebeln"]
+    },
+    {
+      "id": 14,
+      "name": "Caesar Salad",
+      "printer": 1,
+      "bg_color": "#D9EAD3",
+      "extras": ["Extra Parmesan", "Ohne Croutons"]
+    },
+    {
+      "id": 15,
+      "name": "Crêpes",
+      "printer": 2,
+      "bg_color": "#FFF2CC",
+      "extras": ["Nutella", "Zimt & Zucker", "Kinderriegel", "Herzhaft mit Schinken"]
+    },
+    {
+      "id": 16,
+      "name": "Tiramisu",
+      "printer": 2,
+      "bg_color": "#EAD1DC",
+      "extras": ["Extra Kakao"]
+    },
+    {
+      "id": 17,
+      "name": "Schokokuchen",
+      "printer": 2,
+      "bg_color": "#EAD1DC",
+      "extras": ["Sahne", "Extra Sahne"]
+    },
+    {
+      "id": 18,
+      "name": "Apfelstrudel",
+      "printer": 2,
+      "bg_color": "#FCE5CD",
+      "extras": ["Vanillesoße", "Sahne"]
+    },
+    {
+      "id": 19,
+      "name": "Eiskaffee",
+      "printer": 2,
+      "bg_color": "#D0E0E3",
+      "extras": ["Extra Eis", "Extra Sahne"]
+    },
+    {
+      "id": 20,
+      "name": "Milkshake",
+      "printer": 2,
+      "bg_color": "#D0E0E3",
+      "extras": ["Schoko", "Vanille", "Erdbeere"]
+    },
+    {
+      "id": 21,
+      "name": "NOTIZ Küche 2",
+      "printer": 2,
+      "bg_color": "#0000ff",
+      "extras": []
+    }
+  ]

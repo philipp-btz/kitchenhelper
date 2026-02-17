@@ -1,6 +1,5 @@
-import datetime
-import time
+import printutil
+from escpos.printer import Network
 
-
-print(datetime.datetime.now())
-print(time.strftime("%Y_%m_%d-%H_%M_%S"))
+printer = Network("192.168.1.187", port=9100, profile = "POS-5890")
+print(type(printer.paper_status()))

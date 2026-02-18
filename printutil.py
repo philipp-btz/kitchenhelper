@@ -56,13 +56,12 @@ class Quemanager:
                 #func(**kwargs)
                 processing_thread = threading.Thread(target=func, kwargs=kwargs)
                 processing_thread.start()
-            except Exception:
-                logging.exception("Error while processing print job")
+            except Exception as e:
+                logging.exception(f"Error while processing print job: {e}")
 
     def _worker(self):
         """Background worker: process one job, then wait up to 60s."""
         while not self._stop_event.is_set():
-            
             job = None
             with self.lock:
                 if self.queue:
@@ -73,7 +72,7 @@ class Quemanager:
                 if successful:
                     # Remove job from queue
                     self.queue.pop(0)
-                    print("Job completed successfully, removed from queue.")
+                    logging.info("Job completed successfully, removed from queue.")
 
                     # If job contained an order, try to mark it as printed in DB
                     try:
@@ -93,8 +92,8 @@ class Quemanager:
                             )
                             conn_upd.commit()
                             conn_upd.close()
-                    except Exception:
-                        logging.exception("Failed to update printed_customer for order %s", order_no)
+                    except Exception as e:
+                        logging.exception(f"Failed to update printed_customer for order {order_no}: {e}")
 
                 if self._stop_event.wait(2):
                     break
@@ -111,7 +110,6 @@ class Quemanager:
                 )
 
                 rows = cur.fetchall()
-                #print(f"Found {len(rows)} unprinted orders for printer {self.printer_name} with WHERE clause: {self.WHERE_string}")
                 for r in rows:
                     order_no = r[0]
                     # try to atomically reserve the order for this manager
@@ -137,15 +135,14 @@ class Quemanager:
                             cur2.execute('SELECT * FROM orders WHERE order_number = ?', (order_no,))
                             full = cur2.fetchone()
                             order_dict = dict(full) if full else None
-                            print(f"Reserved order {order_no} for printer {self.printer_name}: {order_dict}")
                             if order_dict:
                                 if self.printer_name == "customer":
                                     self.add_to_queue(print_customer, kwargs={'order': order_dict, 'printer_ip': self.printer_ip})
                                 else:
                                     self.add_to_queue(print_kitchen, kwargs={'order': order_dict, 'printer_ip': self.printer_ip})
                         # else: another worker reserved it already
-                    except Exception:
-                        logging.exception("Error reserving order %s", order_no)
+                    except Exception as e:
+                        logging.exception(f"Error reserving order {order_no}: {e}")
 
                 conn.close()
 
@@ -167,65 +164,67 @@ class Quemanager:
 
 def print_test(*, text = "Testdruck", printer_ip: str = "192.168.1.187") -> None:
     try:
-        printer = Network(printer_ip, port=9100, profile = "POS-5890")
+        printer = Network(printer_ip, port=9100, profile = "TM-T88V")
         if printer.paper_status == "0":
-            print("Printer is out of paper!")
+            logging.warning("Printer is out of paper!")
             return False
         printer.text(str(text) + "\n")
         printer.close()
         return True
     except Exception as e:
-        print("Error while printing test receipt:" + str(e))
+        logging.exception(f"Error while printing test receipt: {e}")
         return False
 
 
 
 def print_customer(*, order: dict, printer_ip: str ) -> None:
-    print(f"PRINTING CUSTOMER for printer {printer_ip}")
+    logging.info(f"PRINTING CUSTOMER for printer {printer_ip}")
     try:
         
         order_NO = order.get("order_number", "Unbekannt")
         notes = order.get("notes", "")
         items = order.get("items", [])
 
-        printer = Network(printer_ip, port=9100, profile = "POS-5890")
-        print(f"printer.paper_status: {printer.paper_status()}, type: {type(printer.paper_status())}")
+        printer = Network(printer_ip, port=9100, profile = "TM-T88V")
         if printer.paper_status == 0:
-            print("Printer is out of paper!")
             return False
         
         
-        #HEADER
+        # Head
         printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
-        printer.text("Bei Fallers\n")
-        printer.image("icon.png", center=True)
+        printer.image("icon.png", center=False)
+        printer.text(f"\nNr: {order_NO}\n\n")
 
-        # Order NR
-        printer.text(f"\n\nNr: {order_NO}\n\n")
+        
 
         # order items
         printer.set(font="a",align="left", bold=True, normal_textsize=True)
         if type(items) != list:
             items = json.loads(items)  # Try to convert to list if it's not already
 
+        printer.text(u"\u2500" * 48 + "\n")
+
         for item in items:
             printer.text(f"{item['qty']}x {item['name']}\n")
             for extra in item["extras"]:
                 printer.text(f"  {extra}\n")
 
+        printer.text(u"\u2500" * 48 + "\n")
+
         # Notes
-        printer.set(align="left", invert=False, bold=True, double_height=True, double_width=True)
-        printer.text(f"\n\n{notes}\n\n") if notes else printer.text("\n")
+        printer.set(align="left", bold=True, normal_textsize=True)
+        printer.text(f"\n{notes}\n\n") if notes else printer.text("\n")
 
 
-        printer.set(align="center")
-        printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
-        printer.set(align="center", invert=False, bold=True, double_height=True, double_width=True)
+        # TODO wenn es eine webseite gibt, hier Qr Code
+        #printer.set(align="center")
+        #printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
+        printer.set(align="center", invert=False, bold=True, double_height=False, double_width=True)
         printer.text("Vielen Dank für Ihre \nBestellung!\n")
 
         # aux Infos
         printer.set(align="left", normal_textsize=True)
-        printer.text(f"\n\nBestellzeit: {order.get('created_at', 'Unbekannt')}\n")
+        printer.text(f"\nBestellzeit: {order.get('created_at', 'Unbekannt')}\n")
         printer.text(f"customer: {order.get('customer_id', 'Unbekannt')}\n")
 
         # Cut
@@ -235,12 +234,12 @@ def print_customer(*, order: dict, printer_ip: str ) -> None:
 
         return True
     
-    except Exception:
-        print("Error while printing customer receipt:" + str(Exception))
+    except Exception as e:
+        logging.exception(f"Error while printing customer receipt: {e}")
         return False
 
 def print_kitchen(*, order: dict, printer_ip: str) -> None:
-    print(f"PRINTING KITCHEN for printer {printer_ip}")
+    logging.info(f"PRINTING KITCHEN for printer {printer_ip}")
     try:
         order_NO = order.get("order_number", "Unbekannt")
         notes = order.get("notes", "")
@@ -248,10 +247,9 @@ def print_kitchen(*, order: dict, printer_ip: str) -> None:
 
         
 
-        printer = Network(printer_ip, port=9100, profile = "POS-5890")
+        printer = Network(printer_ip, port=9100, profile = "TM-T88V")
 
         if printer.paper_status == 0:
-            print("Printer is out of paper!")
             return False
         
         if type(items) != list:
@@ -259,7 +257,7 @@ def print_kitchen(*, order: dict, printer_ip: str) -> None:
 
         if len(items) == 1 and items[0]["qty"] ==1:
             printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
-            printer.text("XXXXXXXXXXXXXXXX")
+            printer.text("EINZELBESTELLUNG")
         
         
         # Order NR
@@ -269,10 +267,14 @@ def print_kitchen(*, order: dict, printer_ip: str) -> None:
         # order items
         printer.set(font="a",align="left", bold=True, normal_textsize=True, double_height=True, double_width=True, invert=False)
 
+        printer.text(u"\u2500" * 24 + "\n")
+
         for item in items:
             printer.text(f"{item['qty']}x {item['name']}\n")
             for extra in item["extras"]:
                 printer.text(f"  {extra}\n")
+
+        printer.text(u"\u2500" * 24 + "\n")
 
         # Notes
         printer.set(align="center", invert=True, bold=True, double_height=True, double_width=True)
@@ -295,12 +297,12 @@ def print_kitchen(*, order: dict, printer_ip: str) -> None:
 
         return True
     
-    except Exception:
-        print("Error while printing kitchen receipt:" + str(Exception))
+    except Exception as e:
+        logging.exception(f"Error while printing kitchen receipt: {e}")
         return False
 
 def print_report(*,  order: dict, printer_ip: str) -> None:
-    print("PRINTING REPORT")
+    logging.info("PRINTING REPORT")
     try:
         date = order.get("date", "Unbekannt")
         item_map = order.get("item_map", {})
@@ -308,7 +310,7 @@ def print_report(*,  order: dict, printer_ip: str) -> None:
 
         
 
-        printer = Network(printer_ip, port=9100, profile = "POS-5890")
+        printer = Network(printer_ip, port=9100, profile = "TM-T88V")
 
 
 
@@ -338,8 +340,8 @@ def print_report(*,  order: dict, printer_ip: str) -> None:
 
         return True
     
-    except Exception:
-        print("Error while printing report:" + str(Exception))
+    except Exception as e:
+        logging.exception(f"Error while printing report: {e}")
         return False
 
 

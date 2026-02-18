@@ -6,8 +6,8 @@
   "db_path": "orders.db",
   "auto_print_on_open": true,
   "printer_dict": {
-    "customer": "192.168.1.187",
-    "1": "192.168.1.188",
+    "customer": "192.168.1.188",
+    "1": "192.168.1.187",
     "2": "192.168.1.189"
   }
 }

@@ -9,7 +9,38 @@ from werkzeug.utils import secure_filename
 from typing import Any, Dict, List, Optional, cast
 import menu_picker as mp
 import printutil
+import logging
+from logging.handlers import RotatingFileHandler
 import threading
+import sys
+
+
+
+
+LOGGING_DEBUG = True
+
+if LOGGING_DEBUG:
+    formatter = logging.Formatter(
+        fmt='%(asctime)s [%(levelname)s] %(name)s (%(filename)s:%(lineno)d) %(funcName)s() - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler = RotatingFileHandler(
+        "log.log",
+        maxBytes=5 * 1024 * 1024,
+        backupCount=3,
+        encoding='utf-8'
+    )
+    file_handler.setFormatter(formatter)
+    file_handler.setLevel(logging.DEBUG)
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setFormatter(formatter)
+    stream_handler.setLevel(logging.WARNING)
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+    root.addHandler(file_handler)
+    root.addHandler(stream_handler)
+
+logging.info("Starting Kitchen Helper application")
 
 CONFIG_PATH: str = os.path.join(os.path.dirname(__file__), 'config.json')
 
@@ -93,9 +124,10 @@ _clear_reservations_on_startup()
 printer_manager_dict = {}
 for key in config.get("printer_dict", {}):
     printer_manager_dict[key] = printutil.Quemanager(printer_ip=config["printer_dict"][key], printer_name=key)
-print("printer_manager_dict:", printer_manager_dict)
+logging.info(f"printer_manager_dict: {printer_manager_dict}")
 
 printer_dict = config.get("printer_dict", {})
+logging.info(f"printer_dict: {printer_dict}")
 
 app = Flask(__name__)
 
@@ -233,7 +265,7 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
     if not r:
         return None
     items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
-    print(f"Raw FULFILLED: {r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'}, \nRAW COOKED: {r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no'}")
+    logging.info(f"Raw FULFILLED: {r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'}, \nRAW COOKED: {r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no'}")
     return {
         'order_number': r['order_number'],
         'id': r['id'],
@@ -274,7 +306,7 @@ def order() -> Any:
         except Exception:
             order_number = None
     if order_number:
-        print("ORDER NUMBER PROVIDED, UPDATING EXISTING ORDER", order_number)
+        logging.info(f"ORDER NUMBER PROVIDED, UPDATING EXISTING ORDER {order_number}")
         updated = update_order(order_number, items=items, notes=notes, printed=False)
         order_number = updated.get('order_number') if updated else order_number
     else:
@@ -547,7 +579,27 @@ def order_print(order_number: int) -> Any:
         conn.commit()
         conn.close()
     except Exception:
-        print("Failed to reset printed_customer for order %s", order_number)
+        logging.exception("Failed to reset printed_customer for order %s", order_number)
+
+    return redirect(url_for('orders_view'))
+
+
+@app.route('/order/print_kitchen/<int:order_number>')
+def order_print_kitchen(order_number: int) -> Any:
+    order = get_order_by_number(order_number)
+
+    if not order:
+        return "Bestellung nicht gefunden", 404
+    # Set printed_kitchen back to 0 for this order
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute('UPDATE orders SET printed_kitchen = 0 WHERE order_number = ?', (order_number,))
+        conn.commit()
+        conn.close()
+    except Exception:
+        import logging
+        logging.exception("Failed to reset printed_kitchen for order %s", order_number)
 
     return redirect(url_for('orders_view'))
 

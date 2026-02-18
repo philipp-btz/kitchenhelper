@@ -1,0 +1,13 @@
+{
+  "host": "0.0.0.0",
+  "port": 5099,
+  "debug": true,
+  "menu_path": "backup_menuoiwueroiuwer.json",
+  "db_path": "orders.db",
+  "auto_print_on_open": true,
+  "printer_dict": {
+    "customer": "192.168.1.187",
+    "1": "192.168.1.188",
+    "2": "192.168.1.189"
+  }
+}

@@ -53,9 +53,9 @@ def load_config() -> Dict[str, Any]:
         'db_path': 'orders.db',
         'auto_print_on_open': True,
         "printer_dict": {
-            "customer": "192.168.1.187",
-            "1": "192.168.1.187",
-            "2": "192.168.1.187"
+            "customer": "192.168.8.187",
+            "1": "192.168.8.188",
+            "2": "192.168.8.189"
             }
     }
     if os.path.exists(CONFIG_PATH):
@@ -205,7 +205,7 @@ def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None
         conn.close()
         return None
     params.append(order_number)
-    sql = f"UPDATE orders SET {', '.join(fields)} WHERE order_number = ?"
+    sql = f"UPDATE orders SET {', '.join(fields)}ù WHERE order_number = ?"
     cur.execute(sql, tuple(params))
     conn.commit()
     conn.close()

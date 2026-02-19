@@ -1,5 +1,5 @@
 Flask
-# Production WSGI servers (install as needed)
 waitress
 gunicorn
 escpos
+setuptools

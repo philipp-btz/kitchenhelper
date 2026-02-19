@@ -4,6 +4,7 @@ import threading
 import logging
 import sqlite3
 import json
+import time
 
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 DB_PATH = globals().get("DB_PATH", "orders.db")
@@ -68,7 +69,9 @@ class Quemanager:
                     job = self.queue[0]  # Peek at the first job without popping
             if job:
                 func, kwargs = job
+                time.sleep(1) 
                 successful = func(**(kwargs or {}))
+                print("SLEEP 1s DONE #1")
                 if successful:
                     # Remove job from queue
                     self.queue.pop(0)
@@ -95,7 +98,7 @@ class Quemanager:
                     except Exception as e:
                         logging.exception(f"Failed to update printed_customer for order {order_no}: {e}")
 
-                if self._stop_event.wait(2):
+                if self._stop_event.wait(0.5):
                     break
             else:
                 # no job, sleep briefly and check again
@@ -146,7 +149,7 @@ class Quemanager:
 
                 conn.close()
 
-                if self._stop_event.wait(1):
+                if self._stop_event.wait(0.5):
                     break
 
     def stop(self, timeout: float = 2.0) -> None:
@@ -178,6 +181,8 @@ def print_test(*, text = "Testdruck", printer_ip: str = "192.168.1.187") -> None
 
 
 def print_customer(*, order: dict, printer_ip: str ) -> None:
+    print("SLEEP 1s #3")
+    time.sleep(1)  # Short delay to ensure printer is ready
     logging.info(f"PRINTING CUSTOMER for printer {printer_ip}")
     try:
         
@@ -193,6 +198,7 @@ def print_customer(*, order: dict, printer_ip: str ) -> None:
         # Head
         printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
         printer.image("icon.png", center=False)
+        time.sleep(0.5)  # Short delay to ensure image is processed before printing text
         printer.text(f"\nNr: {order_NO}\n\n")
 
         
@@ -231,6 +237,8 @@ def print_customer(*, order: dict, printer_ip: str ) -> None:
         printer._raw(b"\x1D\x56\x42\x00")
 
         printer.close()
+        print("SLEEP 1s #2")
+        time.sleep(1)
 
         return True
     
@@ -239,6 +247,8 @@ def print_customer(*, order: dict, printer_ip: str ) -> None:
         return False
 
 def print_kitchen(*, order: dict, printer_ip: str) -> None:
+    print("SLEEP 1s #4")
+    time.sleep(1)  # Short delay to ensure printer is ready
     logging.info(f"PRINTING KITCHEN for printer {printer_ip}")
     try:
         order_NO = order.get("order_number", "Unbekannt")
@@ -302,6 +312,8 @@ def print_kitchen(*, order: dict, printer_ip: str) -> None:
         return False
 
 def print_report(*,  order: dict, printer_ip: str) -> None:
+
+    time.sleep(1)  # Short delay to ensure printer is ready
     logging.info("PRINTING REPORT")
     try:
         date = order.get("date", "Unbekannt")

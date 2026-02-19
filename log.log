@@ -9125,3 +9125,441 @@ escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket f
 [Errno 61] Connection refused)
 2026-02-18 19:48:50 [INFO] root (printutil.py:181) print_customer() - PRINTING CUSTOMER for printer 192.168.1.188
 2026-02-18 19:48:50 [INFO] root (printutil.py:181) print_customer() - PRINTING CUSTOMER for printer 192.168.1.188
+2026-02-19 03:19:44 [INFO] root (app.py:43) <module>() - Starting Kitchen Helper application
+2026-02-19 03:19:44 [INFO] root (app.py:127) <module>() - printer_manager_dict: {'customer': <printutil.Quemanager object at 0x10b3f5d30>, '1': <printutil.Quemanager object at 0x10b3dac10>, '2': <printutil.Quemanager object at 0x10b3dae90>}
+2026-02-19 03:19:44 [INFO] root (app.py:130) <module>() - printer_dict: {'customer': '192.168.1.187', '1': '192.168.1.188', '2': '192.168.1.189'}
+2026-02-19 03:19:44 [INFO] werkzeug (_internal.py:97) _log() - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5099
+ * Running on http://192.168.1.38:5099
+2026-02-19 03:19:44 [INFO] werkzeug (_internal.py:97) _log() - [33mPress CTRL+C to quit[0m
+2026-02-19 03:19:44 [INFO] werkzeug (_internal.py:97) _log() -  * Restarting with stat
+2026-02-19 03:19:44 [INFO] root (app.py:43) <module>() - Starting Kitchen Helper application
+2026-02-19 03:19:44 [INFO] root (app.py:127) <module>() - printer_manager_dict: {'customer': <printutil.Quemanager object at 0x107265d30>, '1': <printutil.Quemanager object at 0x10724ac10>, '2': <printutil.Quemanager object at 0x10724ae90>}
+2026-02-19 03:19:44 [INFO] root (app.py:130) <module>() - printer_dict: {'customer': '192.168.1.187', '1': '192.168.1.188', '2': '192.168.1.189'}
+2026-02-19 03:19:44 [WARNING] werkzeug (_internal.py:97) _log() -  * Debugger is active!
+2026-02-19 03:19:44 [INFO] werkzeug (_internal.py:97) _log() -  * Debugger PIN: 304-653-789
+2026-02-19 03:19:45 [INFO] root (printutil.py:181) print_customer() - PRINTING CUSTOMER for printer 192.168.1.187
+2026-02-19 03:19:45 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.189
+2026-02-19 03:19:45 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:45 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:45 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.189
+2026-02-19 03:19:45 [INFO] root (printutil.py:181) print_customer() - PRINTING CUSTOMER for printer 192.168.1.187
+2026-02-19 03:19:46 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:46 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:48 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:48 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:49 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:49 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:51 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:51 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:53 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:53 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:55 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:55 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:56 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:56 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:58 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:58 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:19:59 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:19:59 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:20:01 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:20:01 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:20:02 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:20:02 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:20:04 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:20:04 [INFO] root (printutil.py:242) print_kitchen() - PRINTING KITCHEN for printer 192.168.1.188
+2026-02-19 03:20:05 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+2026-02-19 03:20:05 [ERROR] root (printutil.py:301) print_kitchen() - Error while printing kitchen receipt: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 100, in open
+    self.device.connect((self.host, self.port))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/philipp/git-repos/kitchenhelper/printutil.py", line 259, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 118, in _raw
+    assert self.device
+           ^^^^^^^^^^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/escpos.py", line 146, in device
+    self.open()
+    ~~~~~~~~~^^
+  File "/Users/philipp/git-repos/kitchenhelper/.venv/lib/python3.14/site-packages/escpos/printer/network.py", line 105, in open
+    raise DeviceNotFoundError(
+        f"Could not open socket for {self.host}:\n{e}"
+    )
+escpos.exceptions.DeviceNotFoundError: Device not found (Could not open socket for 192.168.1.188:
+[Errno 61] Connection refused)

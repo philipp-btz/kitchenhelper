@@ -34,7 +34,7 @@ if LOGGING_DEBUG:
     file_handler.setLevel(logging.DEBUG)
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setFormatter(formatter)
-    stream_handler.setLevel(logging.WARNING)
+    stream_handler.setLevel(logging.INFO)
     root = logging.getLogger()
     root.setLevel(logging.DEBUG)
     root.addHandler(file_handler)
@@ -553,7 +553,11 @@ def aggregate_day(date_str: Optional[str] = None) -> Dict[str, Any]:
 def report_daily() -> Any:
     # optional query param ?date=YYYY-MM-DD
     date = request.args.get('date')
-    printutil.print_report(order=aggregate_day(date), printer_ip=printer_dict.get("customer", ""))
+    global printer_manager_dict
+    for key, value in printer_manager_dict.items():
+        print(f"Checking printer manager for key: {key}")
+        if key == "customer":
+            value.add_to_queue("report", kwargs={'order': aggregate_day(date)})
     return redirect(url_for('orders_view'))
 
 

@@ -9,7 +9,7 @@ import time
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 DB_PATH = globals().get("DB_PATH", "orders.db")
 
-class Quemanager:
+class Queuemanager:
     def __init__(self, printer_ip: str, printer_name: str):
         self.printer_ip = printer_ip
         self.printer_name = printer_name
@@ -64,8 +64,8 @@ class Quemanager:
                     job = self.queue[0]  # Peek at the first job without popping
             if job:
                 func, kwargs = job
-                
-                time.sleep(1) 
+
+                time.sleep(1)
                 if func == "customer":
                     successful = self.print_customer(**(kwargs or {}))
                 elif func == "kitchen":
@@ -188,7 +188,7 @@ class Quemanager:
         printer = self.printer
         logging.info(f"PRINTING CUSTOMER for printer {printer}")
         try:
-            
+
             order_NO = order.get("order_number", "Unbekannt")
             notes = order.get("notes", "")
             items = order.get("items", [])
@@ -196,15 +196,15 @@ class Quemanager:
 
             if printer.paper_status == 0:
                 return False
-            
-            
+
+
             # Head
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
             printer.image("icon.png", center=False)
             time.sleep(0.5)  # Short delay to ensure image is processed before printing text
             printer.text(f"\nNr: {order_NO}\n\n")
 
-            
+
 
             # order items
             printer.set(font="a",align="left", bold=True, normal_textsize=True)
@@ -240,7 +240,7 @@ class Quemanager:
             printer._raw(b"\x1D\x56\x42\x00")
 
             return True
-        
+
         except Exception as e:
             logging.exception(f"Error while printing customer receipt: {e}")
             try:
@@ -258,19 +258,19 @@ class Quemanager:
             notes = order.get("notes", "")
             items = order.get("items", [])
 
-            
+
 
             if printer.paper_status == 0:
                 return False
-            
+
             if type(items) != list:
                 items = json.loads(items)  # Try to convert to list if it's not already
 
             if len(items) == 1 and items[0]["qty"] ==1:
                 printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
                 printer.text("EINZELBESTELLUNG")
-            
-            
+
+
             # Order NR
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
             printer.text(f"\n\nNr: {order_NO}\n\n")
@@ -305,7 +305,7 @@ class Quemanager:
             printer.buzzer(times = 2, duration=4)
 
             return True
-        
+
         except Exception as e:
             logging.exception(f"Error while printing kitchen receipt: {e}")
             try:
@@ -341,14 +341,14 @@ class Quemanager:
                 for extra, qty in extras_total.items():
                     printer.text(f"  {str(qty)}x {str(extra)}\n")
 
-            
+
 
             # Cut and buzzer
             printer.ln(5)
             printer._raw(b"\x1D\x56\x42\x00")
 
             return True
-        
+
         except Exception as e:
             logging.exception(f"Error while printing report: {e}")
             return False

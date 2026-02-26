@@ -8,11 +8,11 @@ import sqlite3
 from werkzeug.utils import secure_filename
 from typing import Any, Dict, List, Optional, cast
 import menu_picker as mp
-import printutil
 import logging
 from logging.handlers import RotatingFileHandler
-import threading
 import sys
+
+import printutil
 
 
 
@@ -123,7 +123,7 @@ _clear_reservations_on_startup()
 
 printer_manager_dict = {}
 for key in config.get("printer_dict", {}):
-    printer_manager_dict[key] = printutil.Quemanager(printer_ip=config["printer_dict"][key], printer_name=key)
+    printer_manager_dict[key] = printutil.Queuemanager(printer_ip=config["printer_dict"][key], printer_name=key)
 logging.info(f"printer_manager_dict: {printer_manager_dict}")
 
 printer_dict = config.get("printer_dict", {})
@@ -453,14 +453,14 @@ def fulfilled(order_id: str) -> Any:
     # flip printed state
     cur.execute('SELECT fulfilled FROM orders WHERE id = ?', (order_id,))
     row = cur.fetchone()
+    timestamp = time.strftime("%Y_%m_%d-%H:%M:%S") if row[0] == '--' else '--'
     if row:
-        new = time.strftime("%Y_%m_%d-%H:%M:%S") if row[0] == '--' else '--'
-        cur.execute('UPDATE orders SET fulfilled = ? WHERE id = ?', (new, order_id))
+        cur.execute('UPDATE orders SET fulfilled = ? WHERE id = ?', (timestamp, order_id))
         conn.commit()
     conn.close()
     # If this is an AJAX request, return JSON so the client can update in place
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
-        return {'status': 'ok', 'fulfilled': (new if row else "--")}
+        return {'status': 'ok', 'fulfilled': (timestamp if row else "--")}
     return redirect(url_for('orders_view'))
 
 
@@ -470,13 +470,13 @@ def cooked(order_id: str) -> Any:
     cur = conn.cursor()
     cur.execute('SELECT cooked FROM orders WHERE id = ?', (order_id,))
     row = cur.fetchone()
+    timestamp = time.strftime("%Y_%m_%d-%H:%M:%S") if row[0] == '--' else '--'
     if row:
-        new = time.strftime("%Y_%m_%d-%H:%M:%S") if row[0] == '--' else '--'
-        cur.execute('UPDATE orders SET cooked = ? WHERE id = ?', (new, order_id))
+        cur.execute('UPDATE orders SET cooked = ? WHERE id = ?', (timestamp, order_id))
         conn.commit()
     conn.close()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
-        return {'status': 'ok', 'cooked': (new if row else "--")}
+        return {'status': 'ok', 'cooked': (timestamp if row else "--")}
     return redirect(url_for('orders_view'))
 
 
@@ -568,7 +568,7 @@ def api_report_daily() -> Any:
     return data
 
 
-@app.route('/order/print/<int:order_number>')
+@app.route('/order/print_customer/<int:order_number>')
 def order_print(order_number: int) -> Any:
     order = get_order_by_number(order_number)
     
@@ -612,7 +612,7 @@ def order_print_kitchen(order_number: int) -> Any:
 def order_export(order_number: int) -> Response:
     order = get_order_by_number(order_number)
     if not order:
-        return "Bestellung nicht gefunden", 404
+        return ("Bestellung nicht gefunden", 404)
     lines = []
     lines.append(f"Bestell-Nr.: {order['order_number']}")
     lines.append(f"UUID: {order['id']}")

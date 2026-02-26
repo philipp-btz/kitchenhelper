@@ -26,7 +26,7 @@ def list_menu_files(dir_path: str | None = None) -> list:
 	return files
 
 def push_menu(menu_data: dict, target_file: str = "config.json"):
-    """Append `menu_data` to the JSON array in `target_file`.
+	"""Append `menu_data` to the JSON array in `target_file`.
 
     If `target_file` does not exist, it will be created with an array containing `menu_data`.
     """

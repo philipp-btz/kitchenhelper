@@ -1,13 +1,15 @@
 from escpos.printer import Network
 import datetime
+import time
 import threading
 import logging
 import sqlite3
 import json
-import time
+import os
 
-# Default DB path (can be overridden by importing module and setting DB_PATH)
-DB_PATH = globals().get("DB_PATH", "orders.db")
+import kitchenhelper as kh
+
+
 
 class Queuemanager:
     def __init__(self, printer_ip: str, printer_name: str):
@@ -59,6 +61,7 @@ class Queuemanager:
             if self.printer.is_online is False:
                     self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
             job = None
+            db_path = kh.get_db_path()
             with self.lock:
                 if self.queue:
                     job = self.queue[0]  # Peek at the first job without popping
@@ -93,7 +96,7 @@ class Queuemanager:
                                 order_no = kwargs.get("order_number")
 
                         if order_no is not None:
-                            conn_upd = sqlite3.connect(DB_PATH)
+                            conn_upd = sqlite3.connect(db_path)
                             cur_upd = conn_upd.cursor()
                             cur_upd.execute(
                                 self.UPDATE_string,
@@ -109,7 +112,7 @@ class Queuemanager:
                     break
             else:
                 # no job, sleep briefly and check again
-                conn = sqlite3.connect(DB_PATH)
+                conn = sqlite3.connect(db_path)
                 conn.row_factory = sqlite3.Row
                 cur = conn.cursor()
                 # Select order_numbers for orders matching this manager's WHERE clause
@@ -166,6 +169,7 @@ class Queuemanager:
             self._worker_thread.join(timeout)
         except RuntimeError:
             pass
+        return
 
 
 
@@ -340,7 +344,6 @@ class Queuemanager:
                 printer.text("\nExtras gesammt:\n")
                 for extra, qty in extras_total.items():
                     printer.text(f"  {str(qty)}x {str(extra)}\n")
-
 
 
             # Cut and buzzer

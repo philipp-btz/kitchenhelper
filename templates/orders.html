@@ -35,7 +35,7 @@
             <form method="post" action="/fulfilled/{{ o.id }}" class="fulfilled-form" style="display:inline">
               <button type="submit">ABGEHOLT</button>
             </form>
-            <a href="/order/print/{{ o.order_number }}" target="_parent">Bon Kunde</a>
+            <a href="/order/print_customer/{{ o.order_number }}" target="_parent">Bon Kunde</a>
             <a href="/order/print_kitchen/{{ o.order_number }}" target="_parent">Bon Küche</a>
           </td>
         </tr>

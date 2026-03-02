@@ -13,6 +13,7 @@ from logging.handlers import RotatingFileHandler
 import sys
 
 import printutil
+import kitchenhelper as kh
 
 
 
@@ -28,7 +29,7 @@ if LOGGING_DEBUG:
         "log.log",
         maxBytes=5 * 1024 * 1024,
         backupCount=3,
-        encoding='utf-8'
+        encoding="utf-8"
     )
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
@@ -42,84 +43,15 @@ if LOGGING_DEBUG:
 
 logging.info("Starting Kitchen Helper application")
 
-CONFIG_PATH: str = os.path.join(os.path.dirname(__file__), 'config.json')
 
-def load_config() -> Dict[str, Any]:
-    defaults = {
-        'host': '0.0.0.0',
-        'port': 5099,
-        'debug': True,
-        'menu_path': 'backup_menu.json',
-        'db_path': 'orders.db',
-        'auto_print_on_open': True,
-        "printer_dict": {
-            "customer": "192.168.8.187",
-            "1": "192.168.8.188",
-            "2": "192.168.8.189"
-            }
-    }
-    if os.path.exists(CONFIG_PATH):
-        try:
-            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-                cfg = json.load(f)
-                defaults.update(cfg)
-        except Exception:
-            pass
-    # normalize paths (ensure values are strings before joining)
-    menu_path = mp.list_menu_files()
-    defaults['menu_path'] = os.path.join(os.path.dirname(__file__), str(defaults['menu_path']))
-    defaults['db_path'] = os.path.join(os.path.dirname(__file__), str(defaults['db_path']))
-    return defaults
+config: Dict[str, Any] = kh.load_config()
 
-def init_db() -> None:
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    cur.execute('''
-    CREATE TABLE IF NOT EXISTS orders (
-        order_number INTEGER PRIMARY KEY AUTOINCREMENT,
-        id TEXT UNIQUE,
-        customer_id TEXT,
-        items LIST,
-        notes TEXT,
-        created_at TEXT,
-        fulfilled TEXT DEFAULT '--',
-        cooked TEXT DEFAULT '--',
-        printed_kitchen BOOLEAN DEFAULT 0,
-        printed_customer BOOLEAN DEFAULT 0,
-        kitchen Text
-    )
-    ''')
-    conn.commit()
-    conn.close()
-
-
-
-
-
-config: Dict[str, Any] = load_config()
-
-MENU_PATH: str = str(config['menu_path'])
-DB_PATH: str = str(config['db_path'])
+#MENU_PATH: str = str(config['menu_path'])
+#DB_PATH: str = str(config["db_path"])
 MENU_NAME: str = str(os.path.splitext(os.path.basename(MENU_PATH))[0]) if MENU_PATH else "Unbekannt"
 
-init_db()
-
-# Clear any leftover "reserved" state (2) from previous runs so managers
-# will pick up orders normally. This resets both customer and kitchen flags.
-def _clear_reservations_on_startup() -> None:
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cur = conn.cursor()
-        cur.execute("UPDATE orders SET printed_customer = 0 WHERE printed_customer = 2")
-        cur.execute("UPDATE orders SET printed_kitchen = 0 WHERE printed_kitchen = 2")
-        conn.commit()
-        conn.close()
-    except Exception:
-        import logging
-        logging.exception("Failed to clear reserved print flags on startup")
-
-
-_clear_reservations_on_startup()
+kh.init_db()
+kh.clear_db_reservations()
 
 printer_manager_dict = {}
 for key in config.get("printer_dict", {}):
@@ -132,67 +64,14 @@ logging.info(f"printer_dict: {printer_dict}")
 app = Flask(__name__)
 
 
-
-
-def load_menu() -> List[Dict[str, Any]]:
-    with open(MENU_PATH, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-
-
-
-
-
-
-def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    # ensure items carry `printer` metadata before saving
-    items = order.get('items', [])
-    cur.execute(
-        'INSERT INTO orders (id, customer_id, items, notes, created_at, printed_kitchen, printed_customer, kitchen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        (order['id'], order.get('customer_id'), json.dumps(items, ensure_ascii=False), order.get('notes', 'Notes unobtainable'), order['created_at'], int(order['printed_kitchen']), int(order['printed_customer']), order.get('kitchen', ''))
-    )
-    conn.commit()
-    order_number = cur.lastrowid
-    conn.close()
-    order['order_number'] = order_number
-    return order
-
-
-def enrich_items(items: Optional[List[Any]]) -> List[Dict[str, Any]]:
-    """Ensure each item dict contains a `printer` attribute taken from the menu when possible."""
-    if not items:
-        return []
-    try:
-        menu = load_menu()
-        menu_map: Dict[str, Dict[str, Any]] = {m['name']: m for m in menu}
-    except Exception:
-        menu_map = {}
-    out: List[Dict[str, Any]] = []
-    for raw in items:
-        if isinstance(raw, dict):
-            it: Dict[str, Any] = cast(Dict[str, Any], raw)
-            name = it.get('name')
-            if name and name in menu_map:
-                it.setdefault('printer', menu_map[name].get('printer'))
-            out.append(it)
-        else:
-            # fallback: convert to dict
-            name = str(raw)
-            printer = menu_map.get(name, {}).get('printer') if menu_map else None
-            out.append({'name': name, 'extras': [], 'qty': 1, 'printer': printer})
-    return out
-
-
 def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None, printed: Optional[bool] = None) -> Optional[Dict[str, Any]]:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(kh.get_db_path())
     cur = conn.cursor()
     fields: List[str] = []
     params: List[Any] = []
     if items is not None:
         # enrich items with printer info before storing
-        items = enrich_items(items)
+        items = kh.enrich_items(items)
         fields.append('items = ?')
         params.append(json.dumps(items, ensure_ascii=False))
     if notes is not None:
@@ -209,81 +88,12 @@ def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None
     cur.execute(sql, tuple(params))
     conn.commit()
     conn.close()
-    return get_order_by_number(order_number)
-
-
-def format_timestamp(raw: Optional[str]) -> str:
-    """Format a stored timestamp string into a human-readable form.
-
-    Stored format: "YYYY_mm_dd-HH_MM_SS" (e.g. 2026_02_16-14_30_00).
-    Returns empty string for missing/placeholder values.
-    """
-    if not raw or raw == 'no' or raw == '--':
-        return ''
-    try:
-        dt = datetime.datetime.strptime(raw, "%Y_%m_%d-%H_%M_%S")
-        return dt.strftime("%Y-%m-%d %H:%M:%S")
-    except Exception:
-        return ''
-
-
-def get_orders() -> List[Dict[str, Any]]:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM orders ORDER BY order_number DESC')
-    rows = cur.fetchall()
-    conn.close()
-    out: List[Dict[str, Any]] = []
-    for r in rows:
-        items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
-        # format fulfilled and cooked timestamps if present (stored as "YYYY_mm_dd-HH_MM_SS"), otherwise marker
-        fulfilled_raw = r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'
-        cooked_raw = r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no'
-
-        out.append({
-            'order_number': r['order_number'],
-            'id': r['id'],
-            'items': items,
-            'notes': r['notes'],
-            'created_at': r['created_at'],
-            'printed_kitchen': bool(r['printed_kitchen']),
-            'printed_customer': bool(r['printed_customer']),
-            'fulfilled': fulfilled_raw,
-            'cooked': cooked_raw,
-        })
-    return out
-
-
-def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM orders WHERE order_number = ?', (order_number,))
-    r = cur.fetchone()
-    conn.close()
-    if not r:
-        return None
-    items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
-    logging.info(f"Raw FULFILLED: {r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'}, \nRAW COOKED: {r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no'}")
-    return {
-        'order_number': r['order_number'],
-        'id': r['id'],
-        'items': items,
-        'notes': r['notes'],
-        "customer_id": r['customer_id'],
-        'created_at': r['created_at'],
-        'printed_kitchen': bool(r['printed_kitchen']),
-        'printed_customer': bool(r['printed_customer']),
-        'fulfilled': format_timestamp(r['fulfilled'] if 'fulfilled' in r.keys() and r['fulfilled'] is not None else 'no'),
-        'cooked': format_timestamp(r['cooked'] if 'cooked' in r.keys() and r['cooked'] is not None else 'no')
-    }
-
+    return kh.get_order_by_number(order_number)
 
 @app.route('/')
 def index() -> Any:
-    menu = load_menu()
-    return render_template('index.html', menu=menu, menu_name=MENU_NAME)
+    menu = kh.load_menu()
+    return render_template('index.html', menu=menu, menu_name=kh.get_menu_name())
 
 
 @app.route('/order', methods=['POST'])
@@ -294,7 +104,7 @@ def order() -> Any:
     items_json = data.get('items')
     notes = data.get('notes', '')
     try:
-        items = enrich_items(cast(List[Dict[str, Any]], json.loads(items_json)) if items_json else [])
+        items = kh.enrich_items(cast(List[Dict[str, Any]], json.loads(items_json)) if items_json else [])
     except Exception:
         items = []
     # if order_number provided, update existing draft
@@ -325,7 +135,7 @@ def order() -> Any:
                 'customer_id': customer_id,
                 'kitchen': str(printer),
             }
-            order = save_order(order)
+            order = kh.save_order(order)
             current_order_nr = str(order.get('order_number'))
 
             order_numbers = order_numbers + " + " + current_order_nr
@@ -349,12 +159,12 @@ def order_start() -> Any:
         'printed_kitchen': False,
         'printed_customer': False,
     }
-    saved = save_order(draft)
+    saved = kh.save_order(draft)
     return {'order_number': saved.get('order_number'), 'id': saved.get('id')}
 
 @app.route('/orders')
 def orders_view() -> Any:
-    orders = get_orders()
+    orders = kh.get_orders()
     return render_template('orders.html', orders=orders)
 
 
@@ -374,28 +184,28 @@ def menus_view() -> Any:
 
 @app.route('/menus/select', methods=['POST'])
 def menus_select() -> Any:
-    global MENU_NAME, MENU_PATH
     selected = request.form.get('menu_file')
     if not selected:
         return redirect(url_for('menus_view'))
     src = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
     try:
-        # Do NOT modify any files in `menu_list` — set the active menu path to the selected file instead.
-        MENU_PATH = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
-        MENU_NAME = os.path.splitext(selected)[0]
+        os.environ["KITCHENHELPER_MENU_PATH"] = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
+        menu_name = os.path.splitext(selected)[0]
+        os.environ["KITCHENHELPER_MENU_NAME"] = menu_name
+
         # persist the choice into config.json so next run uses the selected menu
         try:
-            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+            with open(os.environ.get("KITCHENHELPER_CONFIG_PATH", "config.json"), 'r', encoding='utf-8') as f:
                 cfg = json.load(f)
         except Exception:
             cfg = {}
         cfg['menu_path'] = os.path.join('menu_list', selected)
-        with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
+        with open(os.environ.get("KITCHENHELPER_CONFIG_PATH", "config.json"), 'w', encoding='utf-8') as f:
             json.dump(cfg, f, ensure_ascii=False, indent=2)
     except Exception as e:
         return f"Fehler beim Auswählen der Speisekarte: {e}", 500
     # redirect back to selector with confirmation
-    return redirect(url_for('menus_view', selected=MENU_NAME))
+    return redirect(url_for('menus_view', selected=menu_name))
 
 
 @app.route('/menus/upload', methods=['POST'])
@@ -448,7 +258,7 @@ def menus_upload() -> Any:
 
 @app.route('/fulfilled/<order_id>', methods=['POST'])
 def fulfilled(order_id: str) -> Any:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(kh.get_db_path())
     cur = conn.cursor()
     # flip printed state
     cur.execute('SELECT fulfilled FROM orders WHERE id = ?', (order_id,))
@@ -466,7 +276,7 @@ def fulfilled(order_id: str) -> Any:
 
 @app.route('/cooked/<order_id>', methods=['POST'])
 def cooked(order_id: str) -> Any:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(kh.get_db_path())
     cur = conn.cursor()
     cur.execute('SELECT cooked FROM orders WHERE id = ?', (order_id,))
     row = cur.fetchone()
@@ -483,7 +293,7 @@ def cooked(order_id: str) -> Any:
 @app.route('/api/cooked_unfulfilled')
 def api_cooked_unfulfilled() -> Any:
     """Return a JSON list of order_numbers that are cooked but not yet fulfilled."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(kh.get_db_path())
     cur = conn.cursor()
     cur.execute("SELECT order_number FROM orders WHERE cooked IS NOT NULL AND cooked != '--' AND (fulfilled IS NULL OR fulfilled = '--') ORDER BY order_number ASC")
     rows = cur.fetchall()
@@ -498,56 +308,6 @@ def customer_display_view() -> Any:
     return render_template('customer_display.html')
 
 
-def aggregate_day(date_str: Optional[str] = None) -> Dict[str, Any]:
-    """Aggregate item and extra counts for a given day.
-
-    date_str: 'YYYY-MM-DD' (ISO) or None for today.
-    Returns dict with 'date', 'items' (name->count), 'extras' (extra->count).
-    """
-    if date_str:
-        try:
-            dt = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-        except Exception:
-            dt = datetime.datetime.now()
-    else:
-        dt = datetime.datetime.now()
-    prefix = dt.strftime("%Y_%m_%d") + '-'
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cur = conn.cursor()
-    cur.execute("SELECT items FROM orders WHERE created_at LIKE ?", (prefix + '%',))
-    rows = cur.fetchall()
-    conn.close()
-
-    # build nested structure: items -> {count, extras: {extra: count}}
-    items_map: Dict[str, Dict[str, Any]] = {}
-    extras_totals: Dict[str, int] = {}
-    for r in rows:
-        try:
-            items = cast(List[Dict[str, Any]], json.loads(r['items'])) if r['items'] else []
-        except Exception:
-            items = []
-        for it in items:
-            name = it.get('name', 'Unbekannt')
-            qty = it.get('qty', 1)
-            extras = it.get('extras', []) or []
-            if name not in items_map:
-                items_map[name] = {'count': 0, 'extras': {}}
-            items_map[name]['count'] += qty
-            for ex in extras:
-                if ex not in items_map[name]['extras']:
-                    items_map[name]['extras'][ex] = 0
-                items_map[name]['extras'][ex] += qty
-                if ex not in extras_totals:
-                    extras_totals[ex] = 0
-                extras_totals[ex] += qty
-
-    return {
-        'date': dt.strftime("%Y-%m-%d"),
-        'item_map': items_map,
-        'extras_total': extras_totals,
-    }
-
 
 @app.route('/report/daily')
 def report_daily() -> Any:
@@ -557,27 +317,25 @@ def report_daily() -> Any:
     for key, value in printer_manager_dict.items():
         print(f"Checking printer manager for key: {key}")
         if key == "customer":
-            value.add_to_queue("report", kwargs={'order': aggregate_day(date)})
+            value.add_to_queue("report", kwargs={'order': kh.aggregate_day(date)})
     return redirect(url_for('orders_view'))
 
 
 @app.route('/api/report/daily')
 def api_report_daily() -> Any:
     date = request.args.get('date')
-    data = aggregate_day(date)
+    data = kh.aggregate_day(date)
     return data
 
 
 @app.route('/order/print_customer/<int:order_number>')
 def order_print(order_number: int) -> Any:
-    order = get_order_by_number(order_number)
-    
-
+    order = kh.get_order_by_number(order_number)
     if not order:
         return "Bestellung nicht gefunden", 404
     # Set printed_customer back to 0 for this order
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(kh.get_db_path())
         cur = conn.cursor()
         cur.execute('UPDATE orders SET printed_customer = 0 WHERE order_number = ?', (order_number,))
         conn.commit()
@@ -590,13 +348,13 @@ def order_print(order_number: int) -> Any:
 
 @app.route('/order/print_kitchen/<int:order_number>')
 def order_print_kitchen(order_number: int) -> Any:
-    order = get_order_by_number(order_number)
+    order = kh.get_order_by_number(order_number)
 
     if not order:
         return "Bestellung nicht gefunden", 404
     # Set printed_kitchen back to 0 for this order
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(kh.get_db_path())
         cur = conn.cursor()
         cur.execute('UPDATE orders SET printed_kitchen = 0 WHERE order_number = ?', (order_number,))
         conn.commit()
@@ -610,7 +368,7 @@ def order_print_kitchen(order_number: int) -> Any:
 
 @app.route('/order/export/<int:order_number>')
 def order_export(order_number: int) -> Response:
-    order = get_order_by_number(order_number)
+    order = kh.get_order_by_number(order_number)
     if not order:
         return ("Bestellung nicht gefunden", 404)
     lines = []

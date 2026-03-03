@@ -403,8 +403,7 @@ def _shutdown_now() -> None:
     rather than relying on interactive sudo prompts.
     """
     logging.warning("Shutdown requested via /save-shutdown endpoint")
-    print("AAABBBCCDIOASUDKAHJSKJHASKJHASKJDHAKJ")
-    #subprocess.run(["shutdown", "-h", "now"], check=False)
+    subprocess.run(["shutdown", "-h", "now"], check=False)
 
 @app.route("/save-shutdown", methods=["GET", "POST"])
 def save_shutdown() -> Any:

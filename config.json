@@ -9,6 +9,5 @@
     "customer": "192.168.8.188",
     "1": "192.168.8.187",
     "2": "192.168.8.189"
-  },
-  "admin_shutdown_hash": "scrypt:32768:8:1$d2YQg67vldSY4IzU$c8c5fdac9a51091ef8382b695531105e41fd4deba5e4ad4653586a0af95bca363cc9305786de215ef6bbdd3f1585acb900a786016005411bec7459ef7f03f77d"
+  }
 }

@@ -12,6 +12,7 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 os.environ["KITCHENHELPER_CONFIG_PATH"] = CONFIG_PATH
 
 
+
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 def get_db_path():
     return os.environ.get("KITCHENHELPER_DB_PATH", "orders.db")
@@ -21,6 +22,9 @@ def get_menu_name():
 def set_menu_name(new) -> None :
     os.environ["KITCHENHELPER_MENU_NAME"] = new
     return
+
+def get_menu_path():
+    return os.environ.get("KITCHENHELPER_MENU_PATH", "backup_menu.json")
 
 
 def load_config() -> Dict[str, Any]:
@@ -48,7 +52,7 @@ def load_config() -> Dict[str, Any]:
     defaults["menu_path"] = os.path.join(os.path.dirname(__file__), str(defaults["menu_path"]))
     defaults["db_path"] = os.path.join(os.path.dirname(__file__), str(defaults["db_path"]))
     os.environ["KITCHENHELPER_DB_PATH"] = defaults["db_path"]
-    os.environ["KITCHENHELPER_MENU_PATH"] = defaults["manu_path"]
+    os.environ["KITCHENHELPER_MENU_PATH"] = defaults["menu_path"]
     os.environ["KITCHENHELPER_MENU_NAME"]= str(os.path.splitext(os.path.basename(defaults["menu_path"]))[0])
     return defaults
 

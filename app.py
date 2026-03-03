@@ -46,9 +46,6 @@ logging.info("Starting Kitchen Helper application")
 
 config: Dict[str, Any] = kh.load_config()
 
-#MENU_PATH: str = str(config['menu_path'])
-#DB_PATH: str = str(config["db_path"])
-MENU_NAME: str = str(os.path.splitext(os.path.basename(MENU_PATH))[0]) if MENU_PATH else "Unbekannt"
 
 kh.init_db()
 kh.clear_db_reservations()

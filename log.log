@@ -30810,3 +30810,23 @@ RAW COOKED: --
 2026-03-03 01:52:52 [INFO] werkzeug (_internal.py:97) _log() - 127.0.0.1 - - [03/Mar/2026 01:52:52] "GET /save-shutdown HTTP/1.1" 200 -
 2026-03-03 01:52:56 [WARNING] root (app.py:433) save_shutdown() - Invalid shutdown password from 127.0.0.1
 2026-03-03 01:52:57 [INFO] werkzeug (_internal.py:97) _log() - 127.0.0.1 - - [03/Mar/2026 01:52:57] "[31m[1mPOST /save-shutdown HTTP/1.1[0m" 403 -
+2026-03-03 01:58:58 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-03 01:58:58 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa604dfd0>, '1': <printutil.Queuemanager object at 0x7fa642fc50>, '2': <printutil.Queuemanager object at 0x7fa60f4410>}
+2026-03-03 01:58:58 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-03 01:58:58 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-03 01:58:58 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa6042270>, '1': <printutil.Queuemanager object at 0x7fa6427d90>, '2': <printutil.Queuemanager object at 0x7fa60cc550>}
+2026-03-03 01:58:58 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-03 01:58:58 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-03 01:58:58 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa6042270>, '1': <printutil.Queuemanager object at 0x7fa60cc050>, '2': <printutil.Queuemanager object at 0x7fa60cc7d0>}
+2026-03-03 01:58:58 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-03 01:59:18 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-03 01:59:18 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9d842270>, '1': <printutil.Queuemanager object at 0x7f9dc2fb10>, '2': <printutil.Queuemanager object at 0x7f9d8cc2d0>}
+2026-03-03 01:59:18 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-03 01:59:18 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-03 01:59:18 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9d842270>, '1': <printutil.Queuemanager object at 0x7f9dc2bd90>, '2': <printutil.Queuemanager object at 0x7f9d8cc550>}
+2026-03-03 01:59:18 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-03 01:59:18 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-03 01:59:18 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9d842270>, '1': <printutil.Queuemanager object at 0x7f9d8cc050>, '2': <printutil.Queuemanager object at 0x7f9d8cc7d0>}
+2026-03-03 01:59:18 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-03 01:59:43 [WARNING] root (app.py:405) _shutdown_now() - Shutdown requested via /save-shutdown endpoint
+2026-03-03 02:13:36 [WARNING] root (app.py:405) _shutdown_now() - Shutdown requested via /save-shutdown endpoint

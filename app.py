@@ -396,47 +396,6 @@ def order_export(order_number: int) -> Response:
     return resp
 
 
-def _shutdown_now() -> None:
-    """
-    Actually perform the shutdown.
-    Note: Prefer running the service with the required privileges,
-    rather than relying on interactive sudo prompts.
-    """
-    logging.warning("Shutdown requested via /save-shutdown endpoint")
-    subprocess.run(["shutdown", "-h", "now"], check=False)
-
-@app.route("/save-shutdown", methods=["GET", "POST"])
-def save_shutdown() -> Any:
-    """
-    GET  -> show password + confirmation page
-    POST -> verify password, then shut down
-    """
-    # Prefer env var; fall back to config.json (hash only, never plaintext)
-    password_hash = os.environ.get("KITCHENHELPER_ADMIN_SHUTDOWN_PASSWORD_HASH")
-
-    if request.method == "GET":
-        return render_template("ShutdownSystem.html")
-
-    if not password_hash:
-        logging.error("Shutdown attempted but no ADMIN_SHUTDOWN_PASSWORD_HASH / admin_shutdown_password_hash is set")
-        return ("Shutdown is not configured", 503)
-
-    password = request.form.get("password") or ""
-    confirm = request.form.get("confirm") == "yes"
-
-    if not confirm:
-        return ("Confirmation missing", 400)
-
-    # Do NOT log the password (or any part of it).
-    if not check_password_hash(password_hash, password):
-        logging.warning("Invalid shutdown password from %s", request.remote_addr)
-        # tiny delay to slow brute-force attempts a bit
-        time.sleep(0.75)
-        return ("Forbidden", 403)
-
-    threading.Timer(1.0, _shutdown_now).start()
-    return ("Saving and shutting down...", 200)
-
 # run the app
 if __name__ == '__main__':
     app.run(debug=bool(config.get('debug', True)), host=config.get('host', '0.0.0.0'), port=int(config.get('port', 5099)))

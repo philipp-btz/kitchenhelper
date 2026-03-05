@@ -54,7 +54,6 @@ def load_config() -> Dict[str, Any]:
     os.environ["KITCHENHELPER_DB_PATH"] = defaults["db_path"]
     os.environ["KITCHENHELPER_MENU_PATH"] = defaults["menu_path"]
     os.environ["KITCHENHELPER_MENU_NAME"]= str(os.path.splitext(os.path.basename(defaults["menu_path"]))[0])
-    os.environ["KITCHENHELPER_ADMIN_SHUTDOWN_PASSWORD_HASH"] = defaults["admin_shutdown_hash"]
     return defaults
 
 def init_db() -> None:

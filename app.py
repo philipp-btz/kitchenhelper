@@ -11,11 +11,7 @@ import menu_picker as mp
 import logging
 from logging.handlers import RotatingFileHandler
 import sys
-# --- add these imports ---
-import hmac
-import threading
-import subprocess
-from werkzeug.security import check_password_hash
+
 
 import printutil
 import kitchenhelper as kh
@@ -125,7 +121,7 @@ def order() -> Any:
     else:
         customer_id = str(uuid.uuid4())
 
-        # group items by printer and create separate order for each printer
+        # group items by printer and create a separate order for each printer
         for printer in set(it.get('printer') for it in items if it.get('printer')):
             items_for_printer = [it for it in items if it.get('printer') == printer]
             order: Dict[str, Any] = {
@@ -142,7 +138,7 @@ def order() -> Any:
             current_order_nr = str(order.get('order_number'))
 
             order_numbers = order_numbers + " + " + current_order_nr
-           
+
 
 
     # if this is an AJAX request, return JSON so the client can stay on the menu page
@@ -180,7 +176,7 @@ def menus_view() -> Any:
     for f in files:
         if f.lower().endswith('.json'):
             menus.append({'file': f, 'title': os.path.splitext(f)[0]})
-    # optional confirmation from querystring
+    # optional confirmation from query string
     selected = request.args.get('selected')
     return render_template('menu_selector.html', menus=menus, selected=selected)
 
@@ -207,7 +203,7 @@ def menus_select() -> Any:
             json.dump(cfg, f, ensure_ascii=False, indent=2)
     except Exception as e:
         return f"Fehler beim Auswählen der Speisekarte: {e}", 500
-    # redirect back to selector with confirmation
+    # redirect back to the selector with confirmation
     return redirect(url_for('menus_view', selected=menu_name))
 
 
@@ -230,7 +226,7 @@ def menus_upload() -> Any:
                 os.replace(tmpflag, dest)
             return redirect(url_for('menus_view', selected=os.path.splitext(filename)[0]))
         else:
-            # user cancelled: remove temporary upload if exists
+            # user canceled: remove temporary upload if exists
             if os.path.exists(tmpflag):
                 os.remove(tmpflag)
 
@@ -248,7 +244,7 @@ def menus_upload() -> Any:
 
     dest = os.path.join(menu_dir, filename)
 
-    # If file exists, save uploaded file to a temp and ask for confirmation
+    # If the file exists, save the uploaded file to a temp and ask for confirmation
     tmpflag = os.path.join(menu_dir, filename + '.upload')
     if os.path.exists(dest):
         f.save(tmpflag)
@@ -373,7 +369,7 @@ def order_print_kitchen(order_number: int) -> Any:
 def order_export(order_number: int) -> Response:
     order = kh.get_order_by_number(order_number)
     if not order:
-        return ("Bestellung nicht gefunden", 404)
+        return "Bestellung nicht gefunden", 404
     lines = []
     lines.append(f"Bestell-Nr.: {order['order_number']}")
     lines.append(f"UUID: {order['id']}")

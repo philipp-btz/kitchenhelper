@@ -30852,3 +30852,1076 @@ RAW COOKED: --
 2026-03-05 19:37:02 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
 2026-03-05 19:37:02 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
 2026-03-05 19:44:34 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:47:13 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:47:13 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f7d3d6120>, '1': <printutil.Queuemanager object at 0x7f7d7c6850>, '2': <printutil.Queuemanager object at 0x7f7d7c6fd0>}
+2026-03-05 19:47:13 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:47:32 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:47:32 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9dfc63c0>, '1': <printutil.Queuemanager object at 0x7f9e3b6850>, '2': <printutil.Queuemanager object at 0x7f9e3b6fd0>}
+2026-03-05 19:47:32 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:53:42 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:53:42 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fb976e660>, '1': <printutil.Queuemanager object at 0x7fb9732990>, '2': <printutil.Queuemanager object at 0x7fb9733110>}
+2026-03-05 19:53:42 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:56:10 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:56:10 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fb615a3c0>, '1': <printutil.Queuemanager object at 0x7fb6112850>, '2': <printutil.Queuemanager object at 0x7fb6112fd0>}
+2026-03-05 19:56:10 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:57:03 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:57:03 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f8b17a3c0>, '1': <printutil.Queuemanager object at 0x7f8b136850>, '2': <printutil.Queuemanager object at 0x7f8b136fd0>}
+2026-03-05 19:57:03 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:58:39 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:58:39 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fafc4a3c0>, '1': <printutil.Queuemanager object at 0x7fafc06850>, '2': <printutil.Queuemanager object at 0x7fafc06fd0>}
+2026-03-05 19:58:39 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:58:39 [INFO] werkzeug (_internal.py:97) _log() - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5099
+ * Running on http://192.168.8.190:5099
+2026-03-05 19:58:39 [INFO] werkzeug (_internal.py:97) _log() - [33mPress CTRL+C to quit[0m
+2026-03-05 19:58:39 [INFO] werkzeug (_internal.py:97) _log() -  * Restarting with stat
+2026-03-05 19:58:41 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 19:58:41 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f7e19a3c0>, '1': <printutil.Queuemanager object at 0x7f7e156850>, '2': <printutil.Queuemanager object at 0x7f7e156fd0>}
+2026-03-05 19:58:41 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 19:58:41 [WARNING] werkzeug (_internal.py:97) _log() -  * Debugger is active!
+2026-03-05 19:58:41 [INFO] werkzeug (_internal.py:97) _log() -  * Debugger PIN: 170-320-145
+2026-03-05 20:14:08 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:14:08 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9c022270>, '1': <printutil.Queuemanager object at 0x7f9c3fbb10>, '2': <printutil.Queuemanager object at 0x7f9c0a02d0>}
+2026-03-05 20:14:08 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:14:08 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:14:08 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9c012270>, '1': <printutil.Queuemanager object at 0x7f9c3f7d90>, '2': <printutil.Queuemanager object at 0x7f9c09c550>}
+2026-03-05 20:14:08 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:14:08 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:14:08 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f9c012270>, '1': <printutil.Queuemanager object at 0x7f9c09c050>, '2': <printutil.Queuemanager object at 0x7f9c09c7d0>}
+2026-03-05 20:14:08 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:14:54 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:14:54 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:14:54 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:14:54 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f8691e270>, '1': <printutil.Queuemanager object at 0x7f86cf3d90>, '2': <printutil.Queuemanager object at 0x7f8699c550>}
+2026-03-05 20:14:54 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:14:54 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f8690e270>, '1': <printutil.Queuemanager object at 0x7f86cf7b10>, '2': <printutil.Queuemanager object at 0x7f869982d0>}
+2026-03-05 20:14:54 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:14:54 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f8691e270>, '1': <printutil.Queuemanager object at 0x7f8699c050>, '2': <printutil.Queuemanager object at 0x7f8699c7d0>}
+2026-03-05 20:14:54 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:16:49 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f8691e3c0>
+2026-03-05 20:16:49 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 20:16:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 20:16:49 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:16:50 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8699c690>
+2026-03-05 20:16:50 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8699c050>
+2026-03-05 20:16:50 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 20:16:50 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 20:16:50 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:16:50 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:16:51 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f8691e3c0>
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 20:16:51 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 20:16:52 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:36:17 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f8691e3c0>
+2026-03-05 20:36:17 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 20:36:17 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 20:36:18 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:36:18 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8699c2d0>
+2026-03-05 20:36:18 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f86998410>
+2026-03-05 20:36:18 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 20:36:18 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:36:19 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 20:36:19 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:36:19 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f8691e3c0>
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 20:36:19 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 20:36:20 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 20:49:23 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:49:23 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:49:23 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 20:49:23 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa0422270>, '1': <printutil.Queuemanager object at 0x7fa07fbb10>, '2': <printutil.Queuemanager object at 0x7fa04a02d0>}
+2026-03-05 20:49:23 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa0412270>, '1': <printutil.Queuemanager object at 0x7fa049c050>, '2': <printutil.Queuemanager object at 0x7fa049c7d0>}
+2026-03-05 20:49:23 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:49:23 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 20:49:23 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa0412270>, '1': <printutil.Queuemanager object at 0x7fa07f7d90>, '2': <printutil.Queuemanager object at 0x7fa049c550>}
+2026-03-05 20:49:23 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 21:38:41 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fa04123c0>
+2026-03-05 21:38:41 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 21:38:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 21:38:42 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 21:38:42 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fa049c690>
+2026-03-05 21:38:42 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 21:38:42 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 21:42:21 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fa04123c0>
+2026-03-05 21:42:21 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 21:42:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 21:42:21 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 21:42:21 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fa07fbd90>
+2026-03-05 21:42:22 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 21:42:22 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:22:38 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fa04123c0>
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 22:22:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 22:22:39 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-05 22:22:39 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fa049c690>
+2026-03-05 22:22:39 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:22:40 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fa04b6190>
+2026-03-05 22:22:40 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 22:22:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 22:22:41 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:35:30 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fa04123c0>
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 22:35:30 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 22:35:30 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:35:31 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fa049c050>
+2026-03-05 22:35:37 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 22:35:37 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:35:27 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 22:35:27 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 22:35:27 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-05 22:35:27 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fb2232270>, '1': <printutil.Queuemanager object at 0x7fb22bc050>, '2': <printutil.Queuemanager object at 0x7fb22bc7d0>}
+2026-03-05 22:35:27 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 22:35:27 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fb2232270>, '1': <printutil.Queuemanager object at 0x7fb2617d90>, '2': <printutil.Queuemanager object at 0x7fb22bc550>}
+2026-03-05 22:35:27 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 22:35:27 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fb2242270>, '1': <printutil.Queuemanager object at 0x7fb261bb10>, '2': <printutil.Queuemanager object at 0x7fb22c02d0>}
+2026-03-05 22:35:27 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-05 22:39:07 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22323c0>
+2026-03-05 22:39:07 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 22:39:07 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 22:39:08 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:39:08 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc2d0>
+2026-03-05 22:39:08 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 22:39:08 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:39:11 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22323c0>
+2026-03-05 22:39:11 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-05 22:39:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-05 22:39:12 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-05 22:39:12 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc2d0>
+2026-03-05 22:39:12 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:03:11 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22323c0>
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:03:11 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:03:12 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 00:03:12 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22c0410>
+2026-03-06 00:03:12 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 00:03:12 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:03:13 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d9cd0>
+2026-03-06 00:03:13 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:03:13 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:03:14 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:03:23 [INFO] root (kitchenhelper.py:241) get_order_by_number() - Raw FULFILLED: --, 
+RAW COOKED: --
+2026-03-06 00:03:24 [INFO] root (kitchenhelper.py:241) get_order_by_number() - Raw FULFILLED: --, 
+RAW COOKED: --
+2026-03-06 00:03:25 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d9cd0>
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:03:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:03:26 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:03:27 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc910>
+2026-03-06 00:03:34 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 00:03:34 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:23:35 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22323c0>
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:23:35 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:23:36 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 00:23:36 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22c0410>
+2026-03-06 00:23:36 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:23:37 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d62c0>
+2026-03-06 00:23:38 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:23:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:23:38 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:58:26 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d62c0>
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:58:26 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:58:27 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 00:58:27 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc910>
+2026-03-06 00:58:27 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 00:58:28 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d6060>
+2026-03-06 00:58:28 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 00:58:28 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 00:58:29 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 07:32:10 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d9cd0>
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 07:32:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 07:32:10 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 207, in print_customer
+    printer.image("icon.png", center=False)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 261, in image
+    self._raw(header + im.to_raster_format())
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 07:32:12 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc910>
+2026-03-06 07:32:12 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 274, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 07:32:12 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22daea0>
+2026-03-06 07:32:12 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 07:32:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 07:32:12 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 07:32:14 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb2236f90>
+2026-03-06 07:32:15 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 07:32:15 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 07:47:10 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22d6060>
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 07:47:10 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 07:47:10 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 07:47:10 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb261bd90>
+2026-03-06 07:47:10 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22c0410>
+2026-03-06 07:47:10 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 279, in print_kitchen
+    printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 07:47:11 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 07:47:11 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 07:47:12 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2237ad0>
+2026-03-06 07:47:12 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 07:47:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 07:47:12 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 07:47:13 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22d89d0>
+2026-03-06 07:47:14 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2237ad0>
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 07:47:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 07:47:14 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 07:47:15 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 07:47:15 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:07:54 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2237ad0>
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:07:54 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:07:54 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:07:55 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb2236f90>
+2026-03-06 13:07:55 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:02 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 13:08:02 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.189
+2026-03-06 13:08:02 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 13:08:04 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22daea0>
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:08:04 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:08:05 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:08:05 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc2d0>
+2026-03-06 13:08:05 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:06 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:08:06 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:08:06 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:08:07 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:21 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:08:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:08:22 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:22 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc050>
+2026-03-06 13:08:28 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:08:28 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:49 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:08:49 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:08:49 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:49 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc050>
+2026-03-06 13:08:49 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:08:59 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:08:59 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:08:59 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:09:00 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22d89d0>
+2026-03-06 13:09:00 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:09:21 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22423c0>
+2026-03-06 13:09:21 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:09:21 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.189
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:09:21 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:09:22 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:09:22 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22d89d0>
+2026-03-06 13:09:22 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 274, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:09:25 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22da190>
+2026-03-06 13:09:29 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:09:29 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:10:01 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:10:01 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:10:01 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:10:02 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22da190>
+2026-03-06 13:10:02 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:10:02 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc2d0>
+2026-03-06 13:10:02 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 279, in print_kitchen
+    printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:10:03 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:10:03 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:10:03 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:10:04 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22df9b0>
+2026-03-06 13:10:10 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:10:10 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:33:36 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2237ad0>
+2026-03-06 13:33:36 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 206, in print_customer
+    printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:33:37 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22df9b0>
+2026-03-06 13:33:37 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:33:38 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22dbf00>
+2026-03-06 13:33:38 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:33:38 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:33:39 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:40:12 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22423c0>
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:40:12 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:40:12 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:40:13 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc050>
+2026-03-06 13:40:13 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:40:14 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2252d50>
+2026-03-06 13:40:14 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:40:14 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:40:14 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:40:25 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2252d50>
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:40:25 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:40:25 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb261bd90>
+2026-03-06 13:40:25 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:40:25 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:40:26 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc690>
+2026-03-06 13:40:27 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2252d50>
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:40:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:40:27 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:40:33 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:40:33 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:43:24 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2252d50>
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:43:24 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:43:25 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:43:26 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22df9b0>
+2026-03-06 13:43:26 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 274, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:43:28 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb224bd50>
+2026-03-06 13:43:37 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:43:37 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:43:46 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2252d50>
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:43:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:43:47 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:43:47 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22bc050>
+2026-03-06 13:43:47 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 274, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:43:47 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22da190>
+2026-03-06 13:43:47 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:43:48 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2252d50>
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:43:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:43:49 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:43:50 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb23dc490>
+2026-03-06 13:43:57 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:43:57 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:45:27 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22dbf00>
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:45:27 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:45:27 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:45:28 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb2236f90>
+2026-03-06 13:45:28 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 274, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:45:29 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb224f950>
+2026-03-06 13:45:29 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:45:29 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:45:29 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:45:30 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb224ba50>
+2026-03-06 13:45:32 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:45:32 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:45:40 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:45:40 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:45:41 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 13:45:41 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb224ba50>
+2026-03-06 13:45:41 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:45:41 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb224bd50>
+2026-03-06 13:45:41 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:45:42 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2355b80>
+2026-03-06 13:45:42 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:45:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:45:43 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 13:45:44 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2355b80>
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 13:45:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 13:45:45 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 17:14:37 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb224f950>
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 17:14:37 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 17:14:38 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 17:14:38 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb261bd90>
+2026-03-06 17:14:38 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 279, in print_kitchen
+    printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 17:14:38 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22da190>
+2026-03-06 17:14:38 [ERROR] root (printutil.py:314) print_kitchen() - Error while printing kitchen receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 274, in print_kitchen
+    printer.set(invert=True, font="a", height=2, width=3, custom_size=True, align="center", bold=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 952, in set
+    self._raw(TXT_SIZE + six.int2byte(size_byte))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 17:14:39 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb224fb50>
+2026-03-06 17:14:39 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 17:14:39 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 17:14:40 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 17:14:41 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22def10>
+2026-03-06 17:14:41 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb22df020>
+2026-03-06 17:14:41 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb224fb50>
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 17:14:41 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 17:14:41 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 17:14:41 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 17:14:41 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 17:14:41 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 17:14:42 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:12:46 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2355b80>
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:12:46 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:12:46 [ERROR] root (printutil.py:249) print_customer() - Error while printing customer receipt: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/admin/git_repos/kitchenhelper/printutil.py", line 209, in print_customer
+    printer.text(f"\nNr: {order_NO}\n\n")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/escpos.py", line 863, in text
+    self.magic.write(str(txt))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 268, in write
+    self.write_with_encoding(self.encoding, to_write)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/magicencode.py", line 309, in write_with_encoding
+    self.driver._raw(self.encoder.encode(text, encoding))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/git_repos/kitchenhelper/.venv/lib/python3.13/site-packages/escpos/printer/network.py", line 119, in _raw
+    self.device.sendall(msg)
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-03-06 19:12:47 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb224bd50>
+2026-03-06 19:12:47 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:12:47 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb224ba50>
+2026-03-06 19:12:47 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:12:48 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2355e50>
+2026-03-06 19:12:48 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:12:48 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:12:49 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:12:50 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7fb2355e50>
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:12:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:12:51 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.187
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 19:14:57 [INFO] root (network.py:130) close() - Closing Network connection to printer 192.168.8.188
+2026-03-06 19:16:02 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-06 19:16:02 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fa19463c0>, '1': <printutil.Queuemanager object at 0x7fa1d3a850>, '2': <printutil.Queuemanager object at 0x7fa1d3afd0>}
+2026-03-06 19:16:02 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-06 19:16:02 [INFO] werkzeug (_internal.py:97) _log() - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5099
+ * Running on http://192.168.8.190:5099
+2026-03-06 19:16:02 [INFO] werkzeug (_internal.py:97) _log() - [33mPress CTRL+C to quit[0m
+2026-03-06 19:16:02 [INFO] werkzeug (_internal.py:97) _log() -  * Restarting with stat
+2026-03-06 19:16:04 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-06 19:16:04 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f815f23c0>, '1': <printutil.Queuemanager object at 0x7f81a2e850>, '2': <printutil.Queuemanager object at 0x7f81a2efd0>}
+2026-03-06 19:16:04 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-06 19:16:04 [WARNING] werkzeug (_internal.py:97) _log() -  * Debugger is active!
+2026-03-06 19:16:04 [INFO] werkzeug (_internal.py:97) _log() -  * Debugger PIN: 519-320-057
+2026-03-06 19:16:27 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-06 19:16:27 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7f80e563c0>, '1': <printutil.Queuemanager object at 0x7f8124a850>, '2': <printutil.Queuemanager object at 0x7f8124afd0>}
+2026-03-06 19:16:27 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-06 19:16:27 [INFO] werkzeug (_internal.py:97) _log() - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5099
+ * Running on http://192.168.8.190:5099
+2026-03-06 19:16:27 [INFO] werkzeug (_internal.py:97) _log() - [33mPress CTRL+C to quit[0m
+2026-03-06 19:16:27 [INFO] werkzeug (_internal.py:97) _log() -  * Restarting with stat
+2026-03-06 19:16:28 [INFO] root (app.py:50) <module>() - Starting Kitchen Helper application
+2026-03-06 19:16:28 [INFO] root (app.py:62) <module>() - printer_manager_dict: {'customer': <printutil.Queuemanager object at 0x7fb9bc63c0>, '1': <printutil.Queuemanager object at 0x7fb9fba850>, '2': <printutil.Queuemanager object at 0x7fb9fbafd0>}
+2026-03-06 19:16:28 [INFO] root (app.py:65) <module>() - printer_dict: {'customer': '192.168.8.188', '1': '192.168.8.187', '2': '192.168.8.189'}
+2026-03-06 19:16:28 [WARNING] werkzeug (_internal.py:97) _log() -  * Debugger is active!
+2026-03-06 19:16:28 [INFO] werkzeug (_internal.py:97) _log() -  * Debugger PIN: 519-320-057
+2026-03-06 19:16:37 [INFO] werkzeug (_internal.py:97) _log() - 192.168.8.135 - - [06/Mar/2026 19:16:37] "GET / HTTP/1.1" 200 -
+2026-03-06 19:16:47 [INFO] werkzeug (_internal.py:97) _log() - 192.168.8.135 - - [06/Mar/2026 19:16:47] "POST /order HTTP/1.1" 200 -
+2026-03-06 19:16:50 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f80e56660>
+2026-03-06 19:16:50 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:16:50 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:16:50 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:16:51 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8124aad0>
+2026-03-06 19:16:51 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8124b250>
+2026-03-06 19:16:52 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f80e56660>
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:16:52 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:16:52 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:16:56 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 19:16:56 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 19:16:56 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:16:56 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:17:40 [INFO] werkzeug (_internal.py:97) _log() - 192.168.8.135 - - [06/Mar/2026 19:17:40] "POST /order HTTP/1.1" 200 -
+2026-03-06 19:17:42 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f80e56660>
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:17:42 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:17:43 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:17:43 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb9fbb250>
+2026-03-06 19:17:43 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7fb9fbaad0>
+2026-03-06 19:17:44 [INFO] root (printutil.py:193) print_customer() - PRINTING CUSTOMER for printer <escpos.printer.network.Network object at 0x7f80e56660>
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IHDR' 16 13
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iTXt' 41 1205
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'iCCP' 1258 384
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:434) chunk_iCCP() - iCCP profile name b'sRGB IEC61966-2.1'
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:436) chunk_iCCP() - Compression method 0
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'pHYs' 1654 9
+2026-03-06 19:17:44 [DEBUG] PIL.PngImagePlugin (PngImagePlugin.py:204) call() - STREAM b'IDAT' 1675 4518
+2026-03-06 19:17:45 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:17:47 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 19:17:47 [INFO] root (network.py:111) open() - Network printer enabled
+2026-03-06 19:17:47 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:17:47 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:18:22 [INFO] werkzeug (_internal.py:97) _log() -  * Detected change in '/home/admin/git_repos/kitchenhelper/app.py', reloading
+2026-03-06 19:18:23 [INFO] werkzeug (_internal.py:97) _log() -  * Restarting with stat
+2026-03-06 19:20:27 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8124aad0>
+2026-03-06 19:20:27 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.
+2026-03-06 19:20:27 [INFO] root (printutil.py:259) print_kitchen() - PRINTING KITCHEN for printer <escpos.printer.network.Network object at 0x7f8124b250>
+2026-03-06 19:20:27 [INFO] root (printutil.py:87) _worker() - Job completed successfully, removed from queue.

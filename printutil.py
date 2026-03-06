@@ -236,8 +236,8 @@ class Queuemanager:
             printer.text(f"\n{notes}\n\n") if notes else printer.text("\n")
 
             # TODO wenn es eine webseite gibt, hier Qr Code
-            # printer.set(align="center")
-            # printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
+            printer.set(align="center")
+            printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
             printer.set(align="center", invert=False, bold=True, double_height=False, double_width=True)
             printer.text("Vielen Dank für Ihre \nBestellung!\n")
 

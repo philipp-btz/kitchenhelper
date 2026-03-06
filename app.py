@@ -12,7 +12,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 import sys
 
-
 import printutil
 import kitchenhelper as kh
 
@@ -45,9 +44,7 @@ if LOGGING_DEBUG:
 
 logging.info("Starting Kitchen Helper application")
 
-
 config: Dict[str, Any] = kh.load_config()
-
 
 kh.init_db()
 kh.clear_db_reservations()
@@ -63,7 +60,10 @@ logging.info(f"printer_dict: {printer_dict}")
 app = Flask(__name__)
 
 
-def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None, printed: Optional[bool] = None) -> Optional[Dict[str, Any]]:
+def update_order(
+        order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None,
+        printed: Optional[bool] = None
+        ) -> Optional[Dict[str, Any]]:
     conn = sqlite3.connect(kh.get_db_path())
     cur = conn.cursor()
     fields: List[str] = []
@@ -88,6 +88,7 @@ def update_order(order_number: int, items: Optional[List[Dict[str, Any]]] = None
     conn.commit()
     conn.close()
     return kh.get_order_by_number(order_number)
+
 
 @app.route('/')
 def index() -> Any:
@@ -139,10 +140,9 @@ def order() -> Any:
 
             order_numbers = order_numbers + " + " + current_order_nr
 
-
-
     # if this is an AJAX request, return JSON so the client can stay on the menu page
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (
+            request.headers.get('Accept') or ''):
         return {'status': 'ok', 'order_number': order_numbers.lstrip(' + ')}
     return redirect(url_for('orders_view'))
 
@@ -160,6 +160,7 @@ def order_start() -> Any:
     }
     saved = kh.save_order(draft)
     return {'order_number': saved.get('order_number'), 'id': saved.get('id')}
+
 
 @app.route('/orders')
 def orders_view() -> Any:
@@ -268,7 +269,8 @@ def fulfilled(order_id: str) -> Any:
         conn.commit()
     conn.close()
     # If this is an AJAX request, return JSON so the client can update in place
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (
+            request.headers.get('Accept') or ''):
         return {'status': 'ok', 'fulfilled': (timestamp if row else "--")}
     return redirect(url_for('orders_view'))
 
@@ -284,7 +286,8 @@ def cooked(order_id: str) -> Any:
         cur.execute('UPDATE orders SET cooked = ? WHERE id = ?', (timestamp, order_id))
         conn.commit()
     conn.close()
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (request.headers.get('Accept') or ''):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (
+            request.headers.get('Accept') or ''):
         return {'status': 'ok', 'cooked': (timestamp if row else "--")}
     return redirect(url_for('orders_view'))
 
@@ -305,7 +308,6 @@ def api_cooked_unfulfilled() -> Any:
 def customer_display_view() -> Any:
     # render the customer-facing page showing cooked-but-not-fulfilled orders
     return render_template('customer_display.html')
-
 
 
 @app.route('/report/daily')
@@ -394,4 +396,5 @@ def order_export(order_number: int) -> Response:
 
 # run the app
 if __name__ == '__main__':
-    app.run(debug=bool(config.get('debug', True)), host=config.get('host', '0.0.0.0'), port=int(config.get('port', 5099)))
+    app.run(debug=bool(config.get('debug', True)), host=config.get('host', '0.0.0.0'),
+            port=int(config.get('port', 5099)))

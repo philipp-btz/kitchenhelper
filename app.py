@@ -24,7 +24,7 @@ import kitchenhelper as kh
 # app.secret_key = os.environ.get("FLASK_SECRET_KEY", "CHANGE_ME")
 
 
-LOGGING_DEBUG = True
+LOGGING_DEBUG = False
 
 if LOGGING_DEBUG:
     formatter = logging.Formatter(

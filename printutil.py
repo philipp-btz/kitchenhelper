@@ -54,11 +54,16 @@ class Queuemanager:
 
     def _worker(self):
         """Background worker: process one job, then wait up to 60s."""
+        time_checkpoint = time.time()
         while not self._stop_event.is_set():
-            time_checkpoint = time.time()
+            if self.printer_name != "customer":
+                print(f"_worker working; printer: {self.printer_name}, online: {self.printer.is_online()}, paper status: {self.printer.paper_status()}")
             if time.time() - time_checkpoint > 60:
                 self.printer.text(" ")
-            if self.printer.is_online is False:
+                time_checkpoint = time.time()
+                print(f"PRINTER keepalive check; by {self.printer_name}")
+            if self.printer.is_online() is False:
+                    print(f"PRINTER OFFLINE, getting new one; by {self.printer_name}")
                     self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
             job = None
             db_path = kh.get_db_path()
@@ -176,7 +181,7 @@ class Queuemanager:
     def print_test(self, *, text = "Testdruck") -> bool:
         printer = self.printer
         try:
-            if printer.paper_status == "0":
+            if printer.paper_status() == "0":
                 logging.warning("Printer is out of paper!")
                 return False
             printer.text(str(text) + "\n")
@@ -198,7 +203,9 @@ class Queuemanager:
             items = order.get("items", [])
 
 
-            if printer.paper_status == 0:
+            if printer.paper_status() == 0:
+                return False
+            if printer.is_online() is False:
                 return False
 
 
@@ -264,7 +271,9 @@ class Queuemanager:
 
 
 
-            if printer.paper_status == 0:
+            if printer.paper_status() == 0:
+                return False
+            if printer.is_online() is False:
                 return False
 
             if type(items) != list:

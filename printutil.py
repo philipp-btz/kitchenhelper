@@ -12,14 +12,15 @@ import kitchenhelper as kh
 
 
 class Queuemanager:
+
     def __init__(self, printer_ip: str, printer_name: str):
         self.printer_ip = printer_ip
         self.printer_name = printer_name
         self.queue = []
         self.lock = threading.Lock()
         self._stop_event = threading.Event()
+        self._printer = None
         self._worker_thread = threading.Thread(target=self._worker, daemon=True)
-        self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
 
         # WHERE String configuration
         if self.printer_name == "customer":
@@ -34,12 +35,21 @@ class Queuemanager:
             self.UPDATE_string = "UPDATE orders SET printed_kitchen = 1 WHERE order_number = ?"
 
 
-
         self._worker_thread.start()
 
-    def get_printer(self):
-        self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
-        return self.printer
+    @property
+    def printer(self):
+        """
+        Gibt das Drucker-Objekt zurück. Prüft vorher, ob es existiert und online ist.
+        Baut die Verbindung bei Bedarf automatisch neu auf.
+        """
+        # Prüfe zuerst auf None, um AttributeError beim allerersten Aufruf zu vermeiden
+        if self._printer is None or self._printer.is_online() is False:
+            try:
+                self._printer = Network(self.printer_ip, port=9100, profile="TM-T88V")
+            except Exception as e:
+                logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+        return self._printer
 
     def add_to_queue(self, func: str, kwargs: dict | None = None):
         """Add a callable print job to the queue.
@@ -53,7 +63,7 @@ class Queuemanager:
             self.queue.append((func, kwargs))
 
     def _worker(self):
-        """Background worker: process one job, then wait up to 60s."""
+        """Background worker: process one job, then wait up to 60 Seconds."""
         time_checkpoint = time.time()
         while not self._stop_event.is_set():
             if self.printer_name != "customer":
@@ -62,9 +72,6 @@ class Queuemanager:
                 self.printer.text(" ")
                 time_checkpoint = time.time()
                 print(f"PRINTER keepalive check; by {self.printer_name}")
-            if self.printer.is_online() is False:
-                    print(f"PRINTER OFFLINE, getting new one; by {self.printer_name}")
-                    self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
             job = None
             db_path = kh.get_db_path()
             with self.lock:
@@ -92,8 +99,8 @@ class Queuemanager:
                     logging.info("Job completed successfully, removed from queue.")
 
                     # If job contained an order, try to mark it as printed in DB
+                    order_no = None
                     try:
-                        order_no = None
                         if kwargs:
                             if "order" in kwargs and isinstance(kwargs["order"], dict):
                                 order_no = kwargs["order"].get("order_number")
@@ -198,22 +205,22 @@ class Queuemanager:
         logging.info(f"PRINTING CUSTOMER for printer {printer}")
         try:
 
-            order_NO = order.get("order_number", "Unbekannt")
+            order_no = order.get("order_number", "Unbekannt")
             notes = order.get("notes", "")
             items = order.get("items", [])
 
 
-            if printer.paper_status() == 0:
-                return False
-            if printer.is_online() is False:
+            if printer.paper_status() == 0 or not printer.is_online():
                 return False
 
+            # reset Font
+            printer.set_with_default()
 
             # Head
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
             printer.image("icon.png", center=False)
             time.sleep(0.5)  # Short delay to ensure image is processed before printing text
-            printer.text(f"\nNr: {order_NO}\n\n")
+            printer.text(f"\nNr: {order_no}\n\n")
 
 
 
@@ -254,10 +261,6 @@ class Queuemanager:
 
         except Exception as e:
             logging.exception(f"Error while printing customer receipt: {e}")
-            try:
-                self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
-            except Exception as e2:
-                logging.exception(f"Error while reinitializing printer after failed print: {e2}")
             return False
 
     def print_kitchen(self, *, order: dict) -> bool:
@@ -265,16 +268,17 @@ class Queuemanager:
         time.sleep(1)  # Short delay to ensure printer is ready
         logging.info(f"PRINTING KITCHEN for printer {printer}")
         try:
-            order_NO = order.get("order_number", "Unbekannt")
+            order_no = order.get("order_number", "Unbekannt")
             notes = order.get("notes", "")
             items = order.get("items", [])
 
 
 
-            if printer.paper_status() == 0:
+            if printer.paper_status() == 0 or not printer.is_online():
                 return False
-            if printer.is_online() is False:
-                return False
+
+            # reset Font
+            printer.set_with_default()
 
             if type(items) != list:
                 items = json.loads(items)  # Try to convert to list if it's not already
@@ -286,7 +290,7 @@ class Queuemanager:
 
             # Order NR
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
-            printer.text(f"\n\nNr: {order_NO}\n\n")
+            printer.text(f"\n\nNr: {order_no}\n\n")
 
             # order items
             printer.set(font="a",align="left", bold=True, normal_textsize=True, double_height=True, double_width=True, invert=False)
@@ -321,12 +325,7 @@ class Queuemanager:
 
         except Exception as e:
             logging.exception(f"Error while printing kitchen receipt: {e}")
-            try:
-                self.printer = Network(self.printer_ip, port=9100, profile = "TM-T88V")
-            except Exception as e2:
-                logging.exception(f"Error while reinitializing printer after failed print: {e2}")
             return False
-
     def print_report(self, *,  order: dict) -> bool:
         printer = self.printer
         time.sleep(1)  # Short delay to ensure printer is ready
@@ -336,7 +335,8 @@ class Queuemanager:
             item_map = order.get("item_map", {})
             extras_total = order.get("extras_total", {})
 
-
+            # reset Font
+            printer.set_with_default()
 
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
             printer.text(f"\n\nTagesbericht: \n{date}\n\n")

@@ -1,6 +1,4 @@
-import os
-import dotenv
-from werkzeug.security import check_password_hash, generate_password_hash
+import kitchenhelper as kh
 
-print(generate_password_hash("Alufelge26"))
+kh.init_db()
 

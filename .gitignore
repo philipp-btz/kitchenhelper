@@ -1,6 +1,7 @@
 config.json
 __pycache__/*
 **/log
+.idea/**
 
 /.idea/dataSources/0e3c2bc1-f780-4845-9f5c-01acf61c18ff.xml
 /.idea/dataSources.local.xml

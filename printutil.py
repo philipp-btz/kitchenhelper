@@ -62,13 +62,13 @@ class Queuemanager:
 
     def _worker(self):
         """Background worker: process one job, then wait up to 60 Seconds."""
+        id = threading.get_ident()
         time_checkpoint = time.time()
         while not self._stop_event.is_set():
-            if self.printer_name != "customer":
-                print(
-                    f"_worker working; printer: {self.printer_name}, online: {self.printer.is_online()}, paper status: {self.printer.paper_status()}")
+            print(f"_worker {id} working; printer: {self.printer_name}, online: {self.printer.is_online()}, paper status: {self.printer.paper_status()}")
             if time.time() - time_checkpoint > 60:
-                self.printer.text(" ")
+                #self.printer.text(" ")
+                self.printer.set_with_default()
                 time_checkpoint = time.time()
                 print(f"PRINTER keepalive check; by {self.printer_name}")
             job = None

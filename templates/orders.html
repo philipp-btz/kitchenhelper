@@ -4,69 +4,93 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bestellungen</title>
-    <style>body{font-family:system-ui,Arial;margin:20px} table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:8px}</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <style>
+      .actions{display:flex;gap:8px;flex-wrap:wrap}
+      .order-list{display:flex;flex-direction:column;gap:12px}
+      .order-card{border:1px solid #dbe2f0;border-radius:12px;background:#fff;padding:12px}
+      .order-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:flex-start}
+      .order-no{font-size:24px;font-weight:800;line-height:1}
+      .items{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+      .item-row{padding:9px;border:1px solid #e5eaf5;border-radius:10px;background:#fafcff}
+      .notes{margin-top:10px}
+      .status-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+      .status-block{padding:8px 10px;border-radius:10px;border:1px solid #d6deee;background:#f5f8ff}
+      .order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+      .order-actions form{display:inline}
+      .empty{padding:14px;border:1px dashed #cfd8e7;border-radius:10px;background:#f9fbff}
+    </style>
   </head>
   <body>
-    <h1>Aktuelle Bestellungen</h1>
-    <a href="/">Neue Bestellung</a> ---------  <a href="/customer_display">Kundenanzeige</a> --------- <a href="/report/daily">Tagesreport Drucken</a>
-    <table>
-      <thead>
-        <tr><th>Bestell-Nr.</th><th>Zeit</th><th>Gerichte</th><th>Notiz</th><th>Gekocht</th><th>Abgeholt</th><th>Aktion</th></tr>
-      </thead>
-      <tbody>
+    <div class="wrap stack">
+      <header class="topbar">
+        <h1>Aktuelle Bestellungen</h1>
+        <div class="actions">
+          <a href="/" class="btn primary">Neue Bestellung</a>
+          <a href="/customer_display" class="btn">Kundenanzeige</a>
+          <a href="/report/daily" class="btn warning">Tagesreport Drucken</a>
+        </div>
+      </header>
+
+      <section class="order-list">
         {% for o in orders %}
-        <tr>
-          <td>{{ o.order_number }}</td>
-          <td>{{ o.created_at }}</td>
-          <td>
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <div class="order-no">#{{ o.order_number }}</div>
+              <div class="muted">{{ o.created_at }}</div>
+            </div>
+          </div>
+
+          <div class="items">
             {% for it in o['items'] %}
-              <div>
-                {% if it['qty'] and it['qty'] > 1 %}{{ it['qty'] }}x {% endif %}{{ it['name'] }}{% if it['extras'] %} ({{ it['extras'] | join(', ') }}){% endif %}
-              </div>
+            <div class="item-row">
+              {% if it['qty'] and it['qty'] > 1 %}{{ it['qty'] }}x {% endif %}{{ it['name'] }}{% if it['extras'] %} ({{ it['extras'] | join(', ') }}){% endif %}
+            </div>
             {% endfor %}
-          </td>
-          <td>{{ o.notes }}</td>
-          <td>{{ o.cooked or '' }}</td>
-          <td>{{ o.fulfilled or '' }}</td>
-          <td>
-            <form method="post" action="/cooked/{{ o.id }}" class="cooked-form" style="display:inline">
-              <button type="submit">GEKOCHT</button>
+          </div>
+
+          {% if o.notes %}
+          <div class="notes">
+            <strong>Notiz:</strong> {{ o.notes }}
+          </div>
+          {% endif %}
+
+          <div class="status-row">
+            <div class="status-block">Gekocht: <span class="status-cooked">{{ o.cooked or '' }}</span></div>
+            <div class="status-block">Abgeholt: <span class="status-fulfilled">{{ o.fulfilled or '' }}</span></div>
+          </div>
+
+          <div class="order-actions">
+            <form method="post" action="/cooked/{{ o.id }}" class="cooked-form">
+              <button type="submit" class="btn secondary">GEKOCHT</button>
             </form>
-            <form method="post" action="/fulfilled/{{ o.id }}" class="fulfilled-form" style="display:inline">
-              <button type="submit">ABGEHOLT</button>
+            <form method="post" action="/fulfilled/{{ o.id }}" class="fulfilled-form">
+              <button type="submit" class="btn primary">ABGEHOLT</button>
             </form>
-            <a href="/order/print_customer/{{ o.order_number }}" target="_parent">Kundenbon</a>
-            <a href="/order/print_kitchen/{{ o.order_number }}" target="_parent">Küchenbon</a>
-          </td>
-        </tr>
+            <a href="/order/print_customer/{{ o.order_number }}" target="_parent" class="btn">Kundenbon</a>
+            <a href="/order/print_kitchen/{{ o.order_number }}" target="_parent" class="btn">Küchenbon</a>
+          </div>
+        </article>
         {% else %}
-        <tr><td colspan="7">Keine Bestellungen</td></tr>
+        <div class="empty">Keine Bestellungen</div>
         {% endfor %}
-      </tbody>
-    </table>
+      </section>
+    </div>
+
     <script>
-      // Intercept fulfilled forms and submit via fetch to avoid page jump
       document.querySelectorAll('.fulfilled-form').forEach(form => {
-        form.addEventListener('submit', async (ev) => {
+        form.addEventListener('submit', async ev => {
           ev.preventDefault();
           const action = form.getAttribute('action');
           try {
-            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json'}});
-            if (!resp.ok) {
-              console.error('Failed to toggle fulfilled', resp.status);
-              return;
-            }
+            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}});
+            if (!resp.ok) return;
             const data = await resp.json();
             if (data && data.fulfilled !== undefined) {
-              // find the table row containing this form and update the 'Erledigt am' cell
-              const tr = form.closest('tr');
-              if (tr) {
-                const cols = tr.querySelectorAll('td');
-                // fulfilled column is the 6th (0-based index 5)
-                if (cols && cols.length >= 6) {
-                  cols[5].textContent = data.fulfilled && data.fulfilled !== '--' ? data.fulfilled : '';
-                }
-              }
+              const card = form.closest('.order-card');
+              const slot = card ? card.querySelector('.status-fulfilled') : null;
+              if (slot) slot.textContent = data.fulfilled && data.fulfilled !== '--' ? data.fulfilled : '';
             }
           } catch (e) {
             console.error(e);
@@ -74,27 +98,18 @@
         });
       });
 
-      // cooked toggle handler
       document.querySelectorAll('.cooked-form').forEach(form => {
-        form.addEventListener('submit', async (ev) => {
+        form.addEventListener('submit', async ev => {
           ev.preventDefault();
           const action = form.getAttribute('action');
           try {
-            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json'}});
-            if (!resp.ok) {
-              console.error('Failed to toggle cooked', resp.status);
-              return;
-            }
+            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}});
+            if (!resp.ok) return;
             const data = await resp.json();
             if (data && data.cooked !== undefined) {
-              const tr = form.closest('tr');
-              if (tr) {
-                const cols = tr.querySelectorAll('td');
-                // cooked column is the 5th (0-based index 4)
-                if (cols && cols.length >= 5) {
-                  cols[4].textContent = data.cooked && data.cooked !== '--' ? data.cooked : '';
-                }
-              }
+              const card = form.closest('.order-card');
+              const slot = card ? card.querySelector('.status-cooked') : null;
+              if (slot) slot.textContent = data.cooked && data.cooked !== '--' ? data.cooked : '';
             }
           } catch (e) {
             console.error(e);

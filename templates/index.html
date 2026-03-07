@@ -4,106 +4,94 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bestellungen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     <style>
-      body{font-family:system-ui,Arial;margin:20px}
-      .extras{margin-top:10px}
-      .order-btn{margin-top:12px}
+      .layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:start}
+      .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+      .dish-btn{min-height:72px;padding:12px;border:1px solid #b7c1d6;border-radius:12px;font-size:16px;font-weight:650;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;touch-action:manipulation}
+      .dish-btn.selected-dish{box-shadow:inset 0 0 0 3px #1f7a1f,0 8px 18px rgba(0,0,0,0.12);transform:translateY(-1px)}
+      .config-panel{position:sticky;top:12px}
+      #selected-area h3{margin:0 0 6px 0}
+      #selected-area{display:none}
+      .extras-wrap{display:flex;flex-wrap:wrap;gap:6px}
+      .extra-btn{min-height:42px;padding:8px 10px;border-radius:999px;border:1px solid #b8c2d8;background:#eef1f8;font-size:15px}
+      .extra-btn.selected{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
+      .qty-row{display:flex;align-items:center;gap:8px}
+      #selected-area #sel-extras{margin-top:6px}
+      #selected-area .qty-row{margin-top:10px}
+      #selected-area .actions-row{margin-top:10px}
+      .qty-val{font-size:18px;min-width:24px;text-align:center}
+      #cart-items{display:flex;flex-direction:column;gap:8px}
+      .cart-item{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px;border:1px solid #e2e8f4;border-radius:10px;background:#fafcff}
+      .cart-text{font-size:15px;line-height:1.35}
+      .cart-actions{display:flex;gap:6px}
+      .small-btn{min-height:38px;padding:6px 10px;font-size:15px}
+      .actions-row{display:flex;gap:8px;flex-wrap:wrap}
+      #notes{margin-top:4px}
+      #toast-container{pointer-events:none}
+      .toast-message{pointer-events:auto}
+      @media (max-width:980px){
+        .layout{grid-template-columns:1fr}
+        .config-panel{position:static}
+      }
     </style>
   </head>
   <body>
-    <h1><a href="/menus" >Speisekarte: {{ menu_name }}</a></h1>
-
-    <style>
-      /* Layout: menu + cart side-by-side on wide screens, stacked on small screens */
-      .layout{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:stretch;min-height:calc(100vh - 120px)}
-      /* On wide screens keep aside fixed to the right and avoid overlap by adding right margin to main column */
-      @media (min-width:900px){
-        aside#config-panel{position:fixed;right:20px;top:20px;width:360px;height:calc(100vh - 40px);overflow:auto}
-        /* margin equals aside width + right offset (360 + 20 = 380) to avoid excessive gap */
-        .layout > div:first-child{margin-right:10px}
-      }
-      /* On small screens, restore normal flow */
-      @media (max-width:900px){ .layout{grid-template-columns:1fr;min-height:initial} aside#config-panel{position:static;width:auto;height:auto;margin-right:0} .layout > div:first-child{margin-right:0} }
-
-      /* menu tiles: dynamic columns that fill efficiently */
-      #menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;grid-auto-flow:dense}
-      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;text-align:center;box-sizing:border-box}
-        .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;text-align:center;box-sizing:border-box;position:relative}
-      .dish-btn:active{background:#eee}
-      /* extras as tile-buttons */
-      .extra-btn{display:inline-block;padding:10px 12px;margin:6px 6px 0 0;border-radius:8px;border:1px solid #bbb;background:#e9e9e9;color:#111;font-size:14px}
-      .extra-btn.selected{background:#28a745;color:#fff;border-color:#23863a}
-      .extra-btn:active{transform:scale(0.98)}
-      /* cart area: make right column a column flex so cart can be pushed to bottom */
-      aside#config-panel{border-top:1px solid #ddd;padding:12px;display:flex;flex-direction:column}
-      #selected-area{display:none}
-      #cart{background:#fafafa;padding:12px;border-radius:8px;border:1px solid #eee;margin-top:auto}
-      #cart-items div{padding:6px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
-      /* toast container adjustment */
-      #toast-container{pointer-events:none}
-      .toast-message{pointer-events:auto}
-      /* selected tile visuals: inner highlight so overall size doesn't change */
-      .dish-btn.selected-dish{box-shadow:inset 0 0 0 2px #28a745, 0 6px 18px rgba(0,0,0,0.12);transform:translateY(-3px);box-sizing:border-box}
-    </style>
-
-    <div class="layout">
-      <div>
-        <div id="menu-grid">
-        {% for it in menu %}
-        <button class="dish-btn" data-name="{{ it.name }}" data-extras='{{ it.extras|tojson|e }}' {% if it.bg_color %}style="background: {{ it.bg_color }};"{% endif %}>
-          {{ it.name }}
-        </button>
-        {% endfor %}
-      </div>
-      </div>
-
-      <aside id="config-panel">
-      <div id="selected-area">
-        <h3 id="sel-name"></h3>
-        <div id="sel-extras"></div>
-        <div style="margin-top:8px">
-          <label>Menge:</label>
-          <button id="qty-decr">−</button>
-          <span id="qty">1</span>
-          <button id="qty-incr">+</button>
+    <div class="wrap stack">
+      <header class="topbar">
+        <h1>{{ menu_name }}</h1>
+        <div class="actions-row">
+          <a href="/menus" class="btn">Menu Editor</a>
+          <a href="/orders" class="btn">Bestellungen</a>
+          <a href="/customer_display" class="btn">Kundenanzeige</a>
         </div>
-        <div style="margin-top:8px">
-          <button id="add-to-cart">Zum Bestellkorb hinzufügen</button>
-          <button id="cancel-item">Abbrechen</button>
-        </div>
-      </div>
+      </header>
 
-      <div id="cart" style="margin-top:auto">
-        <h3>Aktueller Bestellkorb</h3>
-        <div id="cart-items"></div>
-        <div style="margin-top:8px">
-          <label for="notes">Bestell-Notiz (optional)</label>
-          <input id="notes" placeholder="z. B. ohne Zwiebeln" />
-        </div>
-        <div style="margin-top:8px">
-          <button id="send-order">Bestellung absenden</button>
-          <a href="/orders">Zu den Bestellungen</a>
-        </div>
+      <div class="layout">
+        <section class="card stack">
+          <h2>Menü</h2>
+          <div id="menu-grid" class="menu-grid">
+            {% for it in menu %}
+            <button class="dish-btn" data-name="{{ it.name }}" data-extras='{{ it.extras|tojson|e }}' {% if it.bg_color %}style="background: {{ it.bg_color }};"{% endif %}>
+              {{ it.name }}
+            </button>
+            {% endfor %}
+          </div>
+        </section>
+
+        <aside id="config-panel" class="stack config-panel">
+          <section id="selected-area" class="card stack">
+            <h3 id="sel-name"></h3>
+            <div id="sel-extras" class="extras-wrap"></div>
+            <div class="qty-row">
+              <span>Menge:</span>
+              <button id="qty-decr" class="btn small-btn" type="button">−</button>
+              <span id="qty" class="qty-val">1</span>
+              <button id="qty-incr" class="btn small-btn" type="button">+</button>
+            </div>
+            <div class="actions-row">
+              <button id="add-to-cart" class="btn primary" type="button">Zum Bestellkorb hinzufügen</button>
+              <button id="cancel-item" class="btn" type="button">Abbrechen</button>
+            </div>
+          </section>
+
+          <section id="cart" class="card stack">
+            <h3>Aktueller Bestellkorb</h3>
+            <div id="cart-items"></div>
+            <div>
+              <label for="notes">Bestell-Notiz (optional)</label>
+              <input id="notes" placeholder="z. B. ohne Zwiebeln">
+            </div>
+            <div class="actions-row">
+              <button id="send-order" class="btn secondary" type="button">Bestellung absenden</button>
+              <a href="/orders" class="btn">Zu den Bestellungen</a>
+            </div>
+          </section>
+        </aside>
       </div>
     </div>
 
     <div id="toast-container" aria-live="polite" style="position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:9999"></div>
-
-    <style>
-      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;box-sizing:border-box}
-      .dish-btn:active{background:#eee}
-      #sel-extras label{display:block;margin:6px 0}
-      #cart-items div{padding:6px;border-bottom:1px solid #eee}
-      button{touch-action:manipulation}
-      .dish-btn{padding:18px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:16px;box-sizing:border-box}
-      .dish-btn:active{background:#eee}
-      #sel-extras label{display:block;margin:6px 0}
-      #cart-items div{padding:6px;border-bottom:1px solid #eee}
-      /* keep default button sizing but enable touch action */
-      button{touch-action:manipulation}
-      /* make only the "Zum Bestellkorb hinzufügen" button larger */
-      /* TODO #add-to-cart {padding:12px 6px;font-size:16px;font-weight:600}
-    </style>
 
     <script>
       const menu = {{ menu|tojson }};
@@ -120,22 +108,21 @@
       const sendOrderBtn = document.getElementById('send-order');
       const notesInput = document.getElementById('notes');
 
-      let current = null; // {name, extras[], qty}
+      let current = null;
       let cart = [];
 
       function showSelected(name, extras){
-        current = {name, extras: extras||[], qty:1};
+        current = {name, extras: extras || [], qty: 1};
         selName.textContent = name;
         selExtras.innerHTML = '';
         if (extras && extras.length){
-          // render extras as tile-buttons (toggle)
-          extras.forEach(e=>{
+          extras.forEach(e => {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'extra-btn';
             btn.dataset.value = e;
             btn.textContent = e;
-            btn.addEventListener('click', ()=> btn.classList.toggle('selected'));
+            btn.addEventListener('click', () => btn.classList.toggle('selected'));
             selExtras.appendChild(btn);
           });
         }
@@ -143,89 +130,136 @@
         selectedArea.style.display = 'block';
       }
 
-      menuGrid.addEventListener('click', (ev)=>{
+      menuGrid.addEventListener('click', ev => {
         const btn = ev.target.closest('.dish-btn');
         if (!btn) return;
         const name = btn.dataset.name;
-        const extras = JSON.parse(btn.dataset.extras||'[]');
+        const extras = JSON.parse(btn.dataset.extras || '[]');
         showSelected(name, extras);
-        // visually mark selection and remove mark from others
-        document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish'));
+        document.querySelectorAll('.dish-btn').forEach(b => b.classList.remove('selected-dish'));
         btn.classList.add('selected-dish');
         setContrastForTiles();
       });
 
-      qtyIncr.addEventListener('click', ()=>{ current.qty++; qtyEl.textContent = current.qty; });
-      qtyDecr.addEventListener('click', ()=>{ if (current.qty>1) current.qty--; qtyEl.textContent = current.qty; });
+      qtyIncr.addEventListener('click', () => {
+        if (!current) return;
+        current.qty++;
+        qtyEl.textContent = String(current.qty);
+      });
 
-      cancelItemBtn.addEventListener('click', ()=>{ selectedArea.style.display='none'; current=null; document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish')); setContrastForTiles(); });
+      qtyDecr.addEventListener('click', () => {
+        if (!current) return;
+        if (current.qty > 1) current.qty--;
+        qtyEl.textContent = String(current.qty);
+      });
 
-      function sameExtras(a,b){
-        if (!a && !b) return true;
-        a = a||[]; b = b||[];
+      cancelItemBtn.addEventListener('click', () => {
+        selectedArea.style.display = 'none';
+        current = null;
+        document.querySelectorAll('.dish-btn').forEach(b => b.classList.remove('selected-dish'));
+        setContrastForTiles();
+      });
+
+      function sameExtras(a, b){
+        a = a || [];
+        b = b || [];
         if (a.length !== b.length) return false;
-        const sa = a.slice().sort().join('|');
-        const sb = b.slice().sort().join('|');
-        return sa===sb;
+        return a.slice().sort().join('|') === b.slice().sort().join('|');
       }
 
       function renderCart(){
-        cartItemsDiv.innerHTML='';
-        if (!cart.length){ cartItemsDiv.textContent='(leer)'; return; }
-        cart.forEach((it, idx)=>{
+        cartItemsDiv.innerHTML = '';
+        if (!cart.length){
+          cartItemsDiv.innerHTML = '<div class="muted">(leer)</div>';
+          return;
+        }
+        cart.forEach((it, idx) => {
           const d = document.createElement('div');
-          const txt = document.createElement('span');
-          txt.textContent = (it.qty>1?it.qty+'x ':'') + it.name + (it.extras && it.extras.length? ' ('+it.extras.join(', ')+')':'');
+          d.className = 'cart-item';
+
+          const txt = document.createElement('div');
+          txt.className = 'cart-text';
+          txt.textContent = (it.qty > 1 ? it.qty + 'x ' : '') + it.name + (it.extras && it.extras.length ? ' (' + it.extras.join(', ') + ')' : '');
           d.appendChild(txt);
-          const rem = document.createElement('button'); rem.textContent='−'; rem.style.marginLeft='8px';
-          rem.addEventListener('click', ()=>{ if (it.qty>1){ it.qty--; } else { cart.splice(idx,1); } renderCart(); });
-          const add = document.createElement('button'); add.textContent='+'; add.style.marginLeft='6px'; add.addEventListener('click', ()=>{ it.qty++; renderCart(); });
-          d.appendChild(rem); d.appendChild(add);
+
+          const actions = document.createElement('div');
+          actions.className = 'cart-actions';
+
+          const rem = document.createElement('button');
+          rem.type = 'button';
+          rem.className = 'btn small-btn';
+          rem.textContent = '−';
+          rem.addEventListener('click', () => {
+            if (it.qty > 1) it.qty--;
+            else cart.splice(idx, 1);
+            renderCart();
+          });
+
+          const add = document.createElement('button');
+          add.type = 'button';
+          add.className = 'btn small-btn';
+          add.textContent = '+';
+          add.addEventListener('click', () => {
+            it.qty++;
+            renderCart();
+          });
+
+          actions.appendChild(rem);
+          actions.appendChild(add);
+          d.appendChild(actions);
           cartItemsDiv.appendChild(d);
         });
       }
 
-      addToCartBtn.addEventListener('click', ()=>{
+      addToCartBtn.addEventListener('click', () => {
         if (!current) return;
-        // collect selected extras from tile buttons
         const chosenElems = selExtras.querySelectorAll('.extra-btn.selected');
         const chosen = Array.from(chosenElems).map(b => b.dataset.value);
-        // grouping: find existing with same name and extras
-        const found = cart.find(c => c.name===current.name && sameExtras(c.extras, chosen));
-        if (found){ found.qty += current.qty; }
-        else { cart.push({name: current.name, extras: chosen, qty: current.qty}); }
-        selectedArea.style.display='none'; current=null; document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish')); setContrastForTiles(); renderCart();
+        const found = cart.find(c => c.name === current.name && sameExtras(c.extras, chosen));
+        if (found) found.qty += current.qty;
+        else cart.push({name: current.name, extras: chosen, qty: current.qty});
+        selectedArea.style.display = 'none';
+        current = null;
+        document.querySelectorAll('.dish-btn').forEach(b => b.classList.remove('selected-dish'));
+        setContrastForTiles();
+        renderCart();
       });
 
       function showToast(message, type){
         const container = document.getElementById('toast-container');
         const msg = document.createElement('div');
-        msg.className = 'toast-message ' + (type||'');
-        msg.style.background = type==='error'? '#ffdddd' : '#222';
-        msg.style.color = type==='error'? '#800' : '#fff';
+        msg.className = 'toast-message';
+        msg.style.background = type === 'error' ? '#ffefef' : '#1f2430';
+        msg.style.color = type === 'error' ? '#7c1111' : '#fff';
+        msg.style.border = type === 'error' ? '1px solid #f3bcbc' : '1px solid #2f3b4f';
         msg.style.padding = '10px 14px';
-        msg.style.borderRadius = '8px';
-        msg.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+        msg.style.borderRadius = '10px';
+        msg.style.boxShadow = '0 4px 14px rgba(0,0,0,0.16)';
         msg.style.marginTop = '8px';
-        msg.style.minWidth = '180px';
+        msg.style.minWidth = '220px';
         msg.style.textAlign = 'center';
         msg.textContent = message;
         container.appendChild(msg);
-        // auto remove
-        setTimeout(()=>{ msg.style.transition = 'opacity 300ms'; msg.style.opacity = '0'; setTimeout(()=>msg.remove(),300); }, 2500);
+        setTimeout(() => {
+          msg.style.transition = 'opacity 250ms';
+          msg.style.opacity = '0';
+          setTimeout(() => msg.remove(), 260);
+        }, 2600);
       }
 
-      sendOrderBtn.addEventListener('click', async ()=>{
-        if (!cart.length){ showToast('Der Bestellkorb ist leer', 'error'); return; }
-        const items = cart.map(c=>({name:c.name, extras:c.extras, qty:c.qty}));
+      sendOrderBtn.addEventListener('click', async () => {
+        if (!cart.length){
+          showToast('Der Bestellkorb ist leer', 'error');
+          return;
+        }
+        const items = cart.map(c => ({name: c.name, extras: c.extras, qty: c.qty}));
         const formData = new FormData();
         formData.append('items', JSON.stringify(items));
-        formData.append('notes', notesInput.value||'');
+        formData.append('notes', notesInput.value || '');
         try{
-          const resp = await fetch('/order', {method:'POST', body: formData, headers: {'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json'}});
+          const resp = await fetch('/order', {method: 'POST', body: formData, headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}});
           if (resp.ok){
             const data = await resp.json();
-            // clear cart and notes, stay on menu page
             cart = [];
             notesInput.value = '';
             renderCart();
@@ -234,36 +268,31 @@
           } else {
             showToast('Fehler beim Absenden der Bestellung', 'error');
           }
-        } catch(e){
+        } catch (e){
           console.error(e);
           showToast('Netzwerkfehler beim Absenden', 'error');
         }
       });
 
-      // initial render
-      renderCart();
-
-      // set contrasting text color for dish tiles based on computed background
       function parseRgb(value){
-        // value like 'rgb(r, g, b)' or 'rgba(r, g, b, a)'
         const m = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-        if (m) return [parseInt(m[1],10), parseInt(m[2],10), parseInt(m[3],10)];
+        if (m) return [parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10)];
         return null;
       }
 
       function hexToRgb(hex){
-        hex = hex.replace('#','');
-        if (hex.length === 3) hex = hex.split('').map(h=>h+h).join('');
-        const num = parseInt(hex,16);
-        return [(num>>16)&255, (num>>8)&255, num&255];
+        hex = hex.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(h => h + h).join('');
+        const num = parseInt(hex, 16);
+        return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
       }
 
-      function luminance(r,g,b){
-        const a = [r,g,b].map(v=>{
-          v = v/255;
-          return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+      function luminance(r, g, b){
+        const a = [r, g, b].map(v => {
+          v = v / 255;
+          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
         });
-        return 0.2126*a[0] + 0.7152*a[1] + 0.0722*a[2];
+        return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
       }
 
       function contrastRatio(l1, l2){
@@ -273,7 +302,7 @@
       }
 
       function setContrastForTiles(){
-        document.querySelectorAll('.dish-btn').forEach(btn=>{
+        document.querySelectorAll('.dish-btn').forEach(btn => {
           const style = getComputedStyle(btn);
           let rgb = parseRgb(style.backgroundColor);
           if (!rgb){
@@ -286,20 +315,14 @@
           }
           if (rgb){
             const lum = luminance(rgb[0], rgb[1], rgb[2]);
-            const whiteLum = 1.0;
-            const blackLum = 0.0;
-            const contrastWithWhite = contrastRatio(whiteLum, lum);
-            const contrastWithBlack = contrastRatio(lum, blackLum);
-            // Prefer the color with the higher contrast ratio. Aim for >=4.5:1 if possible.
-            let chosen = contrastWithWhite >= contrastWithBlack ? '#fff' : '#000';
-            // If both are below 4.5, still pick the higher one but favor white for very dark backgrounds
+            const contrastWithWhite = contrastRatio(1.0, lum);
+            const contrastWithBlack = contrastRatio(lum, 0.0);
+            const chosen = contrastWithWhite >= contrastWithBlack ? '#fff' : '#000';
             btn.style.color = chosen;
-            // add subtle text-shadow for low contrast cases to improve legibility on reflective screens
             const bestContrast = Math.max(contrastWithWhite, contrastWithBlack);
             if (bestContrast < 4.5){
-              // use a thin shadow with opposite color
               const shadowColor = chosen === '#fff' ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.45)';
-              btn.style.textShadow = `0 1px 1px ${shadowColor}`;
+              btn.style.textShadow = '0 1px 1px ' + shadowColor;
             } else {
               btn.style.textShadow = '';
             }
@@ -307,7 +330,7 @@
         });
       }
 
-      // Run once on load
+      renderCart();
       setContrastForTiles();
     </script>
   </body>

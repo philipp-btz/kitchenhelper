@@ -1,39 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
-    <meta charset="utf-8" />
-    <title>Safe Shutdown</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body { font-family: system-ui, sans-serif; margin: 2rem; }
-      .danger { color: #b00020; font-weight: 700; }
-      button { padding: 0.75rem 1rem; }
-      input[type="password"] { padding: 0.5rem; width: min(480px, 100%); }
-      .box { max-width: 640px; }
-    </style>
+    <meta charset="utf-8">
+    <title>System herunterfahren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
   </head>
   <body>
-    <div class="box">
-      <h1 class="danger">Shutdown this system</h1>
-      <p>This will stop the machine immediately.</p>
-
-      <form method="post" action="/save-shutdown">
-        <p>
+    <div class="wrap stack">
+      <h1>System herunterfahren</h1>
+      <section class="card stack">
+        <div class="warn"><strong>Achtung:</strong> Der Rechner wird sofort gestoppt.</div>
+        <form method="post" action="/save-shutdown" class="stack">
           <label>
-            Password:<br />
-            <input type="password" name="password" autocomplete="current-password" required />
+            Passwort:
+            <input type="password" name="password" autocomplete="current-password" required>
           </label>
-        </p>
 
-        <p>
-          <label>
-            <input type="checkbox" name="confirm" value="yes" required />
-            Yes, I really want to shut down this system.
+          <label style="display:flex;gap:8px;align-items:center">
+            <input type="checkbox" name="confirm" value="yes" required style="width:auto;min-height:auto">
+            Ja, ich möchte dieses System wirklich herunterfahren.
           </label>
-        </p>
 
-        <button type="submit">Shut down now</button>
-      </form>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="submit" class="btn danger">Jetzt herunterfahren</button>
+            <a href="/" class="btn">Abbrechen</a>
+          </div>
+        </form>
+      </section>
     </div>
   </body>
 </html>

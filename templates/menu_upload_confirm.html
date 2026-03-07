@@ -4,21 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Upload bestätigen</title>
-    <style>body{font-family:system-ui,Arial;margin:20px} .card{border:1px solid #ddd;padding:12px;border-radius:6px;max-width:720px}</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <style>
+      .actions{display:flex;gap:10px;flex-wrap:wrap}
+    </style>
   </head>
   <body>
-    <h1>Datei bereits vorhanden</h1>
-    <div class="card">
-      <p>Die Datei <strong>{{ filename }}</strong> existiert bereits. Möchtest du sie ersetzen?</p>
-      <form method="post" action="/menus/upload" style="display:inline">
-        <input type="hidden" name="replace" value="1" />
-        <input type="hidden" name="filename" value="{{ filename }}" />
-        <button type="submit">Ja, ersetzen</button>
-      </form>
-      <form method="post" action="/menus/upload" style="display:inline;margin-left:12px">
-        <input type="hidden" name="replace" value="2" />
-        <input type="hidden" name="filename" value="{{ filename }}" />
-        <button type="submit">Nein, nicht ersetzen</button>
-      </form>
+    <div class="wrap stack">
+      <h1>Datei bereits vorhanden</h1>
+      <section class="card stack">
+        <p>Die Datei <strong>{{ filename }}</strong> existiert bereits. Möchtest du sie ersetzen?</p>
+        <div class="actions">
+          <form method="post" action="/menus/upload">
+            <input type="hidden" name="replace" value="1">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <button type="submit" class="btn danger">Ja, ersetzen</button>
+          </form>
+          <form method="post" action="/menus/upload">
+            <input type="hidden" name="replace" value="2">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <button type="submit" class="btn">Nein, nicht ersetzen</button>
+          </form>
+          <a href="/menus" class="btn">Zurück</a>
+        </div>
+      </section>
+    </div>
   </body>
 </html>

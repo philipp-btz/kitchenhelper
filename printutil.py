@@ -15,6 +15,7 @@ class Queuemanager:
     def __init__(self, printer_ip: str, printer_name: str):
         self.printer_ip = printer_ip
         self.printer_name = printer_name
+        self.printer_model = "TM-T88V"
         print(f"Initialized Queuemanager for printer '{self.printer_name}' at IP {self.printer_ip}")
         self.queue = []
         self.lock = threading.Lock()
@@ -43,12 +44,17 @@ class Queuemanager:
         Baut die Verbindung bei Bedarf automatisch neu auf.
         """
         # Prüfe zuerst auf None, um AttributeError beim allerersten Aufruf zu vermeiden
-        if self._printer is None or self._printer.is_online() is False:
-            try:
-                self._printer = Network(self.printer_ip, port=9100, profile="TM-T88V")
-            except Exception as e:
-                logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
-        return self._printer
+        try:
+            if self._printer is None or self._printer.is_online() is False:
+                try:
+                    self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
+                except Exception as e:
+                    logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+            return self._printer
+        except:
+            self._printer=Network(self.printer_ip, port=9100, profile=self.printer_model)
+            return self._printer
+
 
     def add_to_queue(self, func: str, kwargs: dict | None = None):
         """Add a callable print job to the queue.
@@ -66,7 +72,7 @@ class Queuemanager:
         id = threading.get_ident()
         time_checkpoint = time.time()
         while not self._stop_event.is_set():
-            print(f"_worker {id} working; printer: {self.printer_name}, online: {self.printer.is_online()}, paper status: {self.printer.paper_status()}")
+            #print(f"_worker {id} working; printer: {self.printer_name}, online: {self.printer.is_online()}, paper status: {self.printer.paper_status()}")
             if time.time() - time_checkpoint > 60:
                 #self.printer.text(" ")
                 self.printer.set_with_default()
@@ -187,8 +193,12 @@ class Queuemanager:
     def print_test(self, *, text="Testdruck") -> bool:
         printer = self.printer
         try:
-            if printer.paper_status() == "0":
-                logging.warning("Printer is out of paper!")
+            try:
+                if printer.paper_status() == "0":
+                    logging.warning("Printer is out of paper!")
+                    return False
+            except Exception as e:
+                logging.error(f"Error checking printer status for {self.printer_name}: {e}")
                 return False
             printer.text(str(text) + "\n")
 
@@ -206,7 +216,12 @@ class Queuemanager:
             notes = order.get("notes", "")
             items = order.get("items", [])
 
-            if printer.paper_status() == 0 or not printer.is_online():
+            try:
+                if printer.paper_status() == 0 or not printer.is_online():
+                    logging.warning(f"Printer {self.printer_name} is offline or out of paper.")
+                    return False
+            except Exception as e:
+                logging.error(f"Error checking printer status for {self.printer_name}: {e}")
                 return False
 
             # reset Font
@@ -265,7 +280,12 @@ class Queuemanager:
             notes = order.get("notes", "")
             items = order.get("items", [])
 
-            if printer.paper_status() == 0 or not printer.is_online():
+            try:
+                if printer.paper_status() == 0 or not printer.is_online():
+                    logging.warning(f"Printer {self.printer_name} is offline or out of paper.")
+                    return False
+            except Exception as e:
+                logging.error(f"Error checking printer status for {self.printer_name}: {e}")
                 return False
 
             # reset Font

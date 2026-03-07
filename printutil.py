@@ -61,7 +61,6 @@ class Queuemanager:
                     print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
                 except Exception as e:
                     logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
-            print(f"Printer {self.printer_name} online: {self._printer.is_online()}")
             return self._printer
         except:
             self._printer.close()
@@ -87,12 +86,11 @@ class Queuemanager:
         id = threading.get_ident()
         time_checkpoint = time.time()
         while not self._stop_event.is_set():
-            #print(f"_worker {id} working; printer: {self.printer_name}, online: {self.printer.is_online()}, paper status: {self.printer.paper_status()}")
             if time.time() - time_checkpoint > 20:
                 #self.printer.text(" ")
                 self.printer.set_with_default()
                 time_checkpoint = time.time()
-                print(f"{datetime.datetime.now()} PRINTER keepalive check; by {self.printer_name}")
+                #print(f"{datetime.datetime.now()} PRINTER keepalive check; by {self.printer_name}")
             job = None
             db_path = kh.get_db_path()
             with self.lock:

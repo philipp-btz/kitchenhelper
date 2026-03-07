@@ -4,30 +4,42 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bestellung {{ order.order_number }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     <style>
-      body{font-family:system-ui,Arial;margin:20px}
-      .receipt{border:1px solid #000;padding:12px;width:380px}
-      h2{margin-top:0}
-      .meta{font-size:0.9em;color:#333}
+      .receipt{max-width:460px;margin:0 auto}
+      .line{padding:6px 0;border-bottom:1px dashed #d7deea}
+      .meta{font-size:14px;color:#4f5d70}
+      .no-print.actions{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+      @media print{
+        .receipt{max-width:none;margin:0}
+      }
     </style>
   </head>
   <body>
-    <div class="receipt">
-      <h2>Bestell-Nr. {{ order['order_number'] }}</h2>
-      <div class="meta">UUID: {{ order['id'] }}</div>
-      <div class="meta">Zeit: {{ order['created_at'] }}</div>
-      <hr>
-      {% for it in order['items'] %}
-        <div><strong>{% if it['qty'] and it['qty'] > 1 %}{{ it['qty'] }}x {% endif %}{{ it['name'] }}</strong></div>
-        {% if it['extras'] %}
-        <div>Extras: {{ it['extras'] | join(', ') }}</div>
+    <div class="wrap stack">
+      <div class="no-print actions">
+        <button onclick="window.print()" type="button" class="btn secondary">Drucken</button>
+        <a href="/orders" class="btn">Zurück</a>
+      </div>
+
+      <div class="receipt card">
+        <h2>Bestell-Nr. {{ order['order_number'] }}</h2>
+        <div class="meta">UUID: {{ order['id'] }}</div>
+        <div class="meta">Zeit: {{ order['created_at'] }}</div>
+        <hr>
+        {% for it in order['items'] %}
+          <div class="line">
+            <strong>{% if it['qty'] and it['qty'] > 1 %}{{ it['qty'] }}x {% endif %}{{ it['name'] }}</strong>
+            {% if it['extras'] %}
+            <div>Extras: {{ it['extras'] | join(', ') }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        {% if order['notes'] %}
+        <div class="line">Notiz: {{ order['notes'] }}</div>
         {% endif %}
-      {% endfor %}
-      {% if order['notes'] %}
-      <div>Notiz: {{ order['notes'] }}</div>
-      {% endif %}
-      <hr>
-      <div>Gedruckt: {{ 'Ja' if order['printed'] else 'Nein' }}</div>
+        <div style="padding-top:8px">Gedruckt: {{ 'Ja' if order['printed'] else 'Nein' }}</div>
+      </div>
     </div>
     <script>window.print()</script>
   </body>

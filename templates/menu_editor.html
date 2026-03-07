@@ -4,60 +4,52 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Speisekarte bearbeiten</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     <style>
-      body{font-family:system-ui,Arial;margin:20px;background:#f7f7f7}
-      .wrap{max-width:980px;margin:0 auto}
-      .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-      .card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;margin-top:12px}
-      .item{display:grid;grid-template-columns:2fr 110px 140px 2fr auto;gap:10px;align-items:start;margin-bottom:10px;padding:10px;border:1px solid #eee;border-radius:8px}
-      .item input,.item select,input[type="text"]{padding:8px;border:1px solid #ccc;border-radius:6px;width:100%;box-sizing:border-box}
-      .muted{font-size:12px;color:#666}
-      .btn{padding:9px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer}
-      .btn.primary{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
-      .btn.danger{background:#8d1a1a;color:#fff;border-color:#8d1a1a}
-      .btn.small{padding:6px 8px;font-size:12px}
-      .err{padding:10px;border:1px solid #f0b7b7;background:#ffeaea;border-radius:6px;color:#7c1111}
+      .item{display:grid;grid-template-columns:2fr 120px 160px 2fr auto;gap:10px;align-items:start;padding:12px;border:1px solid #e7ebf3;border-radius:10px;background:#fcfdff}
+      .item label{font-weight:600;font-size:14px}
       .extras-list{display:flex;flex-direction:column;gap:6px}
       .extra-row{display:flex;gap:6px;align-items:center}
       .extra-row input{flex:1}
-      .color-preview{margin-top:6px;height:28px;border-radius:6px;border:1px solid #999}
-      @media (max-width:860px){
+      .color-preview{margin-top:6px;height:30px;border-radius:8px;border:1px solid #99a5bf}
+      .btn.small{min-height:34px;padding:6px 10px;font-size:14px}
+      @media (max-width:980px){
         .item{grid-template-columns:1fr}
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <div class="top">
+    <div class="wrap stack">
+      <div class="topbar">
         <h1>Speisekarte bearbeiten</h1>
-        <p><a href="/menus">Zurück zur Menü-Auswahl</a></p>
+        <a href="/menus" class="btn">Zurück zur Menü-Auswahl</a>
       </div>
 
       {% if error %}
-      <div class="err">{{ error }}</div>
+      <div class="error">{{ error }}</div>
       {% endif %}
 
-      <form method="post" action="/menus/save" id="menu-form">
-        <div class="card">
+      <form method="post" action="/menus/save" id="menu-form" class="stack">
+        <section class="card stack">
           <label for="menu_name"><strong>Menüname</strong></label>
-          <input id="menu_name" name="menu_name" type="text" value="{{ menu_name }}" placeholder="z. B. Fruehlingsfest_2026" required />
+          <input id="menu_name" name="menu_name" type="text" value="{{ menu_name }}" placeholder="z. B. Fruehlingsfest_2026" required>
           <p class="muted">Wird als Dateiname im Ordner <code>menu_list</code> gespeichert.</p>
-          <input type="hidden" name="loaded_file" value="{{ loaded_file }}" />
-          <input type="hidden" name="items_json" id="items_json" />
-        </div>
+          <input type="hidden" name="loaded_file" value="{{ loaded_file }}">
+          <input type="hidden" name="items_json" id="items_json">
+        </section>
 
-        <div class="card">
-          <div class="top">
+        <section class="card stack">
+          <div class="topbar">
             <h2>Menü-Items</h2>
             <button type="button" id="add-item" class="btn">+ Item hinzufügen</button>
           </div>
           <p class="muted">Extras können beliebig viele pro Item sein.</p>
-          <div id="items-list"></div>
-        </div>
+          <div id="items-list" class="stack"></div>
+        </section>
 
-        <div class="card">
+        <section class="card">
           <button type="submit" class="btn primary">Speisekarte speichern</button>
-        </div>
+        </section>
       </form>
     </div>
 
@@ -65,7 +57,7 @@
       <div class="item">
         <div>
           <label>Name</label>
-          <input class="field-name" type="text" placeholder="Item-Name" required />
+          <input class="field-name" type="text" placeholder="Item-Name" required>
         </div>
         <div>
           <label>Drucker</label>
@@ -76,7 +68,7 @@
         </div>
         <div>
           <label>Farbe</label>
-          <input class="field-bg" type="color" value="#ffffff" />
+          <input class="field-bg" type="color" value="#ffffff">
           <div class="color-preview"></div>
         </div>
         <div>
@@ -86,7 +78,7 @@
         </div>
         <div>
           <label>&nbsp;</label>
-          <button type="button" class="btn danger remove-item">Löschen</button>
+          <button type="button" class="btn small danger remove-item">Löschen</button>
         </div>
       </div>
     </template>

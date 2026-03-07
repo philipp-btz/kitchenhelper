@@ -4,42 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Speisekarte wählen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     <style>
-      body{font-family:system-ui,Arial;margin:20px;background:#f7f7f7;color:#1a1a1a}
-      .wrap{max-width:980px;margin:0 auto}
-      .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-      .top h1{margin:0}
-      .muted{color:#666}
-      .card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:14px;margin-top:12px}
-      .menu-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid #ececec;border-radius:8px;margin:10px 0;background:#fcfcfc;gap:12px}
-      .menu-title{font-weight:600}
+      .menu-item{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;border:1px solid #e7ebf3;border-radius:10px;background:#fcfdff}
+      .menu-title{font-size:18px;font-weight:700}
       .menu-actions{display:flex;gap:8px;flex-wrap:wrap}
-      .btn{padding:9px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer}
-      .btn.primary{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
-      .btn.link{display:inline-block;text-decoration:none}
-      .ok{padding:10px;border:1px solid #cfe9c8;background:#eef9ee;border-radius:6px;margin-bottom:10px}
-      .empty{padding:14px;border:1px dashed #d2d2d2;border-radius:8px;background:#fafafa}
-      input[type="file"]{padding:8px;border:1px solid #ccc;border-radius:6px;background:#fff;width:100%;box-sizing:border-box}
+      .empty{padding:14px;border:1px dashed #cfd8e7;border-radius:10px;background:#f9fbff}
       .upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-      .upload-row input{flex:1;min-width:230px}
-      @media (max-width:720px){
-        .menu-item{flex-direction:column;align-items:flex-start}
-      }
+      .upload-row input{flex:1;min-width:220px}
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <div class="top">
+    <div class="wrap stack">
+      <div class="topbar">
         <h1>Speisekarte wählen</h1>
-        <a href="/" class="btn link">Zurück zur Speisekarte</a>
+        <a href="/" class="btn">Zurück zur Speisekarte</a>
       </div>
       <p class="muted">Wähle eine vorhandene Speisekarte oder erstelle eine neue direkt im Browser.</p>
 
-      <div class="card">
-        <div class="top">
+      <section class="card stack">
+        <div class="topbar">
           <h2>Verfügbare Speisekarten</h2>
-          <a href="/menus/editor" class="btn primary link">+ Neue Speisekarte</a>
+          <a href="/menus/editor" class="btn primary">+ Neue Speisekarte</a>
         </div>
+
         {% if selected %}
         <div class="ok">Ausgewählte Speisekarte: <strong>{{ selected }}</strong></div>
         {% endif %}
@@ -52,23 +40,23 @@
           <div class="menu-title">{{ m.title }}</div>
           <div class="menu-actions">
             <form method="post" action="/menus/select">
-              <input type="hidden" name="menu_file" value="{{ m.file }}" />
+              <input type="hidden" name="menu_file" value="{{ m.file }}">
               <button type="submit" class="btn primary">Auswählen</button>
             </form>
-            <a href="/menus/editor?menu_file={{ m.file }}" class="btn link">Bearbeiten</a>
+            <a href="/menus/editor?menu_file={{ m.file }}" class="btn">Bearbeiten</a>
           </div>
         </div>
         {% endfor %}
         {% if not menus %}
         <div class="empty">(keine Menü-Dateien gefunden)</div>
         {% endif %}
-      </div>
+      </section>
 
-      <section class="card">
+      <section class="card stack">
         <h2>Speisekarte hochladen</h2>
         <form method="post" action="/menus/upload" enctype="multipart/form-data">
           <div class="upload-row">
-            <input type="file" name="menu_file" accept=".json" required />
+            <input type="file" name="menu_file" accept=".json" required>
             <button type="submit" class="btn">Hochladen</button>
           </div>
         </form>

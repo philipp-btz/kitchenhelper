@@ -15,6 +15,7 @@ class Queuemanager:
     def __init__(self, printer_ip: str, printer_name: str):
         self.printer_ip = printer_ip
         self.printer_name = printer_name
+        print(f"Initialized Queuemanager for printer '{self.printer_name}' at IP {self.printer_ip}")
         self.queue = []
         self.lock = threading.Lock()
         self._stop_event = threading.Event()

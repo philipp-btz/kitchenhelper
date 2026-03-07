@@ -69,7 +69,6 @@
         <div>
           <label>Farbe</label>
           <input class="field-bg" type="color" value="#ffffff">
-          <div class="color-preview"></div>
         </div>
         <div>
           <label>Extras</label>
@@ -111,13 +110,7 @@
         const row = node.querySelector('.item');
         row.querySelector('.field-name').value = item?.name || '';
         row.querySelector('.field-printer').value = String(item?.printer || 1);
-        const colorInput = row.querySelector('.field-bg');
-        const colorPreview = row.querySelector('.color-preview');
-        colorInput.value = item?.bg_color || '#ffffff';
-        colorPreview.style.backgroundColor = colorInput.value;
-        colorInput.addEventListener('input', () => {
-          colorPreview.style.backgroundColor = colorInput.value;
-        });
+        row.querySelector('.field-bg').value = item?.bg_color || '#ffffff';
         const extrasList = row.querySelector('.extras-list');
         const extras = item?.extras || [];
         if (extras.length){

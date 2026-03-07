@@ -420,10 +420,56 @@ def api_cooked_unfulfilled() -> Any:
     return {'order_numbers': nums}
 
 
+@app.route('/api/uncooked_orders')
+def api_uncooked_orders() -> Any:
+    """Return a JSON list of uncooked orders."""
+    kitchen = request.args.get('kitchen', 'all')
+    conn = sqlite3.connect(kh.get_db_path())
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    
+    query = "SELECT * FROM orders WHERE cooked IS NULL OR cooked = '--'"
+    params = []
+    
+    if kitchen in ('1', '2'):
+        query += " AND kitchen = ?"
+        params.append(kitchen)
+        
+    query += " ORDER BY created_at ASC"
+    
+    cur.execute(query, tuple(params))
+    rows = cur.fetchall()
+    conn.close()
+    
+    orders = []
+    for row in rows:
+        order_data = dict(row)
+        try:
+            items = json.loads(order_data.get('items', '[]'))
+        except (json.JSONDecodeError, TypeError):
+            items = []
+        
+        orders.append({
+            'id': order_data.get('id'),
+            'order_number': order_data.get('order_number'),
+            'items': items,
+            'kitchen': order_data.get('kitchen'),
+            'notes': order_data.get('notes')
+        })
+        
+    return Response(json.dumps(orders, ensure_ascii=False), mimetype='application/json')
+
+
 @app.route('/customer_display')
 def customer_display_view() -> Any:
     # render the customer-facing page showing cooked-but-not-fulfilled orders
     return render_template('customer_display.html')
+
+
+@app.route('/kitchen_display')
+def kitchen_display_view() -> Any:
+    # render the kitchen-facing page showing uncooked orders
+    return render_template('kitchen_display.html')
 
 
 @app.route('/report/daily')

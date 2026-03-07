@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Küchendisplay</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <style>
+      html,body{height:100%}
+      body{margin:0}
+      .screen{min-height:100vh;display:flex;flex-direction:column;padding:14px}
+      .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+      .title{font-size:clamp(32px,5vw,42px);margin:0}
+      .title a{color:inherit;text-decoration:none}
+      .header-actions{display:flex;gap:8px;align-items:center}
+      .grid-wrap{flex:1;min-height:0}
+      .grid{height:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));grid-auto-rows:max-content;gap:12px}
+      .order{border-radius:14px;border:1px solid #d7dfef;background:#fff;padding:16px;min-height:0; cursor: pointer;}
+      .order.single-item { background-color: #ffb799; }
+      .order.kitchen-1 { border-left: 10px solid #ff717f; }
+      .order.kitchen-2 { border-left: 10px solid #a0cbff; }
+      .order-header{font-size:24px; font-weight:bold; margin-bottom: 10px;}
+      .order-items{list-style:none; padding:0; margin:0;}
+      .order-item{margin-bottom: 8px;}
+      .item-name{font-weight:bold;}
+      .item-extras{list-style:none; padding-left: 20px; margin:0;}
+      .order-notes{margin-top:10px; font-style: italic; color: red; font-weight: bold;}
+      .empty{grid-column:1 / -1;font-size:24px;font-weight:500;color:#556173;background:#f8fbff; text-align:center; padding: 20px;}
+
+      .dialog-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .dialog {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+      }
+      .dialog-buttons {
+        margin-top: 20px;
+      }
+      #kitchen-selector {
+        padding: 6px;
+        border-radius: 6px;
+      }
+      @media (max-width:700px){
+        .screen{padding:10px}
+        .topbar{flex-direction:column;align-items:stretch;gap:10px}
+        .title{text-align:center}
+        .header-actions{justify-content:center}
+        .grid{gap:10px}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screen">
+      <header class="topbar">
+        <h1 class="title"><a href="/orders">Küchendisplay</a></h1>
+        <div class="header-actions">
+          <a href="/orders" class="btn">Bestellübersicht</a>
+          <a href="/customer_display" class="btn">Kundenanzeige</a>
+          <select id="kitchen-selector">
+            <option value="all">Alle</option>
+            <option value="1">Küche 1</option>
+            <option value="2">Küche 2</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="grid-wrap">
+        <div id="order-grid" class="grid">
+          <div class="empty">(Lädt...)</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="dialog-overlay" id="confirmation-dialog" style="display: none;">
+      <div class="dialog">
+        <p>Bestellung als gekocht markieren?</p>
+        <div class="dialog-buttons">
+          <button id="confirm-button">Bestätigen</button>
+          <button id="cancel-button">Abbrechen</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let prevOrders = null;
+      let initial = true;
+      let orderToCook = null;
+
+      function getSelectedKitchen() {
+        return document.getElementById('kitchen-selector').value;
+      }
+
+      function showConfirmation(orderId) {
+        orderToCook = orderId;
+        document.getElementById('confirmation-dialog').style.display = 'flex';
+      }
+
+      function hideConfirmation() {
+        orderToCook = null;
+        document.getElementById('confirmation-dialog').style.display = 'none';
+      }
+
+      async function markAsCooked() {
+        if (!orderToCook) return;
+        try {
+          const resp = await fetch(`/cooked/${orderToCook}`, { method: 'POST' });
+          if (resp.ok) {
+            fetchOrders();
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          hideConfirmation();
+        }
+      }
+
+      async function fetchOrders(){
+        try{
+          const kitchen = getSelectedKitchen();
+          const resp = await fetch(`/api/uncooked_orders?kitchen=${kitchen}`, {headers: {'Accept': 'application/json'}});
+          if (!resp.ok) return;
+          const orders = await resp.json();
+          const grid = document.getElementById('order-grid');
+          grid.innerHTML = '';
+
+          if (orders.length === 0){
+            const msg = document.createElement('div');
+            msg.className = 'tile empty';
+            msg.textContent = 'Keine offenen Bestellungen.';
+            grid.appendChild(msg);
+            prevOrders = orders;
+            initial = false;
+            return;
+          }
+
+          orders.forEach(order => {
+            const orderDiv = document.createElement('div');
+            orderDiv.className = `order kitchen-${order.kitchen}`;
+            if (order.items.length === 1 && order.items[0].qty === 1) {
+              orderDiv.classList.add('single-item');
+            }
+            orderDiv.dataset.orderId = order.id;
+            orderDiv.addEventListener('click', () => showConfirmation(order.id));
+
+            const header = document.createElement('div');
+            header.className = 'order-header';
+            header.textContent = `Bestellung #${order.order_number}`;
+            orderDiv.appendChild(header);
+
+            const itemsList = document.createElement('ul');
+            itemsList.className = 'order-items';
+            order.items.forEach(item => {
+              const itemLi = document.createElement('li');
+              itemLi.className = 'order-item';
+
+              const itemName = document.createElement('div');
+              itemName.className = 'item-name';
+              const qtyText = item.qty && item.qty > 1 ? `${item.qty}x ` : '';
+              itemName.textContent = qtyText + item.name;
+              itemLi.appendChild(itemName);
+
+              if (item.extras && item.extras.length > 0) {
+                const extrasList = document.createElement('ul');
+                extrasList.className = 'item-extras';
+                item.extras.forEach(extra => {
+                  const extraLi = document.createElement('li');
+                  extraLi.textContent = extra;
+                  extrasList.appendChild(extraLi);
+                });
+                itemLi.appendChild(extrasList);
+              }
+              itemsList.appendChild(itemLi);
+            });
+            orderDiv.appendChild(itemsList);
+
+            if (order.notes) {
+              const notesDiv = document.createElement('div');
+              notesDiv.className = 'order-notes';
+              notesDiv.textContent = `Notiz: ${order.notes}`;
+              orderDiv.appendChild(notesDiv);
+            }
+
+            grid.appendChild(orderDiv);
+          });
+
+          prevOrders = orders;
+          initial = false;
+        } catch (e){
+          console.error(e);
+        }
+      }
+
+      document.getElementById('kitchen-selector').addEventListener('change', fetchOrders);
+      document.getElementById('confirm-button').addEventListener('click', markAsCooked);
+      document.getElementById('cancel-button').addEventListener('click', hideConfirmation);
+
+      fetchOrders();
+      setInterval(fetchOrders, 3000);
+    </script>
+  </body>
+</html>

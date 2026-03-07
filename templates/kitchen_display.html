@@ -19,7 +19,7 @@
       .order.single-item { background-color: #ffb799; }
       .order.kitchen-1 { border-left: 10px solid #ff717f; }
       .order.kitchen-2 { border-left: 10px solid #a0cbff; }
-      .order-header{font-size:24px; font-weight:bold; margin-bottom: 10px;}
+      .order-header{font-size:18px; font-weight:bold; margin-bottom: 10px;}
       .order-items{list-style:none; padding:0; margin:0;}
       .order-item{margin-bottom: 8px;}
       .item-name{font-weight:bold;}
@@ -72,7 +72,6 @@
         <h1 class="title"><a href="/orders">Küchendisplay</a></h1>
         <div class="header-actions">
           <a href="/orders" class="btn">Bestellübersicht</a>
-          <a href="/customer_display" class="btn">Kundenanzeige</a>
           <select id="kitchen-selector">
             <option value="all">Alle</option>
             <option value="1">Küche 1</option>
@@ -90,6 +89,7 @@
 
     <div class="dialog-overlay" id="confirmation-dialog" style="display: none;">
       <div class="dialog">
+        <p id="dialog-order-id"></p>
         <p>Bestellung als gekocht markieren?</p>
         <div class="dialog-buttons">
           <button id="confirm-button" class="btn">Bestätigen</button>
@@ -107,8 +107,9 @@
         return document.getElementById('kitchen-selector').value;
       }
 
-      function showConfirmation(orderId) {
+      function showConfirmation(orderId, orderNumber) {
         orderToCook = orderId;
+        document.getElementById('dialog-order-id').textContent = `#${orderNumber}`;
         document.getElementById('confirmation-dialog').style.display = 'flex';
       }
 
@@ -157,7 +158,7 @@
               orderDiv.classList.add('single-item');
             }
             orderDiv.dataset.orderId = order.id;
-            orderDiv.addEventListener('click', () => showConfirmation(order.id));
+            orderDiv.addEventListener('click', () => showConfirmation(order.id, order.order_number));
 
             const header = document.createElement('div');
             header.className = 'order-header';

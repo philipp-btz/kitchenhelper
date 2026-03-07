@@ -77,7 +77,7 @@ class Queuemanager:
                 #self.printer.text(" ")
                 self.printer.set_with_default()
                 time_checkpoint = time.time()
-                print(f"PRINTER keepalive check; by {self.printer_name}")
+                print(f"{datetime.datetime.now()} PRINTER keepalive check; by {self.printer_name}")
             job = None
             db_path = kh.get_db_path()
             with self.lock:

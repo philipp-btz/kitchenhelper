@@ -50,19 +50,10 @@ kh.init_db()
 kh.clear_db_reservations()
 
 printer_manager_dict = {}
-
-def init_printer_managers():
-    global printer_manager_dict
-    config: Dict[str, Any] = kh.load_config()
-    for key in config.get("printer_dict", {}):
-        print(f"Creating printer manager for key: {key}")
-        printer_manager_dict[key] = printutil.Queuemanager(printer_ip=config["printer_dict"][key], printer_name=key)
-    logging.info(f"printer_manager_dict: {printer_manager_dict}")
-
-# Only initialize printer managers in the main Flask worker process,
-# to avoid spawning multiple threads when Flask's reloader is active.
-if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not config.get('debug', True):
-    init_printer_managers()
+for key in config.get("printer_dict", {}):
+    print(f"Creating printer manager for key: {key}")
+    printer_manager_dict[key] = printutil.Queuemanager(printer_ip=config["printer_dict"][key], printer_name=key)
+logging.info(f"printer_manager_dict: {printer_manager_dict}")
 
 printer_dict = config.get("printer_dict", {})
 logging.info(f"printer_dict: {printer_dict}")

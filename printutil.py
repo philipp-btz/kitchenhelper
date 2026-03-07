@@ -79,7 +79,7 @@ class Queuemanager:
             if job:
                 func, kwargs = job
 
-                time.sleep(1)
+                successful = False
                 if func == "customer":
                     successful = self.print_customer(**(kwargs or {}))
                 elif func == "kitchen":

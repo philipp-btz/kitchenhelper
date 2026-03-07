@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Speisekarte bearbeiten</title>
+    <style>
+      body{font-family:system-ui,Arial;margin:20px;background:#f7f7f7}
+      .wrap{max-width:980px;margin:0 auto}
+      .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+      .card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;margin-top:12px}
+      .item{display:grid;grid-template-columns:2fr 110px 140px 2fr auto;gap:10px;align-items:start;margin-bottom:10px;padding:10px;border:1px solid #eee;border-radius:8px}
+      .item input,.item select,input[type="text"]{padding:8px;border:1px solid #ccc;border-radius:6px;width:100%;box-sizing:border-box}
+      .muted{font-size:12px;color:#666}
+      .btn{padding:9px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer}
+      .btn.primary{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
+      .btn.danger{background:#8d1a1a;color:#fff;border-color:#8d1a1a}
+      .btn.small{padding:6px 8px;font-size:12px}
+      .err{padding:10px;border:1px solid #f0b7b7;background:#ffeaea;border-radius:6px;color:#7c1111}
+      .extras-list{display:flex;flex-direction:column;gap:6px}
+      .extra-row{display:flex;gap:6px;align-items:center}
+      .extra-row input{flex:1}
+      .color-preview{margin-top:6px;height:28px;border-radius:6px;border:1px solid #999}
+      @media (max-width:860px){
+        .item{grid-template-columns:1fr}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <h1>Speisekarte bearbeiten</h1>
+        <p><a href="/menus">Zurück zur Menü-Auswahl</a></p>
+      </div>
+
+      {% if error %}
+      <div class="err">{{ error }}</div>
+      {% endif %}
+
+      <form method="post" action="/menus/save" id="menu-form">
+        <div class="card">
+          <label for="menu_name"><strong>Menüname</strong></label>
+          <input id="menu_name" name="menu_name" type="text" value="{{ menu_name }}" placeholder="z. B. Fruehlingsfest_2026" required />
+          <p class="muted">Wird als Dateiname im Ordner <code>menu_list</code> gespeichert.</p>
+          <input type="hidden" name="loaded_file" value="{{ loaded_file }}" />
+          <input type="hidden" name="items_json" id="items_json" />
+        </div>
+
+        <div class="card">
+          <div class="top">
+            <h2>Menü-Items</h2>
+            <button type="button" id="add-item" class="btn">+ Item hinzufügen</button>
+          </div>
+          <p class="muted">Extras können beliebig viele pro Item sein.</p>
+          <div id="items-list"></div>
+        </div>
+
+        <div class="card">
+          <button type="submit" class="btn primary">Speisekarte speichern</button>
+        </div>
+      </form>
+    </div>
+
+    <template id="item-template">
+      <div class="item">
+        <div>
+          <label>Name</label>
+          <input class="field-name" type="text" placeholder="Item-Name" required />
+        </div>
+        <div>
+          <label>Drucker</label>
+          <select class="field-printer">
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+        </div>
+        <div>
+          <label>Farbe</label>
+          <input class="field-bg" type="color" value="#ffffff" />
+          <div class="color-preview"></div>
+        </div>
+        <div>
+          <label>Extras</label>
+          <div class="extras-list"></div>
+          <button type="button" class="btn small add-extra">+ Extra</button>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button type="button" class="btn danger remove-item">Löschen</button>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      const existingItems = {{ items|tojson }};
+      const list = document.getElementById('items-list');
+      const tpl = document.getElementById('item-template');
+
+      function addExtraRow(extrasList, value){
+        const row = document.createElement('div');
+        row.className = 'extra-row';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'field-extra';
+        input.placeholder = 'z. B. Extra Kaese';
+        input.value = value || '';
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'btn small danger';
+        remove.textContent = 'X';
+        remove.addEventListener('click', () => row.remove());
+        row.appendChild(input);
+        row.appendChild(remove);
+        extrasList.appendChild(row);
+      }
+
+      function addItemRow(item){
+        const node = tpl.content.cloneNode(true);
+        const row = node.querySelector('.item');
+        row.querySelector('.field-name').value = item?.name || '';
+        row.querySelector('.field-printer').value = String(item?.printer || 1);
+        const colorInput = row.querySelector('.field-bg');
+        const colorPreview = row.querySelector('.color-preview');
+        colorInput.value = item?.bg_color || '#ffffff';
+        colorPreview.style.backgroundColor = colorInput.value;
+        colorInput.addEventListener('input', () => {
+          colorPreview.style.backgroundColor = colorInput.value;
+        });
+        const extrasList = row.querySelector('.extras-list');
+        const extras = item?.extras || [];
+        if (extras.length){
+          extras.forEach(ex => addExtraRow(extrasList, ex));
+        } else {
+          addExtraRow(extrasList, '');
+        }
+        row.querySelector('.add-extra').addEventListener('click', () => addExtraRow(extrasList, ''));
+        row.querySelector('.remove-item').addEventListener('click', () => row.remove());
+        list.appendChild(row);
+      }
+
+      if (existingItems.length){
+        existingItems.forEach(addItemRow);
+      } else {
+        addItemRow({name: '', printer: 1, bg_color: '#ffffff', extras: []});
+      }
+
+      document.getElementById('add-item').addEventListener('click', () => {
+        addItemRow({name: '', printer: 1, bg_color: '#ffffff', extras: []});
+      });
+
+      document.getElementById('menu-form').addEventListener('submit', (ev) => {
+        const rows = Array.from(document.querySelectorAll('.item'));
+        const items = rows.map((row, idx) => {
+          const extras = Array.from(row.querySelectorAll('.field-extra'))
+            .map(input => (input.value || '').trim())
+            .filter(Boolean);
+          return {
+            id: idx + 1,
+            name: (row.querySelector('.field-name').value || '').trim(),
+            printer: Number(row.querySelector('.field-printer').value || 1),
+            bg_color: row.querySelector('.field-bg').value || '',
+            extras
+          };
+        });
+
+        const hasName = items.some(it => it.name);
+        if (!hasName) {
+          ev.preventDefault();
+          alert('Bitte mindestens ein Menü-Item mit Namen eintragen.');
+          return;
+        }
+        document.getElementById('items_json').value = JSON.stringify(items);
+      });
+    </script>
+  </body>
+</html>

@@ -1,149 +1,237 @@
 [
-    {
-      "id": 1,
-      "name": "Baguette Schinken und Käse",
-      "printer": 2,
-      "bg_color": "#fcc72d",
-      "extras": []
-    },
-    {
-      "id": 2,
-      "name": "Baguette Cammenbert und Preiselbeeren",
-      "printer": 2,
-      "bg_color": "#fcc72d",
-      "extras": []
-    },
-    {
-      "id": 3,
-      "name": "Baguette Schafskäse Peperoni",
-      "printer": 2,
-      "bg_color": "#fcc72d",
-      "extras": ["Kein Käse", "Extra Käse", "Kein Salat"]
-    },
-    {
-      "id": 4,
-      "name": "Pinsa Tomate Mozzarella Käse",
-      "printer": 2,
-      "bg_color": "#ea6d3d",
-      "extras": ["+ Mozarella", "+ Käse", "+ Tomaten", "+ Basilikum", "- Mozarella", "- Käse", "- Tomaten"]
-    },
-    {
-      "id": 5,
-      "name": "Pinsa Schinken",
-      "printer": 2,
-      "bg_color": "#ea6d3d",
-      "extras": ["+ Käse", "+ Schinken", "- Käse", "- Schinken"]
-    },
-    {
-      "id": 6,
-      "name": "Pinsa Schafskäse Peperoni",
-      "printer": 2,
-      "bg_color": "#ea6d3d",
-      "extras": ["+ Käse", "+ Peperoni", "- Käse", "- Peperoni"]
-    },
-    {
-      "id": 7,
-      "name": "Pinsa Schinken Rucola Parmesan",
-      "printer": 2,
-      "bg_color": "#ea6d3d",
-      "extras": ["+ Käse", "+ Schinken", "+ Rucola", "+ Parmesan", "- Käse","- Schinken", "- Rucola", "- Parmesan"]
-    },
-    {
-      "id": 8,
-      "name": "Pinsa Freestyle",
-      "printer": 2,
-      "bg_color": "#ea6d3d",
-      "extras": ["+ Tomatensauce", "+ Käse", "+ Mozarella", "+ Schinken", "+ Peperoni", "+ Rucola", "+ Parmesan"]
-    },
-    {
-      "id": 9,
-      "name": "Leberknödel Sauerkraut",
-      "printer": 1,
-      "bg_color": "#e03a3c",
-      "extras": ["- Kraut", "+ Brot"]
-    },
-    {
-      "id": 10,
-      "name": "Pfälzer Teller",
-      "printer": 1,
-      "bg_color": "#e03a3c",
-      "extras": ["- Kraut", "+ Saumagen", "+ Leberknödel", "+ Brot"]
-    },
-    {
-      "id": 11,
-      "name": "Wurstsalat",
-      "printer": 1,
-      "bg_color": "#e03a3c",
-      "extras": ["Brot", "Kartoffelspalten"]
-    },
-    {
-      "id": 12,
-      "name": "Currywurst",
-      "printer": 1,
-      "bg_color": "#e03a3c",
-      "extras": ["Bratwurst", "Rindswurst", "Brötchen", "Kartoffelspalten", "+ Brötchen", "+ Kartoffelspalten"]
-    },
-    {
-      "id": 13,
-      "name": "Gebackener Schafskäse",
-      "printer": 1,
-      "bg_color": "#cb1f73",
-      "extras": ["+ Brot"]
-    },
-    {
-      "id": 14,
-      "name": "Salatteller",
-      "printer": 1,
-      "bg_color": "#cb1f73",
-      "extras": ["Schafskäse Peperoni", "Steakstreifen"]
-    },
-    {
-      "id": 15,
-      "name": "Schnitzelburger",
-      "printer": 1,
-      "bg_color": "#e03a3c",
-      "extras": ["+ Kartoffelspalten"]
-    },
-    {
-      "id": 16,
-      "name": "Beef Burger",
-      "printer": 1,
-      "bg_color": "#e03a3c",
-      "extras": ["+ Kartoffelspalten"]
-    },
-    {
-      "id": 17,
-      "name": "Kartoffelspalten",
-      "printer": 1,
-      "bg_color": "#383a6b",
-      "extras": []
-    },
-    {
-      "id": 18,
-      "name": "Im Brötchen",
-      "printer": 1,
-      "bg_color": "#383a6b",
-      "extras": ["Bratwurst", "Rindswurst", "Saumargen", "Schnitzel", "Steak"]
-    },
-    {
-      "id": 19,
-      "name": "Eiskaffee",
-      "printer": 2,
-      "bg_color": "#383a6b",
-      "extras": ["Extra Eis", "Extra Sahne"]
-    },
-    {
-      "id": 101,
-      "name": "Notiz Küche 1",
-      "printer": 1,
-      "bg_color": "#101010",
-      "extras": []
-    },
-    {
-      "id": 102,
-      "name": "NOTIZ Küche 2",
-      "printer": 2,
-      "bg_color": "#101010",
-      "extras": []
-    }
-  ]
+  {
+    "id": 1,
+    "name": "Baguette Schinken und Käse",
+    "printer": 2,
+    "extras": [],
+    "bg_color": "#fcc72d"
+  },
+  {
+    "id": 2,
+    "name": "Baguette Cammenbert und Preiselbeeren",
+    "printer": 2,
+    "extras": [],
+    "bg_color": "#fcc72d"
+  },
+  {
+    "id": 3,
+    "name": "Baguette Schafskäse Peperoni",
+    "printer": 2,
+    "extras": [
+      "Kein Käse",
+      "Extra Käse",
+      "Kein Salat"
+    ],
+    "bg_color": "#fcc72d"
+  },
+  {
+    "id": 4,
+    "name": "Pinsa Tomate Mozzarella Käse",
+    "printer": 2,
+    "extras": [
+      "+ Mozarella",
+      "+ Käse",
+      "+ Tomaten",
+      "+ Basilikum",
+      "- Mozarella",
+      "- Käse",
+      "- Tomaten",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "0",
+      "11",
+      "12",
+      "13"
+    ],
+    "bg_color": "#ea6d3d"
+  },
+  {
+    "id": 5,
+    "name": "Pinsa Schinken",
+    "printer": 2,
+    "extras": [
+      "+ Käse",
+      "+ Schinken",
+      "- Käse",
+      "- Schinken"
+    ],
+    "bg_color": "#ea6d3d"
+  },
+  {
+    "id": 6,
+    "name": "Pinsa Schafskäse Peperoni",
+    "printer": 2,
+    "extras": [
+      "+ Käse",
+      "+ Peperoni",
+      "- Käse",
+      "- Peperoni"
+    ],
+    "bg_color": "#ea6d3d"
+  },
+  {
+    "id": 7,
+    "name": "Pinsa Schinken Rucola Parmesan",
+    "printer": 2,
+    "extras": [
+      "+ Käse",
+      "+ Schinken",
+      "+ Rucola",
+      "+ Parmesan",
+      "- Käse",
+      "- Schinken",
+      "- Rucola",
+      "- Parmesan"
+    ],
+    "bg_color": "#ea6d3d"
+  },
+  {
+    "id": 8,
+    "name": "Pinsa Freestyle",
+    "printer": 2,
+    "extras": [
+      "+ Tomatensauce",
+      "+ Käse",
+      "+ Mozarella",
+      "+ Schinken",
+      "+ Peperoni",
+      "+ Rucola",
+      "+ Parmesan"
+    ],
+    "bg_color": "#ea6d3d"
+  },
+  {
+    "id": 9,
+    "name": "Leberknödel Sauerkraut",
+    "printer": 1,
+    "extras": [
+      "- Kraut",
+      "+ Brot"
+    ],
+    "bg_color": "#e03a3c"
+  },
+  {
+    "id": 10,
+    "name": "Pfälzer Teller",
+    "printer": 1,
+    "extras": [
+      "- Kraut",
+      "+ Saumagen",
+      "+ Leberknödel",
+      "+ Brot"
+    ],
+    "bg_color": "#e03a3c"
+  },
+  {
+    "id": 11,
+    "name": "Wurstsalat",
+    "printer": 1,
+    "extras": [
+      "Brot",
+      "Kartoffelspalten"
+    ],
+    "bg_color": "#e03a3c"
+  },
+  {
+    "id": 12,
+    "name": "Currywurst",
+    "printer": 1,
+    "extras": [
+      "Bratwurst",
+      "Rindswurst",
+      "Brötchen",
+      "Kartoffelspalten",
+      "+ Brötchen",
+      "+ Kartoffelspalten"
+    ],
+    "bg_color": "#e03a3c"
+  },
+  {
+    "id": 13,
+    "name": "Gebackener Schafskäse",
+    "printer": 1,
+    "extras": [
+      "+ Brot"
+    ],
+    "bg_color": "#cb1f73"
+  },
+  {
+    "id": 14,
+    "name": "Salatteller",
+    "printer": 1,
+    "extras": [
+      "Schafskäse Peperoni",
+      "Steakstreifen"
+    ],
+    "bg_color": "#cb1f73"
+  },
+  {
+    "id": 15,
+    "name": "Schnitzelburger",
+    "printer": 1,
+    "extras": [
+      "+ Kartoffelspalten"
+    ],
+    "bg_color": "#e03a3c"
+  },
+  {
+    "id": 16,
+    "name": "Beef Burger",
+    "printer": 1,
+    "extras": [
+      "+ Kartoffelspalten"
+    ],
+    "bg_color": "#e03a3c"
+  },
+  {
+    "id": 17,
+    "name": "Kartoffelspalten",
+    "printer": 1,
+    "extras": [],
+    "bg_color": "#383a6b"
+  },
+  {
+    "id": 18,
+    "name": "Im Brötchen",
+    "printer": 1,
+    "extras": [
+      "Bratwurst",
+      "Rindswurst",
+      "Saumargen",
+      "Schnitzel",
+      "Steak"
+    ],
+    "bg_color": "#383a6b"
+  },
+  {
+    "id": 19,
+    "name": "Eiskaffee",
+    "printer": 2,
+    "extras": [
+      "Extra Eis",
+      "Extra Sahne"
+    ],
+    "bg_color": "#383a6b"
+  },
+  {
+    "id": 20,
+    "name": "Notiz Küche 1",
+    "printer": 1,
+    "extras": [],
+    "bg_color": "#101010"
+  },
+  {
+    "id": 21,
+    "name": "NOTIZ Küche 2",
+    "printer": 2,
+    "extras": [],
+    "bg_color": "#101010"
+  }
+]

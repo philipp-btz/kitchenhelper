@@ -57,7 +57,6 @@ class Queuemanager:
             elif self._printer.paper_status() in [0, 1]:
                 # Printer is out of Paper but
                 try:
-
                     time.sleep(0.5)
                     self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
                     print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
@@ -206,13 +205,7 @@ class Queuemanager:
     def print_test(self, *, text="Testdruck") -> bool:
         printer = self.printer
         try:
-            try:
-                if printer and printer.paper_status() == "0":
-                    logging.warning("Printer is out of paper!")
-                    return False
-            except Exception as e:
-                logging.error(f"Error checking printer status for {self.printer_name}: {e}")
-                return False
+
             printer.text(str(text) + "\n")
 
             return True
@@ -228,14 +221,6 @@ class Queuemanager:
             order_no = order.get("order_number", "Unbekannt")
             notes = order.get("notes", "")
             items = order.get("items", [])
-
-            try:
-                if printer is None or printer.paper_status() == 0 or not printer.is_online():
-                    logging.warning(f"Printer {self.printer_name} is offline or out of paper.")
-                    return False
-            except Exception as e:
-                logging.error(f"Error checking printer status for {self.printer_name}: {e}")
-                return False
 
             # reset Font
             printer.set_with_default()
@@ -292,14 +277,6 @@ class Queuemanager:
             order_no = order.get("order_number", "Unbekannt")
             notes = order.get("notes", "")
             items = order.get("items", [])
-
-            try:
-                if printer is None or printer.paper_status() == 0 or not printer.is_online():
-                    logging.warning(f"Printer {self.printer_name} is offline or out of paper.")
-                    return False
-            except Exception as e:
-                logging.error(f"Error checking printer status for {self.printer_name}: {e}")
-                return False
 
             # reset Font
             printer.set_with_default()

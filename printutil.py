@@ -6,6 +6,7 @@ import logging
 import sqlite3
 import json
 import os
+import uuid
 
 import kitchenhelper as kh
 
@@ -22,6 +23,7 @@ class Queuemanager:
         self._stop_event = threading.Event()
         self._printer = None
         self._worker_thread = threading.Thread(target=self._worker, daemon=True)
+        self._uuid = uuid.uuid4()
 
         # WHERE String configuration
         if self.printer_name == "customer":
@@ -98,7 +100,7 @@ class Queuemanager:
                     job = self.queue[0]  # Peek at the first job without popping
             if job:
                 func, kwargs = job
-                print(f"Quemanager PID {os.getpid()} Printing {func}")
+                print(f"Quemanager PID {os.getpid()} UUID {self._uuid} Printing {func}")
                 successful = False
                 if func == "customer":
                     successful = self.print_customer(**(kwargs or {}))

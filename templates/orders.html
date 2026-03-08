@@ -69,8 +69,8 @@
             <form method="post" action="/fulfilled/{{ o.id }}" class="fulfilled-form">
               <button type="submit" class="btn primary">ABGEHOLT</button>
             </form>
-            <a href="/order/print_customer/{{ o.order_number }}" target="_parent" class="btn">Kundenbon</a>
-            <a href="/order/print_kitchen/{{ o.order_number }}" target="_parent" class="btn">Küchenbon</a>
+            <a href="/order/print_customer/{{ o.order_number }}" target="_parent" class="btn print-btn">Kundenbon</a>
+            <a href="/order/print_kitchen/{{ o.order_number }}" target="_parent" class="btn print-btn">Küchenbon</a>
           </div>
         </article>
         {% else %}
@@ -112,6 +112,18 @@
               const slot = card ? card.querySelector('.status-cooked') : null;
               if (slot) slot.textContent = data.cooked && data.cooked !== '--' ? data.cooked : '';
             }
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      });
+
+      document.querySelectorAll('.print-btn').forEach(btn => {
+        btn.addEventListener('click', async ev => {
+          ev.preventDefault();
+          const href = btn.getAttribute('href');
+          try {
+            await fetch(href);
           } catch (e) {
             console.error(e);
           }

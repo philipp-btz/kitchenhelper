@@ -22,7 +22,7 @@
     <div class="wrap stack">
       <div class="topbar">
         <h1>Speisekarte bearbeiten</h1>
-        <a href="/menus" class="btn">Zurück zur Menü-Auswahl</a>
+        <a href="/menus" class="btn">Zurück zur Speisekarten-Auswahl</a>
       </div>
 
       {% if error %}
@@ -31,7 +31,7 @@
 
       <form method="post" action="/menus/save" id="menu-form" class="stack">
         <section class="card stack">
-          <label for="menu_name"><strong>Menüname</strong></label>
+          <label for="menu_name"><strong>Name</strong></label>
           <input id="menu_name" name="menu_name" type="text" value="{{ menu_name }}" placeholder="z. B. Fruehlingsfest_2026" required>
           <p class="muted">Wird als Dateiname im Ordner <code>menu_list</code> gespeichert.</p>
           <input type="hidden" name="loaded_file" value="{{ loaded_file }}">

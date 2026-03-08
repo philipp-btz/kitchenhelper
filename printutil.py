@@ -60,7 +60,7 @@ class Queuemanager:
                     self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
                     print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
                 except Exception as e:
-                    logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+                    logging.warning(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
             return self._printer
         except:
             self._printer.close()
@@ -98,7 +98,7 @@ class Queuemanager:
                     job = self.queue[0]  # Peek at the first job without popping
             if job:
                 func, kwargs = job
-
+                print(f"Quemanager PID {os.getpid()} Printing {func}")
                 successful = False
                 if func == "customer":
                     successful = self.print_customer(**(kwargs or {}))
@@ -109,7 +109,6 @@ class Queuemanager:
                 elif func == "test":
                     successful = self.print_test(**(kwargs or {}))
                 else:
-                    print("ABCABCABC")
                     logging.warning(f"Unknown job function: {func}")
                     successful = self.print_test(
                         text=f"Unknown job function: {func}\n" * 20 + "Please check the printer configuration and logs." + "\n" * 20)
@@ -137,7 +136,6 @@ class Queuemanager:
                             conn_upd.commit()
                             conn_upd.close()
                     except Exception as e:
-                        print("RRRRRRRRRRR")
                         logging.exception(f"Failed to update printed_customer for order {order_no}: {e}")
 
                 if self._stop_event.wait(0.5):
@@ -207,7 +205,7 @@ class Queuemanager:
         printer = self.printer
         try:
             try:
-                if printer.paper_status() == "0":
+                if printer and printer.paper_status() == "0":
                     logging.warning("Printer is out of paper!")
                     return False
             except Exception as e:
@@ -230,7 +228,7 @@ class Queuemanager:
             items = order.get("items", [])
 
             try:
-                if printer.paper_status() == 0 or not printer.is_online():
+                if printer is None or printer.paper_status() == 0 or not printer.is_online():
                     logging.warning(f"Printer {self.printer_name} is offline or out of paper.")
                     return False
             except Exception as e:
@@ -294,7 +292,7 @@ class Queuemanager:
             items = order.get("items", [])
 
             try:
-                if printer.paper_status() == 0 or not printer.is_online():
+                if printer is None or printer.paper_status() == 0 or not printer.is_online():
                     logging.warning(f"Printer {self.printer_name} is offline or out of paper.")
                     return False
             except Exception as e:

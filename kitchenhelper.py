@@ -13,7 +13,7 @@ os.environ["KITCHENHELPER_CONFIG_PATH"] = CONFIG_PATH
 
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 def get_db_path():
-    return os.environ.get("KITCHENHELPER_DB_PATH", "orders.db")
+    return os.environ.get("KITCHENHELPER_DB_PATH", "/app/data/orders.db")
 
 
 def get_menu_name():
@@ -35,7 +35,7 @@ def load_config() -> Dict[str, Any]:
         "port": 5099,
         "debug": True,
         "menu_path": "backup_menu.json",
-        "db_path": "orders.db",
+        "db_path": "app/data/orders.db",
         "printer_dict": {
             "customer": "192.168.8.187",
             "1": "192.168.8.188",
@@ -60,6 +60,7 @@ def load_config() -> Dict[str, Any]:
 
 
 def init_db() -> None:
+    os.makedirs(os.path.dirname(get_db_path()), exist_ok=True)
     conn = sqlite3.connect(get_db_path())
     cur = conn.cursor()
     cur.execute("""

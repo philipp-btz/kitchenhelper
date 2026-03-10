@@ -23,7 +23,7 @@ Einstellungen sind in `config.json` konfigurierbar. Standardwerte sind:
 	"port": 5099,
 	"debug": true,
 	"menu_path": "menu.json",
-	"db_path": "orders.db",
+	"db_path": "app/data/orders.db",
 	"auto_print_on_open": true
 }
 ```

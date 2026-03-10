@@ -20,4 +20,4 @@ services:
     # 5. ENVIRONMENT VARIABLES (OPTIONAL)
     environment:
       - FLASK_ENV=production
-      - DATABASE_URL=sqlite:///data/kitchen_helper.db/kitchen-helper:latest
+      - KITCHENHELPER_DB_PATH=/app/data/orders.db

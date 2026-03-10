@@ -13,7 +13,7 @@ os.environ["KITCHENHELPER_CONFIG_PATH"] = CONFIG_PATH
 
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 def get_db_path():
-    return os.environ.get("KITCHENHELPER_DB_PATH", "/app/data/orders.db")
+    return os.environ.get("KITCHENHELPER_DB_PATH", "orders.db")
 
 
 def get_menu_name():
@@ -35,7 +35,7 @@ def load_config() -> Dict[str, Any]:
         "port": 5099,
         "debug": True,
         "menu_path": "backup_menu.json",
-        "db_path": "app/data/orders.db",
+        "db_path": "orders.db",
         "printer_dict": {
             "customer": "192.168.8.187",
             "1": "192.168.8.188",
@@ -53,7 +53,9 @@ def load_config() -> Dict[str, Any]:
     menu_path = mp.list_menu_files()
     defaults["menu_path"] = os.path.join(os.path.dirname(__file__), str(defaults["menu_path"]))
     defaults["db_path"] = os.path.join(os.path.dirname(__file__), str(defaults["db_path"]))
-    os.environ["KITCHENHELPER_DB_PATH"] = str(defaults["db_path"])
+    if "KITCHENHELPER_DB_PATH" not in os.environ.keys():
+        os.environ["KITCHENHELPER_DB_PATH"] = str(defaults["db_path"])
+        print("FALLBACK DB PATH ERROR")
     os.environ["KITCHENHELPER_MENU_PATH"] = str(defaults["menu_path"])
     os.environ["KITCHENHELPER_MENU_NAME"] = str(os.path.splitext(os.path.basename(defaults["menu_path"]))[0])
     return defaults

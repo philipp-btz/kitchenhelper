@@ -3,7 +3,6 @@
   "port": 5099,
   "debug": true,
   "menu_path": "menu_list/haardt_sept_25.json",
-  "db_path": "app/data/orders.db",
   "auto_print_on_open": true,
   "printer_dict": {
     "customer": "192.168.8.188",

@@ -1,0 +1,23 @@
+version: '3.8'
+
+
+services:
+  kitchen-app:
+    # 1. THE IMAGE
+    image: philippbtz/kitchen-helper:latest
+
+    # 2. THE PORTS
+    ports:
+      - "80:80"
+
+    # 3. THE STORAGE (PERSISTENCE)
+    volumes:
+      - ./kitchen_data:/app/data
+
+    # 4. THE SAFETY NET
+    restart: always
+
+    # 5. ENVIRONMENT VARIABLES (OPTIONAL)
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:///data/kitchen_helper.db/kitchen-helper:latest

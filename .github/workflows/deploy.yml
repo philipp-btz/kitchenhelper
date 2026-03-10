@@ -29,4 +29,4 @@ jobs:
           context: .
           platforms: linux/arm64  # Ensure this matches your Pi OS (64-bit)
           push: true
-          tags: yourusername/kitchen-helper:latest
+          tags: philippbtz/kitchen-helper:latest

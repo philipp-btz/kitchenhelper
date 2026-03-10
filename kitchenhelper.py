@@ -53,8 +53,8 @@ def load_config() -> Dict[str, Any]:
     menu_path = mp.list_menu_files()
     defaults["menu_path"] = os.path.join(os.path.dirname(__file__), str(defaults["menu_path"]))
     defaults["db_path"] = os.path.join(os.path.dirname(__file__), str(defaults["db_path"]))
-    os.environ["KITCHENHELPER_DB_PATH"] = defaults["db_path"]
-    os.environ["KITCHENHELPER_MENU_PATH"] = defaults["menu_path"]
+    os.environ["KITCHENHELPER_DB_PATH"] = str(defaults["db_path"])
+    os.environ["KITCHENHELPER_MENU_PATH"] = str(defaults["menu_path"])
     os.environ["KITCHENHELPER_MENU_NAME"] = str(os.path.splitext(os.path.basename(defaults["menu_path"]))[0])
     return defaults
 

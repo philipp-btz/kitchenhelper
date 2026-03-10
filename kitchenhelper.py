@@ -250,7 +250,7 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
     if not r:
         return None
     items: List[Dict[str, Any]] = cast(List[Dict[str, Any]], json.loads(r["items"])) if r["items"] else []
-    logging.info(f"Raw FULFILLED: {r["fulfilled"] if "fulfilled" in r.keys() and r["fulfilled"] is not None else "no"}, \nRAW COOKED: {r["cooked"] if "cooked" in r.keys() and r["cooked"] is not None else "no"}")
+    #logging.info(f"Raw FULFILLED: {r["fulfilled"] if "fulfilled" in r.keys() and r["fulfilled"] is not None else "no"}, \nRAW COOKED: {r["cooked"] if "cooked" in r.keys() and r["cooked"] is not None else "no"}")
     return {
         "order_number": r["order_number"],
         "id": r["id"],

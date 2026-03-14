@@ -7,9 +7,6 @@ import dotenv
 from typing import Any, Dict, List, Optional, cast
 
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
-os.environ["KITCHENHELPER_CONFIG_PATH"] = CONFIG_PATH
-
 
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 def get_db_path():
@@ -17,7 +14,7 @@ def get_db_path():
 
 
 def get_menu_name():
-    return os.environ.get("KITCHENHELPER_MENU_NAME", "NICHT BEKANNT #env-error")
+    return os.environ.get("KITCHENHELPER_MENU_NAME", "BITTE SPEISEKARTE WAHLEN")
 
 
 def set_menu_name(new) -> None:

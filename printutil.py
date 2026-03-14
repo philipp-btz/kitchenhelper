@@ -227,7 +227,7 @@ class Queuemanager:
 
             # Head
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
-            printer.image("icon.png", center=False)
+            printer.image("static/icon.png", center=False)
             time.sleep(0.5)  # Short delay to ensure image is processed before printing text
             printer.text(f"\nNr: {order_no}\n\n")
 

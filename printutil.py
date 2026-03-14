@@ -1,4 +1,4 @@
-from escpos.printer import Network
+from escpos.printer import Network, File
 import datetime
 import time
 import threading
@@ -13,12 +13,13 @@ import kitchenhelper as kh
 
 class Queuemanager:
 
-    def __init__(self, printer_ip: str, printer_name: str):
+    def __init__(self, printer_ip: str, printer_name: str, printer_mode: str = "File"):
         self.printer_ip = printer_ip
         self.printer_name = printer_name
+        self.printer_mode = printer_mode
         self.printer_model = "TM-T88V"
         print(f"Initialized Queuemanager for printer '{self.printer_name}' at IP {self.printer_ip}")
-        self.queue = []
+        self.queue: list[tuple[str, dict]] = []
         self.lock = threading.Lock()
         self._stop_event = threading.Event()
         self._printer = None
@@ -45,30 +46,63 @@ class Queuemanager:
         Gibt das Drucker-Objekt zurück. Prüft vorher, ob es existiert und online ist.
         Baut die Verbindung bei Bedarf automatisch neu auf.
         """
-        # Prüfe zuerst auf None, um AttributeError beim allerersten Aufruf zu vermeiden
-        try:
-            if self._printer is None:
-                # Printer is not set up yet
-                try:
-                    self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
-                    print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} None Printer creation")
-                except Exception as e:
-                    logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
-            elif self._printer.paper_status() in [0, 1]:
-                # Printer is out of Paper but
-                try:
-                    time.sleep(0.5)
-                    self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
-                    print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
-                except Exception as e:
-                    logging.warning(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
-            return self._printer
-        except:
-            self._printer.close()
-            time.sleep(0.5)
-            self._printer=Network(self.printer_ip, port=9100, profile=self.printer_model)
-            print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} fallback creation")
-            return self._printer
+        if self.printer_mode == "Thermo":
+            # Prüfe zuerst auf None, um AttributeError beim allerersten Aufruf zu vermeiden
+            try:
+                if self._printer is None:
+                    # Printer is not set up yet
+                    try:
+                        self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
+                        print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} None Printer creation")
+                    except Exception as e:
+                        logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+                elif self._printer.paper_status() in [0, 1]:
+                    # Printer is out of Paper but
+                    try:
+                        time.sleep(0.5)
+                        self._printer = Network(self.printer_ip, port=9100, profile=self.printer_model)
+                        print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
+                    except Exception as e:
+                        logging.warning(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+                return self._printer
+            except:
+                self._printer.close()
+                time.sleep(0.5)
+                self._printer=Network(self.printer_ip, port=9100, profile=self.printer_model)
+                print(f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} fallback creation")
+                return self._printer
+
+
+        else:
+            # Prüfe zuerst auf None, um AttributeError beim allerersten Aufruf zu vermeiden
+            try:
+                if self._printer is None:
+                    # Printer is not set up yet
+                    try:
+                        self._printer = File(f".local/{self.printer_name}_printer.txt")
+                        print(
+                            f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} None Printer creation")
+                    except Exception as e:
+                        logging.error(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+                elif self._printer.paper_status() in [0, 1]:
+                    # Printer is out of Paper but
+                    try:
+                        time.sleep(0.5)
+                        self._printer = File(f".local/{self.printer_name}_printer.txt")
+                        print(
+                            f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
+                    except Exception as e:
+                        logging.warning(f"Fehler bei der Drucker-Verbindung ({self.printer_name}): {e}")
+                return self._printer
+            except:
+                self._printer.close()
+                time.sleep(0.5)
+                self._printer = File(f".local/{self.printer_name}_printer.txt")
+                print(
+                    f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} fallback creation")
+                return self._printer
+
+
 
 
     def add_to_queue(self, func: str, kwargs: dict | None = None):

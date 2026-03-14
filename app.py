@@ -7,7 +7,7 @@ import uuid
 import sqlite3
 from werkzeug.utils import secure_filename
 from typing import Any, Dict, List, Optional, cast
-import menu_picker as mp
+import menu_utility as mu
 import logging
 from logging.handlers import RotatingFileHandler
 import sys
@@ -56,7 +56,8 @@ printer_manager_dict = {}
 if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
     for key in config.get("printer_dict", {}):
         print(f"Creating printer manager for key: {key}")
-        printer_manager_dict[key] = printutil.Queuemanager(printer_ip=config["printer_dict"][key], printer_name=key)
+        printer_mode = os.environ.get("KITCHENHELPER_PRINTER_MODE", "File")
+        printer_manager_dict[key] = printutil.Queuemanager(printer_name=key,printer_ip=config["printer_dict"][key], printer_mode=printer_mode)
     logging.info(f"printer_manager_dict: {printer_manager_dict}")
 
 
@@ -127,7 +128,6 @@ def order() -> Any:
 '''
 @app.route('/order/start', methods=['POST', 'GET'])
 def order_start() -> Any:
-    print("####################################################################################################################################################################################################################################################################")
     # create a draft order and return its order_number and id
     draft: Dict[str, Any] = {
         'id': str(uuid.uuid4()),
@@ -150,7 +150,7 @@ def orders_view() -> Any:
 @app.route('/menus')
 def menus_view() -> Any:
     # list available menu files from the `menu_list` folder
-    files = mp.list_menu_files()
+    files = mu.list_menu_files()
     menus = []
     for f in files:
         if f.lower().endswith('.json'):
@@ -161,43 +161,6 @@ def menus_view() -> Any:
     return render_template('menu_selector.html', menus=menus, selected=selected, saved=saved)
 
 
-def _menu_path_from_file(menu_file: str) -> Optional[str]:
-    safe_file = secure_filename(menu_file or "")
-    if not safe_file.lower().endswith(".json"):
-        return None
-    full_path = os.path.abspath(os.path.join(MENU_DIR, safe_file))
-    menu_root = os.path.abspath(MENU_DIR)
-    if not full_path.startswith(menu_root + os.sep) and full_path != menu_root:
-        return None
-    return full_path
-
-
-def _normalize_menu_item(raw: Dict[str, Any], item_id: int) -> Dict[str, Any]:
-    extras_raw = raw.get("extras", [])
-    if isinstance(extras_raw, str):
-        extras = [e.strip() for e in extras_raw.replace("\r", "").split("\n") if e.strip()]
-    elif isinstance(extras_raw, list):
-        extras = [str(e).strip() for e in extras_raw if str(e).strip()]
-    else:
-        extras = []
-    printer_raw = raw.get("printer", 1)
-    try:
-        printer = int(printer_raw)
-    except Exception:
-        printer = 1
-    printer = 1 if printer not in (1, 2) else printer
-
-    item: Dict[str, Any] = {
-        "id": item_id,
-        "name": str(raw.get("name", "")).strip(),
-        "printer": printer,
-        "extras": extras,
-    }
-    bg_color = str(raw.get("bg_color", "")).strip()
-    if bg_color:
-        item["bg_color"] = bg_color
-    return item
-
 
 @app.route('/menus/editor')
 def menus_editor() -> Any:
@@ -207,13 +170,13 @@ def menus_editor() -> Any:
     items: List[Dict[str, Any]] = []
     error = request.args.get('error')
     if menu_file:
-        path = _menu_path_from_file(menu_file)
+        path = mu.menu_path_from_file(menu_file=menu_file, menu_dir=MENU_DIR)
         if not path or not os.path.exists(path):
             return redirect(url_for('menus_view'))
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 raw_items = cast(List[Dict[str, Any]], json.load(f))
-            items = [_normalize_menu_item(it, idx + 1) for idx, it in enumerate(raw_items) if isinstance(it, dict)]
+            items = [mu.normalize_menu_item(it, idx + 1) for idx, it in enumerate(raw_items) if isinstance(it, dict)]
             loaded_file = os.path.basename(path)
             if not menu_name:
                 menu_name = os.path.splitext(loaded_file)[0]
@@ -244,7 +207,7 @@ def menus_save() -> Any:
     if not filename.lower().endswith('.json'):
         filename += '.json'
 
-    target_path = _menu_path_from_file(filename)
+    target_path = mu.menu_path_from_file(menu_file=filename, menu_dir=MENU_DIR)
     if not target_path:
         return redirect(url_for('menus_editor', menu_file=loaded_file, error="Ungültiger Dateiname."))
 
@@ -257,7 +220,7 @@ def menus_save() -> Any:
     for raw in raw_items:
         if not isinstance(raw, dict):
             continue
-        normalized = _normalize_menu_item(raw, len(items) + 1)
+        normalized = mu.normalize_menu_item(raw, len(items) + 1)
         if normalized["name"]:
             items.append(normalized)
 
@@ -280,16 +243,6 @@ def menus_select() -> Any:
         os.environ["KITCHENHELPER_MENU_PATH"] = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
         menu_name = os.path.splitext(selected)[0]
         os.environ["KITCHENHELPER_MENU_NAME"] = menu_name
-
-        # persist the choice into config.json so next run uses the selected menu
-        try:
-            with open(os.environ.get("KITCHENHELPER_CONFIG_PATH", "config.json"), 'r', encoding='utf-8') as f:
-                cfg = json.load(f)
-        except Exception:
-            cfg = {}
-        cfg['menu_path'] = os.path.join('menu_list', selected)
-        with open(os.environ.get("KITCHENHELPER_CONFIG_PATH", "config.json"), 'w', encoding='utf-8') as f:
-            json.dump(cfg, f, ensure_ascii=False, indent=2)
     except Exception as e:
         return f"Fehler beim Auswählen der Speisekarte: {e}", 500
     # redirect back to the selector with confirmation

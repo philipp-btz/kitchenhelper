@@ -15,9 +15,6 @@ import sys
 import printutil
 import kitchenhelper as kh
 
-# --- optionally set a secret key if you later want sessions/CSRF ---
-# app.secret_key = os.environ.get("FLASK_SECRET_KEY", "CHANGE_ME")
-
 
 LOGGING_DEBUG = False
 
@@ -459,10 +456,7 @@ def order_export(order_number: int) -> Response:
     order = kh.get_order_by_number(order_number)
     if not order:
         return "Bestellung nicht gefunden", 404
-    lines = []
-    lines.append(f"Bestell-Nr.: {order['order_number']}")
-    lines.append(f"UUID: {order['id']}")
-    lines.append(f"Zeit: {order['created_at']}")
+    lines = [f"Bestell-Nr.: {order['order_number']}", f"UUID: {order['id']}", f"Zeit: {order['created_at']}"]
     # list all ordered items
     for it in order.get('items', []):
         qty = it.get('qty', 1)

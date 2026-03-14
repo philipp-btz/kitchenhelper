@@ -1,9 +1,9 @@
 [
   {
-    "name": "Bratwurst",
-    "extras": ["extra ketchup", "extra Senf"],
+    "name": "BACKUP MENU",
+    "extras": ["GO", "TO", "SPEISEKARTEN AUSWAHL", "TO", "SELECT", "YOUR", "SPEISEKARTE"],
     "printer": "1",
-    "bg_color": "#22121f"
+    "bg_color": "#333333"
   },
   {
     "name": "Currywurst",

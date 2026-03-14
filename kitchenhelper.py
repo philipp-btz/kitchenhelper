@@ -28,9 +28,6 @@ def get_menu_path():
 
 def load_config() -> Dict[str, Any]:
     dotenv.load_dotenv(".env", override=True)
-    if os.environ.get("KITCHENHELPER_DB_PATH") is not None:
-        os.environ["KITCHENHELPER_DB_PATH"] = ".local/orders.db"
-
     defaults = {}
     pd = os.environ["KITCHENHELPER_PRINTER_DICT"]
     defaults["printer_dict"] = json.loads(pd)

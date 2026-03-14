@@ -3,9 +3,9 @@ import os
 import sqlite3
 import datetime
 import logging
+import dotenv
 from typing import Any, Dict, List, Optional, cast
 
-import menu_picker as mp
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 os.environ["KITCHENHELPER_CONFIG_PATH"] = CONFIG_PATH
@@ -30,34 +30,12 @@ def get_menu_path():
 
 
 def load_config() -> Dict[str, Any]:
-    defaults = {
-        "host": "0.0.0.0",
-        "port": 5099,
-        "debug": True,
-        "menu_path": "backup_menu.json",
-        "db_path": "orders.db",
-        "printer_dict": {
-            "customer": "192.168.8.187",
-            "1": "192.168.8.188",
-            "2": "192.168.8.189"
-        }
-    }
-    if os.path.exists(CONFIG_PATH):
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                cfg = json.load(f)
-                defaults.update(cfg)
-        except Exception:
-            pass
-    # normalize paths (ensure values are strings before joining)
-    menu_path = mp.list_menu_files()
-    defaults["menu_path"] = os.path.join(os.path.dirname(__file__), str(defaults["menu_path"]))
-    defaults["db_path"] = os.path.join(os.path.dirname(__file__), str(defaults["db_path"]))
-    if "KITCHENHELPER_DB_PATH" not in os.environ.keys():
-        os.environ["KITCHENHELPER_DB_PATH"] = str(defaults["db_path"])
-        print("FALLBACK DB PATH ERROR")
-    os.environ["KITCHENHELPER_MENU_PATH"] = str(defaults["menu_path"])
-    os.environ["KITCHENHELPER_MENU_NAME"] = str(os.path.splitext(os.path.basename(defaults["menu_path"]))[0])
+    dotenv.load_dotenv("static_config.env", override=True)
+    dotenv.load_dotenv("dynamic_config.env", override=True)
+
+    defaults = {}
+    pd = os.environ["KITCHENHELPER_PRINTER_DICT"]
+    defaults["printer_dict"] = json.loads(pd)
     return defaults
 
 

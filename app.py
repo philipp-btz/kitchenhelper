@@ -67,36 +67,6 @@ app = Flask(__name__)
 MENU_DIR = os.path.join(os.path.dirname(__file__), 'menu_list')
 
 
-def update_order(
-        order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None,
-        printed: Optional[bool] = None
-        ) -> Optional[Dict[str, Any]]:
-    conn = sqlite3.connect(kh.get_db_path())
-    cur = conn.cursor()
-    fields: List[str] = []
-    params: List[Any] = []
-    if items is not None:
-        # enrich items with printer info before storing
-        items = kh.enrich_items(items)
-        fields.append('items = ?')
-        params.append(json.dumps(items, ensure_ascii=False))
-    if notes is not None:
-        fields.append('notes = ?')
-        params.append(notes)
-    if printed is not None:
-        fields.append('printed = ?')
-        params.append(int(bool(printed)))
-    if not fields:
-        conn.close()
-        return None
-    params.append(order_number)
-    sql = f"UPDATE orders SET {', '.join(fields)}ù WHERE order_number = ?"
-    cur.execute(sql, tuple(params))
-    conn.commit()
-    conn.close()
-    return kh.get_order_by_number(order_number)
-
-
 @app.route('/')
 def index() -> Any:
     menu = kh.load_menu()
@@ -122,30 +92,31 @@ def order() -> Any:
             order_number = int(order_number)
         except Exception:
             order_number = None
-    if order_number:
-        logging.info(f"ORDER NUMBER PROVIDED, UPDATING EXISTING ORDER {order_number}")
-        updated = update_order(order_number, items=items, notes=notes, printed=False)
-        order_number = updated.get('order_number') if updated else order_number
-    else:
-        customer_id = str(uuid.uuid4())
 
-        # group items by printer and create a separate order for each printer
-        for printer in set(it.get('printer') for it in items if it.get('printer')):
-            items_for_printer = [it for it in items if it.get('printer') == printer]
-            order: Dict[str, Any] = {
-                'id': str(uuid.uuid4()),
-                'items': items_for_printer,
-                'notes': notes,
-                'created_at': time.strftime("%Y_%m_%d-%H:%M:%S"),
-                'printed_kitchen': False,
-                'printed_customer': False,
-                'customer_id': customer_id,
-                'kitchen': str(printer),
-            }
-            order = kh.save_order(order)
-            current_order_nr = str(order.get('order_number'))
+    #if order_number:
+     #   logging.info(f"ORDER NUMBER PROVIDED, UPDATING EXISTING ORDER {order_number}")
+      #  updated = kh.update_order(order_number, items=items, notes=notes, printed=False)
+       # order_number = updated.get('order_number') if updated else order_number
+    #else:
+    customer_id = str(uuid.uuid4())
 
-            order_numbers = order_numbers + " + " + current_order_nr
+    # group items by printer and create a separate order for each printer
+    for printer in set(it.get('printer') for it in items if it.get('printer')):
+        items_for_printer = [it for it in items if it.get('printer') == printer]
+        order: Dict[str, Any] = {
+            'id': str(uuid.uuid4()),
+            'items': items_for_printer,
+            'notes': notes,
+            'created_at': time.strftime("%Y_%m_%d-%H:%M:%S"),
+            'printed_kitchen': False,
+            'printed_customer': False,
+            'customer_id': customer_id,
+            'kitchen': str(printer),
+        }
+        order = kh.save_order(order)
+        current_order_nr = str(order.get('order_number'))
+
+        order_numbers = order_numbers + " + " + current_order_nr
 
     # if this is an AJAX request, return JSON so the client can stay on the menu page
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in (
@@ -156,6 +127,7 @@ def order() -> Any:
 
 @app.route('/order/start', methods=['POST', 'GET'])
 def order_start() -> Any:
+    print("####################################################################################################################################################################################################################################################################")
     # create a draft order and return its order_number and id
     draft: Dict[str, Any] = {
         'id': str(uuid.uuid4()),

@@ -13,7 +13,7 @@ os.environ["KITCHENHELPER_CONFIG_PATH"] = CONFIG_PATH
 
 # Default DB path (can be overridden by importing module and setting DB_PATH)
 def get_db_path():
-    return os.environ.get("KITCHENHELPER_DB_PATH", "orders.db")
+    return os.environ.get("KITCHENHELPER_DB_PATH", ".local/orders.db")
 
 
 def get_menu_name():
@@ -30,9 +30,8 @@ def get_menu_path():
 
 
 def load_config() -> Dict[str, Any]:
-    dotenv.load_dotenv("static_config.env", override=True)
-    dotenv.load_dotenv("dynamic_config.env", override=True)
-    if os.environ.get("TEST_ENV") is not None:
+    dotenv.load_dotenv(".env", override=True)
+    if os.environ.get("KITCHENHELPER_DB_PATH") is not None:
         os.environ["KITCHENHELPER_DB_PATH"] = ".local/orders.db"
 
     defaults = {}
@@ -42,6 +41,7 @@ def load_config() -> Dict[str, Any]:
 
 
 def init_db() -> None:
+    print(f"DB PATH: {get_db_path()}")
     os.makedirs(os.path.dirname(get_db_path()), exist_ok=True)
     conn = sqlite3.connect(get_db_path())
     cur = conn.cursor()
@@ -193,6 +193,34 @@ def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     order["order_number"] = order_number
     return order
 
+def update_order(
+        order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None,
+        printed: Optional[bool] = None
+        ) -> Optional[Dict[str, Any]]:
+    conn = sqlite3.connect(get_db_path())
+    cur = conn.cursor()
+    fields: List[str] = []
+    params: List[Any] = []
+    if items is not None:
+        # enrich items with printer info before storing
+        items = enrich_items(items)
+        fields.append('items = ?')
+        params.append(json.dumps(items, ensure_ascii=False))
+    if notes is not None:
+        fields.append('notes = ?')
+        params.append(notes)
+    if printed is not None:
+        fields.append('printed = ?')
+        params.append(int(bool(printed)))
+    if not fields:
+        conn.close()
+        return None
+    params.append(order_number)
+    sql = f"UPDATE orders SET {', '.join(fields)} WHERE order_number = ?"
+    cur.execute(sql, tuple(params))
+    conn.commit()
+    conn.close()
+    return get_order_by_number(order_number)
 
 def get_orders() -> List[Dict[str, Any]]:
     conn = sqlite3.connect(get_db_path())

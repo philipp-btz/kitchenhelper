@@ -1,5 +1,12 @@
+```
+***** this is outdated *****
+```
+
+
+
 # KitchenHelper - Bestellaufnahme
 
+### KITCHENHELPER_DB_PATH="/app/data/orders.db"
 
 Kleines Beispiel: Flask-App, die die Speisekarte aus `menu.json` lädt und Bestellungen annimmt.
 
@@ -13,7 +20,7 @@ python app.py
 Öffne dann im Browser `http://localhost:5000`.
 
 
-Die Speisekarte ist in der Datei [backup_menu.json](backup_menu.json) und kann einfach ausgetauscht oder geändert werden.
+Die Speisekarte ist in der Datei [backup_menu.json](menu_list/backup_menu.json) und kann einfach ausgetauscht oder geändert werden.
 
 Einstellungen sind in `config.json` konfigurierbar. Standardwerte sind:
 

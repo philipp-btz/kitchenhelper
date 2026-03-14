@@ -18,6 +18,3 @@ services:
     restart: always
 
     # 5. ENVIRONMENT VARIABLES (OPTIONAL)
-    environment:
-      - FLASK_ENV=production
-      - KITCHENHELPER_DB_PATH=/app/data/orders.db

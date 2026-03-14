@@ -26,12 +26,14 @@ def set_menu_name(new) -> None:
 
 
 def get_menu_path():
-    return os.environ.get("KITCHENHELPER_MENU_PATH", "backup_menu.json")
+    return os.environ.get("KITCHENHELPER_MENU_PATH", "menu_list/backup_menu.json")
 
 
 def load_config() -> Dict[str, Any]:
     dotenv.load_dotenv("static_config.env", override=True)
     dotenv.load_dotenv("dynamic_config.env", override=True)
+    if os.environ.get("TEST_ENV") is not None:
+        os.environ["KITCHENHELPER_DB_PATH"] = ".local/orders.db"
 
     defaults = {}
     pd = os.environ["KITCHENHELPER_PRINTER_DICT"]
@@ -79,7 +81,7 @@ def clear_db_reservations() -> None:
 
 
 def load_menu() -> List[Dict[str, Any]]:
-    with open(os.environ.get("KITCHENHELPER_MENU_PATH", "backup_menu.json"), "r", encoding="utf-8") as f:
+    with open(os.environ.get("KITCHENHELPER_MENU_PATH", "menu_list/backup_menu.json"), "r", encoding="utf-8") as f:
         return json.load(f)
 
 

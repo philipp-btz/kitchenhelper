@@ -1,4 +1,4 @@
-from escpos.printer import Network, File
+from escpos.printer import Network, Dummy
 import datetime
 import time
 import threading
@@ -79,7 +79,8 @@ class Queuemanager:
                 if self._printer is None:
                     # Printer is not set up yet
                     try:
-                        self._printer = File(f".local/{self.printer_name}_printer.txt")
+                        self._printer = Dummy()
+                        print(f"{datetime.datetime.now()} {self.printer_name} DUMMY Printer created")
                         print(
                             f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} None Printer creation")
                     except Exception as e:
@@ -88,7 +89,8 @@ class Queuemanager:
                     # Printer is out of Paper but
                     try:
                         time.sleep(0.5)
-                        self._printer = File(f".local/{self.printer_name}_printer.txt")
+                        self._printer = Dummy()
+                        print(f"{datetime.datetime.now()} {self.printer_name} DUMMY Printer created")
                         print(
                             f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} standard creation")
                     except Exception as e:
@@ -97,7 +99,8 @@ class Queuemanager:
             except:
                 self._printer.close()
                 time.sleep(0.5)
-                self._printer = File(f".local/{self.printer_name}_printer.txt")
+                self._printer = Dummy()
+                print(f"{datetime.datetime.now()} {self.printer_name} DUMMY Printer created")
                 print(
                     f"{datetime.datetime.now()} Created new Printer connection for {self.printer_name}: {self.printer_ip} fallback creation")
                 return self._printer

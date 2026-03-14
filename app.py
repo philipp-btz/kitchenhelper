@@ -48,7 +48,7 @@ kh.clear_db_reservations()
 
 printer_manager_dict = {}
 
-# Only initialize printer managers in the main Flask worker process,
+# Only initialize printer managers in the main Flask worker process
 # to avoid spawning multiple threads when Flask's reloader is active.
 if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
     for key in config.get("printer_dict", {}):
@@ -258,16 +258,16 @@ def menus_upload() -> Any:
     if replace in ('1', '2') and form_filename:
         filename = secure_filename(form_filename)
         dest = os.path.join(menu_dir, filename)
-        tmpflag = os.path.join(menu_dir, filename + '.upload')
+        tmp_flag = os.path.join(menu_dir, filename + '.upload')
         if replace == '1':
-            # user confirmed replace; move temp upload if present
-            if os.path.exists(tmpflag):
-                os.replace(tmpflag, dest)
+            # user has confirmed replacing; move temp upload if present
+            if os.path.exists(tmp_flag):
+                os.replace(tmp_flag, dest)
             return redirect(url_for('menus_view', selected=os.path.splitext(filename)[0]))
         else:
             # user canceled: remove temporary upload if exists
-            if os.path.exists(tmpflag):
-                os.remove(tmpflag)
+            if os.path.exists(tmp_flag):
+                os.remove(tmp_flag)
 
             return redirect(url_for('menus_view'))
 
@@ -284,9 +284,9 @@ def menus_upload() -> Any:
     dest = os.path.join(menu_dir, filename)
 
     # If the file exists, save the uploaded file to a temp and ask for confirmation
-    tmpflag = os.path.join(menu_dir, filename + '.upload')
+    tmp_flag = os.path.join(menu_dir, filename + '.upload')
     if os.path.exists(dest):
-        f.save(tmpflag)
+        f.save(tmp_flag)
         return render_template('menu_upload_confirm.html', filename=filename)
 
     # otherwise save directly

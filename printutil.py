@@ -136,7 +136,7 @@ class Queuemanager:
                     job = self.queue[0]  # Peek at the first job without popping
             if job:
                 func, kwargs = job
-                print(f"Quemanager PID {os.getpid()} UUID {self._uuid} Printing {func}")
+                print(f"Queuemanager PID {os.getpid()} UUID {self._uuid} Printing {func}")
                 successful = False
                 if func == "customer":
                     successful = self.print_customer(**(kwargs or {}))
@@ -151,11 +151,11 @@ class Queuemanager:
                     successful = self.print_test(
                         text=f"Unknown job function: {func}\n" * 20 + "Please check the printer configuration and logs." + "\n" * 20)
                 if successful:
-                    # Remove job from queue
+                    # Remove the job from the queue
                     self.queue.pop(0)
                     logging.info("Job completed successfully, removed from queue.")
 
-                    # If job contained an order, try to mark it as printed in DB
+                    # If the job contained an order, try to mark it as printed in DB
                     order_no = None
                     try:
                         if kwargs:
@@ -265,7 +265,7 @@ class Queuemanager:
             # Head
             printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
             printer.image("static/icon.png", center=False)
-            time.sleep(0.5)  # Short delay to ensure image is processed before printing text
+            time.sleep(0.5)  # Short delay to ensure the image is processed before printing text
             printer.text(f"\nNr: {order_no}\n\n")
 
             # order items
@@ -308,7 +308,7 @@ class Queuemanager:
 
     def print_kitchen(self, *, order: dict) -> bool:
         printer = self.printer
-        time.sleep(1)  # Short delay to ensure printer is ready
+        time.sleep(1)  # Short delay to ensure the printer is ready
         logging.info(f"PRINTING KITCHEN for printer {printer}")
         try:
             order_no = order.get("order_number", "Unbekannt")
@@ -366,7 +366,7 @@ class Queuemanager:
 
     def print_report(self, *, order: dict) -> bool:
         printer = self.printer
-        time.sleep(1)  # Short delay to ensure printer is ready
+        time.sleep(1)  # Short delay to ensure the printer is ready
         logging.info("PRINTING REPORT")
         try:
             date = order.get("date", "Unbekannt")
@@ -389,7 +389,7 @@ class Queuemanager:
                     printer.text(f"    {item_map[key]['extras'][extra]}x {str(extra)}\n")
 
             if extras_total:
-                printer.text("\nExtras gesammt:\n")
+                printer.text("\nExtras gesamt:\n")
                 for extra, qty in extras_total.items():
                     printer.text(f"  {str(qty)}x {str(extra)}\n")
 

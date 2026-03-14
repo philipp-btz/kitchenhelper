@@ -124,7 +124,7 @@ def order() -> Any:
         return {'status': 'ok', 'order_number': order_numbers.lstrip(' + ')}
     return redirect(url_for('orders_view'))
 
-
+'''
 @app.route('/order/start', methods=['POST', 'GET'])
 def order_start() -> Any:
     print("####################################################################################################################################################################################################################################################################")
@@ -139,7 +139,7 @@ def order_start() -> Any:
     }
     saved = kh.save_order(draft)
     return {'order_number': saved.get('order_number'), 'id': saved.get('id')}
-
+'''
 
 @app.route('/orders')
 def orders_view() -> Any:

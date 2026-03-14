@@ -193,6 +193,8 @@ def save_order(order: Dict[str, Any]) -> Dict[str, Any]:
     order["order_number"] = order_number
     return order
 
+
+'''
 def update_order(
         order_number: int, items: Optional[List[Dict[str, Any]]] = None, notes: Optional[str] = None,
         printed: Optional[bool] = None
@@ -221,6 +223,8 @@ def update_order(
     conn.commit()
     conn.close()
     return get_order_by_number(order_number)
+    
+'''
 
 def get_orders() -> List[Dict[str, Any]]:
     conn = sqlite3.connect(get_db_path())

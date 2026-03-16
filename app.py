@@ -1,3 +1,4 @@
+from os import environ
 from flask import Flask, render_template, request, redirect, url_for, Response
 import json
 import os
@@ -61,8 +62,7 @@ printer_dict = config.get("printer_dict", {})
 logging.info(f"printer_dict: {printer_dict}")
 
 app = Flask(__name__)
-MENU_DIR = os.path.join(os.path.dirname(__file__), '.local', 'menu_list')
-SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '.defaults', 'default.json')
+MENU_DIR = os.path.join('.local', 'menu_list')
 
 
 
@@ -253,6 +253,28 @@ def menus_select() -> Any:
         return f"Fehler beim Auswählen der Speisekarte: {e}", 500
     # redirect back to the selector with confirmation
     return redirect(url_for('menus_view', selected=menu_name))
+
+
+@app.route('/menus/delete', methods=['POST'])
+def menus_delete() -> Any:
+    deleted_dir = os.path.join(".local", "menu_list", "deleted")
+    menu_file = request.form.get('menu_file')
+    if not menu_file:
+        return redirect(url_for('menus_view'))
+
+    src_path = mu.menu_path_from_file(menu_file=menu_file, menu_dir=MENU_DIR)
+    if not src_path or not os.path.exists(src_path):
+        return redirect(url_for('menus_view'))
+
+    os.makedirs(deleted_dir, exist_ok=True)
+    dest_path = os.path.join(deleted_dir, os.path.basename(src_path))
+
+    try:
+        os.rename(src_path, dest_path)
+    except OSError as e:
+        return f"Fehler beim Löschen der Datei: {e}", 500
+
+    return redirect(url_for('menus_view'))
 
 
 @app.route('/menus/upload', methods=['POST'])

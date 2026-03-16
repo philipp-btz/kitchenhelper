@@ -14,12 +14,12 @@ def list_menu_files(dir_path: str | None = None) -> list:
     if dir_path:
         base = Path(dir_path)
     else:
-        base = Path(__file__).resolve().parent / "menu_list"
+        base = Path(__file__).resolve().parent / ".local" / "menu_list"
 
     try:
         base = base.resolve()
     except Exception:
-        base = Path(dir_path) if dir_path else Path("menu_list")
+        base = Path(dir_path) if dir_path else Path(".local/menu_list")
 
     if not base.exists() or not base.is_dir():
         return []

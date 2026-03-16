@@ -5,6 +5,7 @@ import datetime
 import logging
 import dotenv
 from typing import Any, Dict, List, Optional, cast
+import shutil
 
 
 
@@ -23,14 +24,46 @@ def set_menu_name(new) -> None:
 
 
 def get_menu_path():
-    return os.environ.get("KITCHENHELPER_MENU_PATH", "menu_list/backup_menu.json")
+    return os.environ.get("KITCHENHELPER_MENU_PATH", ".defaults/backup_menu.json")
+
+
+def setup_folders():
+    os.makedirs(".local", exist_ok=True)
+    os.makedirs(".local/user_settings", exist_ok=True)
+    os.makedirs(".local/menu_list", exist_ok=True)
+    os.makedirs(".local/printers", exist_ok=True)
+
+
+    # files
+    shutil.copyfile(".defaults/backup_menu.json", ".local/menu_list/backup_menu.json")
+    shutil.copyfile(".defaults/default.env", ".local/user_settings/user.env")
+    shutil.copyfile(".defaults/default.json", ".local/user_settings/user_settings.json")
+
 
 
 def load_config() -> Dict[str, Any]:
-    dotenv.load_dotenv(".env", override=True)
+    setup_folders()
+
+    #load .env
+    dotenv.load_dotenv(".defaults/default.env", override=True)
+    dotenv.load_dotenv(".local/user_settings/user.env", override=True)
     defaults = {}
     pd = os.environ["KITCHENHELPER_PRINTER_DICT"]
     defaults["printer_dict"] = json.loads(pd)
+
+    #load json
+    with open(".defaults/default.json", "r", encoding="utf-8") as f:
+        settings_dict = json.load(f)
+        defaults.update(settings_dict)
+        for key, value in settings_dict.items():
+            os.environ[key] = str(value)
+    if os.path.isfile(".local/user_settings/user_settings.json"):
+        with open(".local/user_settings/user_settings.json", "r", encoding="utf-8") as f:
+            settings_dict = json.load(f)
+            defaults.update(settings_dict)
+            for key, value in settings_dict.items():
+                os.environ[key] = str(value)
+
     return defaults
 
 
@@ -75,7 +108,7 @@ def clear_db_reservations() -> None:
 
 
 def load_menu() -> List[Dict[str, Any]]:
-    with open(os.environ.get("KITCHENHELPER_MENU_PATH", "menu_list/backup_menu.json"), "r", encoding="utf-8") as f:
+    with open(os.environ.get("KITCHENHELPER_MENU_PATH", ".defaults/backup_menu.json"), "r", encoding="utf-8") as f:
         return json.load(f)
 
 

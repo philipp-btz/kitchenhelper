@@ -64,16 +64,6 @@ app = Flask(__name__)
 MENU_DIR = os.path.join(os.path.dirname(__file__), '.local', 'menu_list')
 SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '.defaults', 'default.json')
 
-def load_settings() -> Dict[str, Any]:
-    try:
-        with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-
-def save_settings(settings: Dict[str, Any]) -> None:
-    with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(settings, f, indent=2)
 
 
 @app.route('/')
@@ -166,7 +156,7 @@ def menus_view() -> Any:
     # optional confirmation from query string
     selected = request.args.get('selected')
     saved = request.args.get('saved')
-    settings = load_settings()
+    settings = kh.load_settings()
     return render_template('menu_selector.html', menus=menus, selected=selected, saved=saved, settings=settings)
 
 
@@ -496,10 +486,11 @@ def order_export(order_number: int) -> Response:
 
 @app.route('/update_settings', methods=['POST'])
 def update_settings() -> Any:
-    settings = load_settings()
+    settings = kh.load_settings()
     for key in settings.keys():
         settings[key] = request.form.get(key) == 'on'
-    save_settings(settings)
+        os.environ[key] = str(settings[key])
+    kh.save_settings(settings)
     return redirect(url_for('menus_view'))
 
 

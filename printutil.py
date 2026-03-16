@@ -242,8 +242,14 @@ class Queuemanager:
     def print_test(self, *, text="Testdruck") -> bool:
         printer = self.printer
         try:
+            printer.set_with_default()
+            printer.text(str(text) + "\n\n\n")
 
-            printer.text(str(text) + "\n")
+            for key, value in os.environ.items():
+                printer.text(f"{key}: {value}\n")
+
+            # Cut
+            printer._raw(b"\x1D\x56\x42\x00")
 
             return True
         except Exception as e:
@@ -259,46 +265,59 @@ class Queuemanager:
             notes = order.get("notes", "")
             items = order.get("items", [])
 
-            # reset Font
-            printer.set_with_default()
+            if os.environ["print_customer_double"] == "True":
+                receipt_count = 2
+            else:
+                receipt_count = 1
 
-            # Head
-            printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
-            printer.image("static/icon.png", center=False)
-            time.sleep(0.5)  # Short delay to ensure the image is processed before printing text
-            printer.text(f"\nNr: {order_no}\n\n")
+            for _ in range(receipt_count):
 
-            # order items
-            printer.set(font="a", align="left", bold=True, normal_textsize=True)
-            if type(items) != list:
-                items = json.loads(items)  # Try to convert to list if it's not already
+                # reset Font
+                printer.set_with_default()
 
-            printer.text(u"\u2500" * 48 + "\n")
+                # Head
+                printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
+                printer.image("static/icon.png", center=False)
+                time.sleep(0.5)  # Short delay to ensure the image is processed before printing text
+                printer.text(f"\nNr: {order_no}\n\n")
 
-            for item in items:
-                printer.text(f"{item['qty']}x {item['name']}\n")
-                for extra in item["extras"]:
-                    printer.text(f"  {extra}\n")
+                # order items
+                printer.set(font="a", align="left", bold=True, normal_textsize=True)
+                if type(items) != list:
+                    items = json.loads(items)  # Try to convert to list if it's not already
 
-            printer.text(u"\u2500" * 48 + "\n")
+                printer.text(u"\u2500" * 48 + "\n")
 
-            # Notes
-            printer.set(align="left", bold=True, normal_textsize=True)
-            printer.text(f"\n{notes}\n\n") if notes else printer.text("\n")
+                for item in items:
+                    printer.text(f"{item['qty']}x {item['name']}\n")
+                    for extra in item["extras"]:
+                        printer.text(f"  {extra}\n")
 
-            # TODO wenn es eine webseite gibt, hier Qr Code
-            printer.set(align="center")
-            printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
-            printer.set(align="center", invert=False, bold=True, double_height=False, double_width=True)
-            printer.text("Vielen Dank für Ihre \nBestellung!\n")
+                printer.text(u"\u2500" * 48 + "\n")
 
-            # aux Infos
-            printer.set(align="left", normal_textsize=True)
-            printer.text(f"\nBestellzeit: {order.get('created_at', 'Unbekannt')}\n")
-            printer.text(f"customer: {order.get('customer_id', 'Unbekannt')}\n")
+                # Notes
+                printer.set(align="left", bold=True, normal_textsize=True)
+                printer.text(f"\n{notes}\n\n") if notes else printer.text("\n")
 
-            # Cut
-            printer._raw(b"\x1D\x56\x42\x00")
+                # TODO wenn es eine webseite gibt, hier Qr Code
+                printer.set(align="center")
+                printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
+                printer.set(align="center", invert=False, bold=True, double_height=False, double_width=True)
+                printer.text("Vielen Dank für Ihre \nBestellung!\n")
+
+                # aux Infos
+                printer.set(align="left", normal_textsize=True)
+                printer.text(f"\nBestellzeit: {order.get('created_at', 'Unbekannt')}\n")
+                printer.text(f"customer: {order.get('customer_id', 'Unbekannt')}\n")
+
+                # Cut
+                printer._raw(b"\x1D\x56\x42\x00")
+
+            if os.environ["print_extra_order_nr"] == "True":
+                printer.set_with_default(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
+                printer.text(f"\n\n\n\nNr: {order_no}\n\n\n\n\n")
+                printer._raw(b"\x1D\x56\x42\x00")
+
 
             return True
 

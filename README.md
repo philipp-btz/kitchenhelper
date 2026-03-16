@@ -20,7 +20,7 @@ python app.py
 Öffne dann im Browser `http://localhost:5000`.
 
 
-Die Speisekarte ist in der Datei [backup_menu.json](menu_list/backup_menu.json) und kann einfach ausgetauscht oder geändert werden.
+Die Speisekarte ist in der Datei [backup_menu.json](.defaults/backup_menu.json) und kann einfach ausgetauscht oder geändert werden.
 
 Einstellungen sind in `config.json` konfigurierbar. Standardwerte sind:
 

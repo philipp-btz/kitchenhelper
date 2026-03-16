@@ -12,6 +12,9 @@
       .empty{padding:14px;border:1px dashed #cfd8e7;border-radius:10px;background:#f9fbff}
       .upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
       .upload-row input{flex:1;min-width:220px}
+      .settings-wrap{display:flex;flex-wrap:wrap;gap:8px}
+      .setting-btn{min-height:42px;padding:8px 12px;border-radius:999px;border:1px solid #b8c2d8;background:#eef1f8;font-size:15px;cursor:pointer}
+      .setting-btn.selected{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
     </style>
   </head>
   <body>
@@ -44,6 +47,10 @@
               <button type="submit" class="btn primary">Auswählen</button>
             </form>
             <a href="/menus/editor?menu_file={{ m.file }}" class="btn">Bearbeiten</a>
+            <form method="post" action="/menus/delete" onsubmit="return confirm('Möchten Sie dieses Menü wirklich löschen?');">
+              <input type="hidden" name="menu_file" value="{{ m.file }}">
+              <button type="submit" class="btn danger">Löschen</button>
+            </form>
           </div>
         </div>
         {% endfor %}
@@ -65,13 +72,13 @@
 
       <section class="card stack">
         <h2>System Einstellungen</h2>
-        <form action="/update_settings" method="post">
-          <div class="stack">
+        <form id="settings-form" action="/update_settings" method="post">
+          <div class="settings-wrap">
             {% for key, value in settings.items() %}
-            <label class="checkbox-label" style="display: flex; gap: 8px; align-items: center;">
-              <input type="checkbox" name="{{ key }}" {% if value %}checked{% endif %}>
-              <span>{{ key.replace('_', ' ') | title }}</span>
-            </label>
+            <button type="button" class="setting-btn {% if value %}selected{% endif %}" data-key="{{ key }}">
+              {{ key.replace('_', ' ') | title }}
+            </button>
+            <input type="hidden" name="{{ key }}" id="input-{{ key }}" value="{{ 'on' if value else 'off' }}">
             {% endfor %}
           </div>
           <div class="actions-row" style="margin-top: 14px;">
@@ -81,5 +88,24 @@
         </form>
       </section>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const settingsForm = document.getElementById('settings-form');
+        if (settingsForm) {
+          settingsForm.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('setting-btn')) {
+              target.classList.toggle('selected');
+              const key = target.dataset.key;
+              const hiddenInput = document.getElementById('input-' + key);
+              if (hiddenInput) {
+                hiddenInput.value = target.classList.contains('selected') ? 'on' : 'off';
+              }
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>

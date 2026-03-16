@@ -62,7 +62,7 @@ printer_dict = config.get("printer_dict", {})
 logging.info(f"printer_dict: {printer_dict}")
 
 app = Flask(__name__)
-MENU_DIR = os.path.join(os.path.dirname(__file__), 'menu_list')
+MENU_DIR = os.path.join(os.path.dirname(__file__), '.local', 'menu_list')
 
 
 @app.route('/')
@@ -146,7 +146,7 @@ def orders_view() -> Any:
 
 @app.route('/menus')
 def menus_view() -> Any:
-    # list available menu files from the `menu_list` folder
+    # list available menu files from the `.local/menu_list` folder
     files = mu.list_menu_files()
     menus = []
     for f in files:
@@ -235,9 +235,9 @@ def menus_select() -> Any:
     selected = request.form.get('menu_file')
     if not selected:
         return redirect(url_for('menus_view'))
-    src = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
+    src = os.path.join(os.path.dirname(__file__), '.local/menu_list', selected)
     try:
-        os.environ["KITCHENHELPER_MENU_PATH"] = os.path.join(os.path.dirname(__file__), 'menu_list', selected)
+        os.environ["KITCHENHELPER_MENU_PATH"] = os.path.join(os.path.dirname(__file__), '.local/menu_list', selected)
         menu_name = os.path.splitext(selected)[0]
         os.environ["KITCHENHELPER_MENU_NAME"] = menu_name
     except Exception as e:
@@ -248,11 +248,11 @@ def menus_select() -> Any:
 
 @app.route('/menus/upload', methods=['POST'])
 def menus_upload() -> Any:
-    # handle JSON file uploads to the menu_list folder
+    # handle JSON file uploads to the .local/menu_list folder
     # First, support replace/cancel actions from the confirmation page (these posts may not include a file)
     replace = request.form.get('replace')
     form_filename = request.form.get('filename')
-    menu_dir = os.path.join(os.path.dirname(__file__), 'menu_list')
+    menu_dir = MENU_DIR
     os.makedirs(menu_dir, exist_ok=True)
 
     if replace in ('1', '2') and form_filename:

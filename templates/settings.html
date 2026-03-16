@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Einstellungen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+  </head>
+  <body>
+    <div class="wrap stack">
+      <header class="topbar">
+        <h1>Einstellungen</h1>
+        <div class="actions-row">
+          <a href="/" class="btn">Zurück</a>
+        </div>
+      </header>
+
+      <section class="card stack">
+        <form action="/update_settings" method="post">
+          <div class="stack">
+            {% for key, value in settings.items() %}
+            <label class="checkbox-label">
+              <input type="checkbox" name="{{ key }}" {% if value %}checked{% endif %}>
+              <span>{{ key.replace('_', ' ') | title }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="actions-row" style="margin-top: 14px;">
+            <button type="submit" class="btn primary">Anwenden</button>
+            <a href="/settings" class="btn">Verwerfen</a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>

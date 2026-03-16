@@ -62,6 +62,24 @@
         </form>
         <p class="muted">Dateien müssen im <code>.json</code>-Format vorliegen. Bei bestehender Datei wirst du gefragt, ob sie ersetzt werden soll.</p>
       </section>
+
+      <section class="card stack">
+        <h2>System Einstellungen</h2>
+        <form action="/update_settings" method="post">
+          <div class="stack">
+            {% for key, value in settings.items() %}
+            <label class="checkbox-label" style="display: flex; gap: 8px; align-items: center;">
+              <input type="checkbox" name="{{ key }}" {% if value %}checked{% endif %}>
+              <span>{{ key.replace('_', ' ') | title }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="actions-row" style="margin-top: 14px;">
+            <button type="submit" class="btn primary">Anwenden</button>
+            <a href="/menus" class="btn">Verwerfen</a>
+          </div>
+        </form>
+      </section>
     </div>
   </body>
 </html>

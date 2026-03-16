@@ -31,15 +31,14 @@ def setup_folders():
     os.makedirs(".local", exist_ok=True)
     os.makedirs(".local/user_settings", exist_ok=True)
     os.makedirs(".local/menu_list", exist_ok=True)
-    os.makedirs(".local/printers", exist_ok=True)
-
+    os.makedirs(".local/menu_list/deleted", exist_ok=True)
 
     # files
     shutil.copyfile(".defaults/backup_menu.json", ".local/menu_list/backup_menu.json")
     shutil.copyfile(".defaults/default.env", ".local/user_settings/user.env")
     shutil.copyfile(".defaults/default.json", ".local/user_settings/user_settings.json")
-
-
+    if not os.path.isfile(".local/user_settings/current_menu_path.json"):
+        shutil.copyfile(".defaults/current_menu_path_template.json", ".local/user_settings/current_menu_path.json")
 
 def load_config() -> Dict[str, Any]:
     setup_folders()
@@ -52,17 +51,16 @@ def load_config() -> Dict[str, Any]:
     defaults["printer_dict"] = json.loads(pd)
 
     #load json
-    with open(".defaults/default.json", "r", encoding="utf-8") as f:
+    with open(".local/user_settings/user_settings.json", "r", encoding="utf-8") as f:
         settings_dict = json.load(f)
         defaults.update(settings_dict)
         for key, value in settings_dict.items():
             os.environ[key] = str(value)
-    if os.path.isfile(".local/user_settings/user_settings.json"):
-        with open(".local/user_settings/user_settings.json", "r", encoding="utf-8") as f:
-            settings_dict = json.load(f)
-            defaults.update(settings_dict)
-            for key, value in settings_dict.items():
-                os.environ[key] = str(value)
+    with open(".local/user_settings/current_menu_path.json", "r", encoding="utf-8") as f:
+        settings_dict = json.load(f)
+        defaults.update(settings_dict)
+        for key, value in settings_dict.items():
+            os.environ[key] = str(value)
 
     return defaults
 
@@ -108,7 +106,7 @@ def clear_db_reservations() -> None:
 
 
 def load_menu() -> List[Dict[str, Any]]:
-    with open(os.environ.get("KITCHENHELPER_MENU_PATH", ".defaults/backup_menu.json"), "r", encoding="utf-8") as f:
+    with open(get_menu_path(), "r", encoding="utf-8") as f:
         return json.load(f)
 
 

@@ -2,4 +2,5 @@ from pathlib import Path
 import os
 import json
 
-print(os.environ)
+for i in range(2):
+    print(i)

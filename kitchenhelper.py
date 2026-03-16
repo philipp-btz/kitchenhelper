@@ -33,10 +33,12 @@ def setup_folders():
     os.makedirs(".local/menu_list", exist_ok=True)
     os.makedirs(".local/menu_list/deleted", exist_ok=True)
 
-    # files
+    # copy files if they do not yet exist
     shutil.copyfile(".defaults/backup_menu.json", ".local/menu_list/backup_menu.json")
-    shutil.copyfile(".defaults/default.env", ".local/user_settings/user.env")
-    shutil.copyfile(".defaults/default.json", ".local/user_settings/user_settings.json")
+    if not os.path.isfile(".local/user_settings/user.env"):
+        shutil.copyfile(".defaults/default.env", ".local/user_settings/user.env")
+    if not os.path.isfile(".local/user_settings/user_settings.json"):
+        shutil.copyfile(".defaults/default.json", ".local/user_settings/user_settings.json")
     if not os.path.isfile(".local/user_settings/current_menu_path.json"):
         shutil.copyfile(".defaults/current_menu_path_template.json", ".local/user_settings/current_menu_path.json")
 
@@ -63,6 +65,19 @@ def load_config() -> Dict[str, Any]:
             os.environ[key] = str(value)
 
     return defaults
+
+
+
+def load_settings() -> Dict[str, Any]:
+    try:
+        with open(".local/user_settings/user_settings.json", 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+def save_settings(settings: Dict[str, Any]) -> None:
+    with open(".local/user_settings/user_settings.json", 'w', encoding='utf-8') as f:
+        json.dump(settings, f, indent=2)
 
 
 def init_db() -> None:
@@ -303,3 +318,6 @@ def get_order_by_number(order_number: int) -> Optional[Dict[str, Any]]:
             r["fulfilled"] if "fulfilled" in r.keys() and r["fulfilled"] is not None else "no"),
         "cooked": format_timestamp(r["cooked"] if "cooked" in r.keys() and r["cooked"] is not None else "no")
     }
+
+
+

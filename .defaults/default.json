@@ -1,7 +1,4 @@
 {
-  "print_customer_double" : false,
-  "print_extra_order_nr" : false,
-  "spare_1" : false,
-  "spare_2" : false,
-  "spare_3" : false
+  "print_customer_double": false,
+  "print_extra_order_nr": false
 }

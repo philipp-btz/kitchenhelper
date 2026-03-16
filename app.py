@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
 import json
 import os
-import datetime
 import time
 import uuid
 import sqlite3
@@ -237,7 +236,14 @@ def menus_select() -> Any:
         return redirect(url_for('menus_view'))
     src = os.path.join(os.path.dirname(__file__), '.local/menu_list', selected)
     try:
-        os.environ["KITCHENHELPER_MENU_PATH"] = os.path.join(os.path.dirname(__file__), '.local/menu_list', selected)
+        with open(".local/user_settings/current_menu_path.json", "r", encoding="utf-8") as f:
+            content = json.loads(f.read())
+        content["KITCHENHELPER_MENU_PATH"] = os.path.join('.local/menu_list', selected)
+        os.environ["KITCHENHELPER_MENU_PATH"] = os.path.join('.local/menu_list', selected)
+
+        with open(".local/user_settings/current_menu_path.json", "w", encoding="utf-8") as f:
+            f.write(json.dumps(content, ensure_ascii=False, indent=2))
+
         menu_name = os.path.splitext(selected)[0]
         os.environ["KITCHENHELPER_MENU_NAME"] = menu_name
     except Exception as e:

@@ -163,6 +163,7 @@ def menus_view() -> Any:
 
 @app.route('/menus/editor')
 def menus_editor() -> Any:
+    print("((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((")
     menu_file = request.args.get('menu_file', '').strip()
     menu_name = request.args.get('menu_name', '').strip()
     loaded_file = ""
@@ -192,6 +193,7 @@ def menus_editor() -> Any:
 
 @app.route('/menus/save', methods=['POST'])
 def menus_save() -> Any:
+    print("##################################################################")
     os.makedirs(MENU_DIR, exist_ok=True)
     menu_name = request.form.get('menu_name', '').strip()
     items_json = request.form.get('items_json', '').strip()
@@ -229,11 +231,14 @@ def menus_save() -> Any:
     with open(target_path, 'w', encoding='utf-8') as f:
         json.dump(items, f, ensure_ascii=False, indent=2)
 
+
+
     return redirect(url_for('menus_view', selected=os.path.splitext(filename)[0], saved=filename))
 
 
 @app.route('/menus/select', methods=['POST'])
 def menus_select() -> Any:
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     selected = request.form.get('menu_file')
     if not selected:
         return redirect(url_for('menus_view'))
@@ -279,6 +284,8 @@ def menus_delete() -> Any:
 
 @app.route('/menus/upload', methods=['POST'])
 def menus_upload() -> Any:
+    print("============================================================================")
+    # TODO check if json is valid
     # handle JSON file uploads to the .local/menu_list folder
     # First, support replace/cancel actions from the confirmation page (these posts may not include a file)
     replace = request.form.get('replace')

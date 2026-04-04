@@ -17,4 +17,6 @@ services:
     # 4. THE SAFETY NET
     restart: always
 
-    # 5. ENVIRONMENT VARIABLES (OPTIONAL)
+    # 5. ENVIRONMENT VARIABLES
+    environment:
+      - PRODUCTION=true

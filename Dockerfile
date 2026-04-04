@@ -1,23 +1,24 @@
 # Use a lightweight Python image
-FROM python:3.11-slim
+FROM python:3.14.3-slim
 
 LABEL authors="philipp"
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy only requirements first to leverage Docker cache
-COPY requirements.txt .
+COPY . .
+
+# install uv
+RUN pip install uv
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn
+RUN uv sync
 
-# Copy the rest of the application code
-COPY . .
+
+
 
 # Expose the port Gunicorn will run on
 EXPOSE 80
 
 # Command to run the app
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "wsgi:application"]
+CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:80", "wsgi:application"]

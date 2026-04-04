@@ -12,7 +12,7 @@ services:
 
     # 3. THE STORAGE (PERSISTENCE)
     volumes:
-      - ./kitchen_data:/app/data
+      - ./kitchen_data:/app/.local
 
     # 4. THE SAFETY NET
     restart: always

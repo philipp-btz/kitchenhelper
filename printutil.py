@@ -301,7 +301,7 @@ class Queuemanager:
 
                 # TODO wenn es eine webseite gibt, hier Qr Code
                 printer.set(align="center")
-                printer.qr("https://youtu.be/dQw4w9WgXcQm", size=4)
+                printer.qr("https://www.youtube.com/watch?v=dQw4w9WgXcQ", size=5)
                 printer.set(align="center", invert=False, bold=True, double_height=False, double_width=True)
                 printer.text("Vielen Dank für Ihre \nBestellung!\n")
 
@@ -363,17 +363,17 @@ class Queuemanager:
 
             # Notes
             printer.set(align="center", invert=True, bold=True, double_height=True, double_width=True)
-            printer.text(f"\n\n{notes}\n\n") if notes else printer.text("\n")
+            printer.text(f"\n\n{notes}\n\n") if notes else printer.text("")
 
             printer.set(align="center")
 
             # aux Infos
             printer.set(align="left", invert=False, normal_textsize=True)
-            printer.text(f"\n\nBestellzeit: {order.get('created_at', 'Unbekannt')}\n")
+            printer.text(f"\nBestellzeit: {order.get('created_at', 'Unbekannt')}\n")
             printer.text(f"customer: {order.get('customer_id', 'Unbekannt')}\n")
 
             # Cut and buzzer
-            printer.ln(5)
+            printer.ln(1)
             printer._raw(b"\x1D\x56\x42\x00")
             printer.buzzer(times=2, duration=4)
 

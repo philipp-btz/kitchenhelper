@@ -10,3 +10,4 @@ __pycache__/*
 *.log
 /app/data
 .local/**
+kitchen_data/*

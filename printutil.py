@@ -375,7 +375,8 @@ class Queuemanager:
             # Cut and buzzer
             printer.ln(1)
             printer._raw(b"\x1D\x56\x42\x00")
-            printer.buzzer(times=2, duration=4)
+            if os.environ.get("kitchen_buzzer", "False") == "True":
+                printer.buzzer(times=2, duration=4)
 
             return True
 

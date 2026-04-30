@@ -21,4 +21,4 @@ RUN uv sync
 EXPOSE 80
 
 # Command to run the app
-CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:80", "wsgi:application"]
+CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:80", "--workers", "9", "--timeout", "30", "wsgi:application"]

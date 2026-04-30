@@ -277,7 +277,7 @@ class Queuemanager:
 
                 # Head
                 printer.set(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
-                printer.image("static/icon_montageservice.png", center=False)
+                printer.image("static/icon_beifallers.png", center=False)
                 time.sleep(0.5)  # Short delay to ensure the image is processed before printing text
                 printer.text(f"\nNr: {order_no}\n\n")
 
@@ -301,7 +301,7 @@ class Queuemanager:
 
                 # TODO wenn es eine webseite gibt, hier Qr Code
                 printer.set(align="center")
-                printer.qr("https://www.youtube.com/watch?v=dQw4w9WgXcQ", size=5)
+                printer.qr("https://share.google/97GUBhxCRPvn9ZpVY", size=5) #TODO Webseite
                 printer.set(align="center", invert=False, bold=True, double_height=False, double_width=True)
                 printer.text("Vielen Dank für Ihre \nBestellung!\n")
 

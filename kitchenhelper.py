@@ -3,6 +3,7 @@ import os
 import sqlite3
 import datetime
 import logging
+import time
 import dotenv
 from typing import Any, Dict, List, Optional, cast
 import shutil
@@ -23,8 +24,20 @@ def set_menu_name(new) -> None:
     return
 
 
+_menu_path_cache: str = ""
+_menu_path_loaded_at: float = 0.0
+
 def get_menu_path():
-    return os.environ.get("KITCHENHELPER_MENU_PATH", ".defaults/backup_menu.json")
+    global _menu_path_cache, _menu_path_loaded_at
+    if time.time() - _menu_path_loaded_at > 60:
+        try:
+            with open(".local/user_settings/current_menu_path.json", "r", encoding="utf-8") as f:
+                _menu_path_cache = json.load(f).get("KITCHENHELPER_MENU_PATH", ".defaults/backup_menu.json")
+            _menu_path_loaded_at = time.time()
+        except Exception:
+            if not _menu_path_cache:
+                _menu_path_cache = os.environ.get("KITCHENHELPER_MENU_PATH", ".defaults/backup_menu.json")
+    return _menu_path_cache
 
 
 def setup_folders():

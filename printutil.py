@@ -25,6 +25,8 @@ class Queuemanager:
         self._printer = None
         self._worker_thread = threading.Thread(target=self._worker, daemon=True)
         self._uuid = uuid.uuid4()
+        self._settings_cache: dict = {}
+        self._settings_loaded_at: float = 0.0
 
         # WHERE String configuration
         if self.printer_name == "customer":
@@ -39,6 +41,16 @@ class Queuemanager:
             self.UPDATE_string = "UPDATE orders SET printed_kitchen = 1 WHERE order_number = ?"
 
         self._worker_thread.start()
+
+    def _get_settings(self) -> dict:
+        """Return cached settings, refreshing from disk at most once per minute."""
+        if time.time() - self._settings_loaded_at > 60:
+            try:
+                self._settings_cache = kh.load_settings()
+                self._settings_loaded_at = time.time()
+            except Exception as e:
+                logging.warning(f"Failed to reload settings: {e}")
+        return self._settings_cache
 
     @property
     def printer(self):
@@ -266,7 +278,8 @@ class Queuemanager:
             notes = order.get("notes", "")
             items = order.get("items", [])
 
-            if os.environ["print_customer_double"] == "True":
+            settings = self._get_settings()
+            if settings.get("print_customer_double", False):
                 receipt_count = 2
             else:
                 receipt_count = 1
@@ -314,7 +327,7 @@ class Queuemanager:
                 # Cut
                 printer._raw(b"\x1D\x56\x42\x00")
 
-            if os.environ["print_extra_order_nr"] == "True":
+            if settings.get("print_extra_order_nr", False):
                 printer.set_with_default(font="a", height=2, width=3, custom_size=True, align="center", bold=True, smooth=True)
                 printer.text(f"\n\n\n\nNr: {order_no}\n\n\n\n\n")
                 printer._raw(b"\x1D\x56\x42\x00")
@@ -376,7 +389,7 @@ class Queuemanager:
             # Cut and buzzer
             printer.ln(4)
             printer._raw(b"\x1D\x56\x42\x00")
-            if os.environ.get("kitchen_buzzer", "False") == "True":
+            if self._get_settings().get("kitchen_buzzer", False):
                 printer.buzzer(times=2, duration=4)
 
             return True

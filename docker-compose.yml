@@ -1,20 +1,31 @@
 
 services:
-  kitchen-app:
-    # 1. THE IMAGE
-    image: philippbtz/kitchen-helper:latest
 
-    # 2. THE PORTS
+  # Handles all HTTP traffic. Multiple workers for concurrency.
+  # Does NOT connect to printers — printer_service owns those connections.
+  web:
+    image: philippbtz/kitchen-helper:latest
     ports:
       - "80:80"
-
-    # 3. THE STORAGE (PERSISTENCE)
     volumes:
       - ./kitchen_data:/app/.local
-
-    # 4. THE SAFETY NET
     restart: always
-
-    # 5. ENVIRONMENT VARIABLES
     environment:
       - PRODUCTION=true
+      - DISABLE_PRINTER_MANAGER=true
+      - 'KITCHENHELPER_PRINTER_DICT={"customer": "192.168.8.188", "1": "192.168.8.187", "2": "192.168.8.189"}'
+      - KITCHENHELPER_PRINTER_MODE=Thermo
+    command: uv run gunicorn --bind 0.0.0.0:80 --workers 4 --timeout 30 wsgi:application
+
+  # Single process that owns all TCP connections to thermal printers.
+  # Polls the shared SQLite DB and prints new orders.
+  printer-service:
+    image: philippbtz/kitchen-helper:latest
+    volumes:
+      - ./kitchen_data:/app/.local
+    restart: always
+    environment:
+      - PRODUCTION=true
+      - 'KITCHENHELPER_PRINTER_DICT={"customer": "192.168.8.188", "1": "192.168.8.187", "2": "192.168.8.189"}'
+      - KITCHENHELPER_PRINTER_MODE=Thermo
+    command: uv run python printer_service.py

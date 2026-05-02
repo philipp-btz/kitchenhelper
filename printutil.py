@@ -125,10 +125,11 @@ class Queuemanager:
         time_checkpoint = time.time()
         while not self._stop_event.is_set():
             if time.time() - time_checkpoint > 20:
-                #self.printer.text(" ")
-                self.printer.set_with_default()
+                try:
+                    self.printer.set_with_default()
+                except Exception as e:
+                    logging.warning(f"Keepalive failed for {self.printer_name}: {e}")
                 time_checkpoint = time.time()
-                #print(f"{datetime.datetime.now()} PRINTER keepalive check; by {self.printer_name}")
             job = None
             db_path = kh.get_db_path()
             with self.lock:
@@ -373,7 +374,7 @@ class Queuemanager:
             printer.text(f"customer: {order.get('customer_id', 'Unbekannt')}\n")
 
             # Cut and buzzer
-            printer.ln(1)
+            printer.ln(4)
             printer._raw(b"\x1D\x56\x42\x00")
             if os.environ.get("kitchen_buzzer", "False") == "True":
                 printer.buzzer(times=2, duration=4)

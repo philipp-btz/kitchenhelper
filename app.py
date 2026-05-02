@@ -50,7 +50,7 @@ printer_manager_dict = {}
 
 # Only initialize printer managers in the main Flask worker process
 # to avoid spawning multiple threads when Flask's reloader is active.
-if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or os.environ.get('PRODUCTION'):
+if not os.environ.get('DISABLE_PRINTER_MANAGER') and (os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or os.environ.get('PRODUCTION')):
     for key in config.get("printer_dict", {}):
         print(f"Creating printer manager for key: {key}")
         printer_mode = os.environ.get("KITCHENHELPER_PRINTER_MODE", "File")

@@ -103,6 +103,20 @@ Receipt formatting is separated into `receipts.py` — `QueueManager` calls form
 - `print_extra_order_nr` — print a large order number slip after the customer receipt
 - `kitchen_buzzer` — trigger printer buzzer after kitchen print
 
+## Dynamic Printer Configuration
+
+The number of printers is fully dynamic, driven by `KITCHENHELPER_PRINTER_DICT` in the environment:
+
+```
+KITCHENHELPER_PRINTER_DICT={"kitchen1":"192.168.1.10","kitchen2":"192.168.1.11","customer":"192.168.1.12"}
+```
+
+`config.py` parses this at startup and exposes the printer names (keys) to the rest of the app.
+
+**Menu editor integration:** When editing a menu item, the printer assignment dropdown is populated from the live printer names — not hardcoded values. If 5 printers are configured, the dropdown shows 5 options. If the config changes, the editor reflects it on the next page load.
+
+`menu.py` reads printer names from config when rendering the editor; no printer names are stored in `settings.json` or hardcoded anywhere in templates. Menu items store the printer name as a plain string (e.g. `"kitchen2"`), which is matched against active printer names at order time.
+
 ## Routing
 
 ```

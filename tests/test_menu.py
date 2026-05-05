@@ -5,7 +5,7 @@ import menu
 
 def test_normalize_item_basic():
     raw = {"name": "Burger", "price": 9.5, "extras": ["Cheese"], "printer": "kitchen1"}
-    result = menu.normalize_item(raw, 1)
+    result = menu.normalize_item(raw)
     assert result["name"] == "Burger"
     assert result["price"] == 9.5
     assert result["extras"] == ["Cheese"]
@@ -15,13 +15,13 @@ def test_normalize_item_basic():
 
 def test_normalize_item_name_de_fallback():
     raw = {"name_de": "Schnitzel", "price": 12.0, "extras": [], "printer": "k"}
-    result = menu.normalize_item(raw, 1)
+    result = menu.normalize_item(raw)
     assert result["name"] == "Schnitzel"
 
 
 def test_normalize_item_strips_whitespace():
     raw = {"name": "  Pizza  ", "price": 8.0, "extras": [], "printer": " kitchen1 "}
-    result = menu.normalize_item(raw, 1)
+    result = menu.normalize_item(raw)
     assert result["name"] == "Pizza"
     assert result["printer"] == "kitchen1"
 

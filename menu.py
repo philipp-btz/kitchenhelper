@@ -36,10 +36,10 @@ def list_menu_files() -> list[str]:
 def load_menu(path: str) -> list[dict[str, Any]]:
     with open(path, "r", encoding="utf-8") as f:
         raw = json.load(f)
-    return [normalize_item(it, i + 1) for i, it in enumerate(raw) if isinstance(it, dict)]
+    return [normalize_item(it) for it in raw if isinstance(it, dict)]
 
 
-def normalize_item(raw: dict[str, Any], idx: int) -> dict[str, Any]:
+def normalize_item(raw: dict[str, Any]) -> dict[str, Any]:
     name = raw.get("name") or raw.get("name_de") or raw.get("name_en") or ""
     return {
         "name": str(name).strip(),

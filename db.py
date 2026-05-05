@@ -208,7 +208,10 @@ def aggregate_orders(from_dt: str, to_dt: str) -> dict[str, Any]:
 
 
 def _row_to_order(row: sqlite3.Row) -> dict[str, Any]:
-    items = json.loads(row["items"]) if row["items"] else []
+    try:
+        items = json.loads(row["items"]) if row["items"] else []
+    except (json.JSONDecodeError, ValueError):
+        items = []
     return {
         "order_number": row["order_number"],
         "id": row["id"],

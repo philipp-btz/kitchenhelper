@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, Response
 from fastapi.templating import Jinja2Templates
@@ -27,7 +29,6 @@ async def customer_display(request: Request):
 @router.get("/api/uncooked_orders")
 async def api_uncooked_orders(kitchen: str = "all"):
     orders = db.get_uncooked_orders(kitchen if kitchen != "all" else None)
-    import json
     return Response(
         content=json.dumps(orders, ensure_ascii=False),
         media_type="application/json",

@@ -93,8 +93,10 @@ async def menus_save(
 async def menus_select(menu_file: str = Form("")):
     if not menu_file:
         return RedirectResponse("/menus", status_code=303)
-    menu_path = os.path.join(MENU_DIR, menu_file)
-    config.set_active_menu_path(menu_path)
+    path = menu_module.menu_path(menu_file)
+    if not path:
+        return RedirectResponse("/menus", status_code=303)
+    config.set_active_menu_path(path)
     menu_name = os.path.splitext(menu_file)[0]
     return RedirectResponse(f"/menus?selected={menu_name}", status_code=303)
 

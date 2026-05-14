@@ -1,24 +1,14 @@
-# Use a lightweight Python image
-FROM python:3.14.3-slim
+FROM python:3.11-slim
 
 LABEL authors="philipp"
 
-# Set the working directory inside the container
 WORKDIR /app
 
 COPY . .
 
-# install uv
 RUN pip install uv
+RUN uv sync --no-dev
 
-# Install dependencies
-RUN uv sync
+EXPOSE 8000
 
-
-
-
-# Expose the port Gunicorn will run on
-EXPOSE 80
-
-# Command to run the app
-CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--timeout", "30", "wsgi:application"]
+CMD ["uv", "run", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

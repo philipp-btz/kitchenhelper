@@ -1,175 +1,54 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fertige Bestellungen</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
-    <style>
-      html, body {
-        height: 100%;
-        margin: 0;
-        font-family: sans-serif;
-      }
-      .screen {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        padding: 14px;
-        box-sizing: border-box;
-      }
-      .title {
-        font-size: clamp(42px, 6vw, 72px);
-        text-align: center;
-        margin: 0 0 12px 0;
-      }
-      .title a {
-        color: inherit;
-        text-decoration: none;
-      }
-      .grid-wrap {
-        flex: 1;
-        min-height: 0;
-      }
-
-      .grid-container {
-        height: 100%;
-        display: grid;
-        gap: 12px;
-        grid-auto-flow: column;
-      }
-
-      .tile {
-        box-sizing: border-box;
-        border-radius: 14px;
-        border: 1px solid #d7dfef;
-        background: #fff;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: clamp(34px, 7vw, 76px);
-        font-weight: 800;
-        letter-spacing: 0.02em;
-        min-height: 0;
-      }
-
-      .tile.empty {
-        grid-row: 1 / -1;
-        grid-column: 1 / -1;
-        font-size: 24px;
-        font-weight: 500;
-        color: #556173;
-        background: #f8fbff;
-      }
-
-      @keyframes highlight {
-        0% { transform: scale(1.04); box-shadow: 0 8px 20px rgba(255,153,0,0.2); background: #fff5e8; }
-        100% { transform: none; box-shadow: none; background: #fff; }
-      }
-
-      .tile.new { animation: highlight 1200ms ease-out; border-color: #f0b469; }
-
-      @media (max-width: 700px) {
-        .screen { padding: 10px; }
-        .title { font-size: 40px; margin-bottom: 10px; }
-        .grid-container { gap: 10px; }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="screen">
-      <header>
-        <h1 class="title"><a href="/orders">Bereit zur Abholung</a></h1>
-      </header>
-
-      <section class="grid-wrap">
-        <div id="order-grid" class="grid-container">
-          <div class="tile empty">(Lädt...)</div>
-        </div>
-      </section>
-    </div>
-
-    <script>
-      let prevNums = null;
-      let initial = true;
-
-      function updateGridLayout(itemCount) {
-        const grid = document.getElementById('order-grid');
-        if (itemCount === 0) {
-          grid.style.gridTemplateRows = '1fr';
-          grid.style.gridTemplateColumns = '1fr';
-          return;
-        }
-
-        let cols = 1;
-        let rows = itemCount;
-
-        if (itemCount > 1) {
-          if (itemCount <= 4) {
-             cols = 1;
-             rows = itemCount;
-          } else if (itemCount <= 8) {
-             cols = 2;
-             rows = Math.ceil(itemCount / cols);
-          } else {
-             cols = 3;
-             rows = Math.ceil(itemCount / cols);
-          }
-        }
-
-        grid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-      }
-
-      async function fetchList() {
-        try {
-          const resp = await fetch('/api/cooked_unfulfilled', {headers: {'Accept': 'application/json'}});
-          if (!resp.ok) return;
-          const data = await resp.json();
-          const grid = document.getElementById('order-grid');
-
-          const nums = data && data.order_numbers ? data.order_numbers : [];
-
-          const numsStr = JSON.stringify(nums);
-          const prevNumsStr = JSON.stringify(prevNums);
-
-          if (numsStr !== prevNumsStr) {
-            if (nums.length === 0) {
-              grid.innerHTML = '';
-              const msg = document.createElement('div');
-              msg.className = 'tile empty';
-              msg.textContent = 'Keine fertigen Bestellungen.';
-              grid.appendChild(msg);
-              updateGridLayout(0);
-              prevNums = nums;
-              initial = false;
-              return;
-            }
-
-            updateGridLayout(nums.length);
-            grid.innerHTML = '';
-            nums.forEach(n => {
-              const tile = document.createElement('div');
-              tile.className = 'tile';
-              tile.textContent = n;
-              if (!initial && prevNums && prevNums.indexOf(n) === -1) {
-                tile.classList.add('new');
-                setTimeout(() => tile.classList.remove('new'), 3000);
-              }
-              grid.appendChild(tile);
-            });
-            prevNums = nums;
-          }
-
-          initial = false;
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      fetchList();
-      setInterval(fetchList, 3000);
-    </script>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %}Fertige Bestellungen{% endblock %}
+{% block head %}
+<style>
+  html,body{height:100%;margin:0}
+  .screen{height:100vh;display:flex;flex-direction:column;padding:14px;box-sizing:border-box}
+  .title{font-size:clamp(42px,6vw,72px);text-align:center;margin:0 0 12px}
+  .title a{color:inherit;text-decoration:none}
+  .grid-wrap{flex:1;min-height:0}
+  .grid-container{height:100%;display:grid;gap:12px;grid-auto-flow:column}
+  .tile{box-sizing:border-box;border-radius:14px;border:1px solid #d7dfef;background:#fff;padding:16px;display:flex;align-items:center;justify-content:center;font-size:clamp(34px,7vw,76px);font-weight:800;letter-spacing:0.02em;min-height:0}
+  .tile.empty{grid-row:1/-1;grid-column:1/-1;font-size:24px;font-weight:500;color:#556173;background:#f8fbff}
+  @keyframes highlight{0%{transform:scale(1.04);box-shadow:0 8px 20px rgba(255,153,0,0.2);background:#fff5e8}100%{transform:none;box-shadow:none;background:#fff}}
+  .tile.new{animation:highlight 1200ms ease-out;border-color:#f0b469}
+</style>
+{% endblock %}
+{% block body %}
+<div class="screen">
+  <header><h1 class="title"><a href="/orders">Bereit zur Abholung</a></h1></header>
+  <section class="grid-wrap">
+    <div id="order-grid" class="grid-container"><div class="tile empty">(Lädt...)</div></div>
+  </section>
+</div>
+<script>
+  let prevNums=null,initial=true;
+  function updateGridLayout(n){
+    const g=document.getElementById('order-grid');
+    if(!n){g.style.gridTemplateRows='1fr';g.style.gridTemplateColumns='1fr';return;}
+    let cols=1,rows=n;
+    if(n>4){cols=2;rows=Math.ceil(n/2);}if(n>8){cols=3;rows=Math.ceil(n/3);}
+    g.style.gridTemplateRows='repeat('+rows+',1fr)';
+    g.style.gridTemplateColumns='repeat('+cols+',1fr)';
+  }
+  async function fetchList(){
+    try{
+      const resp=await fetch('/api/cooked_unfulfilled',{headers:{'Accept':'application/json'}});
+      if(!resp.ok)return;
+      const data=await resp.json();
+      const nums=(data&&data.order_numbers)||[];
+      if(JSON.stringify(nums)===JSON.stringify(prevNums)){initial=false;return;}
+      const g=document.getElementById('order-grid');g.innerHTML='';
+      if(!nums.length){updateGridLayout(0);g.innerHTML='<div class="tile empty">Keine fertigen Bestellungen.</div>';prevNums=nums;initial=false;return;}
+      updateGridLayout(nums.length);
+      nums.forEach(n=>{
+        const t=document.createElement('div');t.className='tile';t.textContent=n;
+        if(!initial&&prevNums&&prevNums.indexOf(n)===-1){t.classList.add('new');setTimeout(()=>t.classList.remove('new'),3000);}
+        g.appendChild(t);
+      });
+      prevNums=nums;initial=false;
+    }catch(e){console.error(e);}
+  }
+  fetchList();setInterval(fetchList,3000);
+</script>
+{% endblock %}

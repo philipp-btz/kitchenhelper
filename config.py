@@ -11,7 +11,8 @@ LOCAL_DIR = ".local"
 # Load .env first (user overrides), then fall back to .defaults/default.env.
 # Already-set env vars (e.g. from Docker environment:) are never overridden.
 load_dotenv(".env")
-load_dotenv(os.path.join(LOCAL_DIR, "default.env"))
+load_dotenv(os.path.join(LOCAL_DIR, "local.env"))
+load_dotenv(os.path.join(DEFAULTS_DIR, "default.env"))
 
 
 def setup_local() -> None:
@@ -19,6 +20,7 @@ def setup_local() -> None:
     for src_name, dst_name in [
         ("default_settings.json", "settings.json"),
         ("active_menu.json", "active_menu.json"),
+        ("default.env", "local.env"),
     ]:
         src = os.path.join(DEFAULTS_DIR, src_name)
         dst = os.path.join(LOCAL_DIR, dst_name)

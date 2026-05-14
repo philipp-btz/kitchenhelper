@@ -122,11 +122,18 @@
 const PRINTER_NAMES = {{ printer_names|tojson }};
 const EXISTING_ITEMS = {{ items|tojson }};
 
-function printerOptions(selected) {
-  const none = '<option value="">— kein Drucker —</option>';
-  return none + PRINTER_NAMES.map(p =>
-    `<option value="${p}"${p === selected ? ' selected' : ''}>${p}</option>`
-  ).join('');
+function buildPrinterOptions(selectEl, selected) {
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = '— kein Drucker —';
+  selectEl.appendChild(none);
+  PRINTER_NAMES.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p;
+    opt.textContent = p;
+    if (p === selected) opt.selected = true;
+    selectEl.appendChild(opt);
+  });
 }
 
 function updateSummary(extrasSection) {
@@ -210,7 +217,7 @@ function makeItemCard(item) {
 
   const printerSel = document.createElement('select');
   printerSel.className = 'field-printer';
-  printerSel.innerHTML = printerOptions(item.printer || '');
+  buildPrinterOptions(printerSel, item.printer || '');
 
   const colorLblEl = document.createElement('label');
   colorLblEl.className = 'mobile-lbl';
@@ -247,7 +254,6 @@ function makeItemCard(item) {
 
   const details = document.createElement('details');
   details.className = 'extras-details';
-  details.open = true;
 
   const summary = document.createElement('summary');
   summary.className = 'extras-summary';
@@ -299,7 +305,7 @@ document.getElementById('add-item').addEventListener('click', () => {
   container.appendChild(makeItemCard(null));
 });
 
-document.getElementById('menu-form').addEventListener('submit', () => {
+document.getElementById('menu-form').addEventListener('submit', (ev) => {
   const items = Array.from(document.querySelectorAll('.item-card')).map(card => ({
     name: (card.querySelector('.field-name').value || '').trim(),
     printer: card.querySelector('.field-printer').value || '',
@@ -307,6 +313,11 @@ document.getElementById('menu-form').addEventListener('submit', () => {
     extras: Array.from(card.querySelectorAll('.field-extra'))
       .map(i => i.value.trim()).filter(Boolean),
   })).filter(it => it.name);
+  if (!items.length) {
+    ev.preventDefault();
+    alert('Bitte mindestens ein Item mit Namen eintragen.');
+    return;
+  }
   document.getElementById('items-json').value = JSON.stringify(items);
 });
 </script>

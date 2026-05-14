@@ -23,8 +23,7 @@ async def reports_view(request: Request, from_dt: str = "", to_dt: str = ""):
         from_dt, to_dt = _today_range()
     data = db.aggregate_orders(from_dt, to_dt)
     orders = db.get_orders(from_dt, to_dt)
-    return templates.TemplateResponse("reports.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "reports.html", {
         "data": data,
         "orders": orders,
         "from_dt": from_dt,

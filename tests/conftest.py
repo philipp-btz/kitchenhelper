@@ -1,6 +1,10 @@
 import os
 import shutil
+from pathlib import Path
 import pytest
+
+# Absolute path to the project root (one level above tests/)
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 @pytest.fixture
@@ -16,6 +20,10 @@ def tmp_local(tmp_path, monkeypatch):
         '{"path": ".local/menus/backup_menu.json"}'
     )
     (defaults / "backup_menu.json").write_text("[]")
+
+    # Symlink static and templates so FastAPI can find them after chdir
+    (tmp_path / "static").symlink_to(_PROJECT_ROOT / "static")
+    (tmp_path / "templates").symlink_to(_PROJECT_ROOT / "templates")
 
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("KITCHENHELPER_DB_PATH", str(local / "orders.db"))

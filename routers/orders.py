@@ -22,8 +22,7 @@ async def index(request: Request):
         items = menu_module.load_menu(config.get_active_menu_path())
     except Exception:
         items = []
-    return templates.TemplateResponse("index.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "index.html", {
         "menu": items,
         "menu_name": config.get_active_menu_name(),
     })
@@ -111,8 +110,7 @@ async def fulfilled(order_id: str, request: Request):
 @router.get("/orders")
 async def orders_view(request: Request, from_dt: str = "", to_dt: str = ""):
     orders = db.get_orders(from_dt or None, to_dt or None)
-    return templates.TemplateResponse("orders.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "orders.html", {
         "orders": orders,
         "from_dt": from_dt,
         "to_dt": to_dt,

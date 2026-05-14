@@ -15,15 +15,14 @@ templates = Jinja2Templates(directory="templates")
 async def kitchen_display(request: Request):
     printer_names = config.get_printer_names()
     kitchen_printers = [p for p in printer_names if p != "customer"]
-    return templates.TemplateResponse("kitchen_display.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "kitchen_display.html", {
         "kitchen_printers": kitchen_printers,
     })
 
 
 @router.get("/customer_display")
 async def customer_display(request: Request):
-    return templates.TemplateResponse("customer_display.html", {"request": request})
+    return templates.TemplateResponse(request, "customer_display.html")
 
 
 @router.get("/api/uncooked_orders")

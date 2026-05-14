@@ -13,8 +13,7 @@ SETTING_KEYS = ["print_customer_double", "print_extra_order_nr", "kitchen_buzzer
 @router.get("/settings")
 async def settings_view(request: Request):
     settings = config.load_settings()
-    return templates.TemplateResponse("settings.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "settings.html", {
         "settings": settings,
     })
 

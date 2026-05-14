@@ -17,8 +17,7 @@ async def menus_view(request: Request, selected: str = "", saved: str = ""):
     files = menu_module.list_menu_files()
     menus = [{"file": f, "title": os.path.splitext(f)[0]} for f in files]
     settings = config.load_settings()
-    return templates.TemplateResponse("menu_selector.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "menu_selector.html", {
         "menus": menus,
         "selected": selected,
         "saved": saved,
@@ -44,8 +43,7 @@ async def menus_editor(request: Request, menu_file: str = "", menu_name: str = "
                 error = "Die ausgewählte Menüdatei konnte nicht geladen werden."
         else:
             return RedirectResponse("/menus", status_code=303)
-    return templates.TemplateResponse("menu_editor.html", {
-        "request": request,
+    return templates.TemplateResponse(request, "menu_editor.html", {
         "items": items,
         "menu_name": menu_name,
         "loaded_file": loaded_file,
@@ -149,8 +147,7 @@ async def menus_upload(
         tmp = dest + ".upload"
         with open(tmp, "wb") as f:
             f.write(content)
-        return templates.TemplateResponse("menu_upload_confirm.html", {
-            "request": request,
+        return templates.TemplateResponse(request, "menu_upload_confirm.html", {
             "filename": safe,
         })
 

@@ -3,8 +3,15 @@ import os
 import shutil
 from typing import Any
 
+from dotenv import load_dotenv
+
 DEFAULTS_DIR = ".defaults"
 LOCAL_DIR = ".local"
+
+# Load .env first (user overrides), then fall back to .defaults/default.env.
+# Already-set env vars (e.g. from Docker environment:) are never overridden.
+load_dotenv(".env")
+load_dotenv(os.path.join(LOCAL_DIR, "default.env"))
 
 
 def setup_local() -> None:

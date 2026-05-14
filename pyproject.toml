@@ -1,16 +1,23 @@
 [project]
 name = "kitchenhelper"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.14"
+version = "2.0.0"
+requires-python = ">=3.11"
 dependencies = [
-    "dotenv>=0.9.9",
-    "flask>=3.1.3",
-    "gunicorn>=25.3.0",
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.29",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.9",
     "python-escpos>=3.1",
-    "werkzeug>=3.1.8",
+    "python-dotenv>=1.0",
 ]
 
 [dependency-groups]
-dev = []
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]

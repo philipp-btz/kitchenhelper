@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Berichte{% endblock %}
+{% block body %}
+<div class="wrap stack">
+  <header class="topbar">
+    <h1>Berichte</h1>
+    <a href="/" class="btn">Zurück</a>
+  </header>
+
+  <section class="card stack">
+    <h2>Zeitraum auswählen</h2>
+    <form method="get" action="/reports" class="actions-row" style="flex-wrap:wrap;gap:8px">
+      <label>Von: <input type="datetime-local" name="from_dt" value="{{ from_dt }}"></label>
+      <label>Bis: <input type="datetime-local" name="to_dt" value="{{ to_dt }}"></label>
+      <button class="btn" type="submit">Anzeigen</button>
+      <button class="btn" type="button" onclick="setPreset('today')">Heute</button>
+      <button class="btn" type="button" onclick="setPreset('yesterday')">Gestern</button>
+      <button class="btn" type="button" onclick="setPreset('week')">Diese Woche</button>
+    </form>
+  </section>
+
+  <section class="card stack">
+    <h2>Statistik: {{ data.from }} – {{ data.to }}</h2>
+    {% if data.item_map %}
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px">Gericht</th>
+          <th style="text-align:left;padding:8px">Anzahl</th>
+          <th style="text-align:left;padding:8px">Extras</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, info in data.item_map.items() %}
+        <tr style="border-top:1px solid #e2e8f4">
+          <td style="padding:8px">{{ name }}</td>
+          <td style="padding:8px">{{ info.count }}</td>
+          <td style="padding:8px">
+            {% for ex, qty in info.extras.items() %}{{ qty }}x {{ ex }}{% if not loop.last %}, {% endif %}{% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">Keine Bestellungen im gewählten Zeitraum.</p>
+    {% endif %}
+
+    {% if data.extras_total %}
+    <h3>Extras gesamt</h3>
+    <ul>{% for ex, qty in data.extras_total.items() %}<li>{{ qty }}x {{ ex }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <form method="post" action="/reports/print" style="margin-top:12px">
+      <input type="hidden" name="from_dt" value="{{ from_dt }}">
+      <input type="hidden" name="to_dt" value="{{ to_dt }}">
+      <button class="btn primary" type="submit">Bericht drucken</button>
+    </form>
+  </section>
+
+  <section class="card stack">
+    <h2>Einzelbestellungen im Zeitraum ({{ orders|length }})</h2>
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px">Nr.</th>
+          <th style="text-align:left;padding:8px">Zeit</th>
+          <th style="text-align:left;padding:8px">Items</th>
+          <th style="text-align:left;padding:8px">Notiz</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr style="border-top:1px solid #e2e8f4">
+          <td style="padding:8px">{{ o.order_number }}</td>
+          <td style="padding:8px">{{ o.created_at }}</td>
+          <td style="padding:8px">{% for it in o['items'] %}{{ it.qty }}x {{ it.name }}<br>{% endfor %}</td>
+          <td style="padding:8px">{{ o.notes }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" style="padding:16px;text-align:center;color:#556173">Keine Bestellungen.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+<script>
+  function setPreset(p){
+    const now=new Date();
+    let from,to;
+    if(p==='today'){from=dayStart(now);to=dayEnd(now);}
+    else if(p==='yesterday'){const y=new Date(now);y.setDate(y.getDate()-1);from=dayStart(y);to=dayEnd(y);}
+    else if(p==='week'){const w=new Date(now);w.setDate(w.getDate()-w.getDay());from=dayStart(w);to=dayEnd(now);}
+    document.querySelector('[name=from_dt]').value=toLocal(from);
+    document.querySelector('[name=to_dt]').value=toLocal(to);
+  }
+  function dayStart(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0);}
+  function dayEnd(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate(),23,59,59);}
+  function toLocal(d){const pad=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+</script>
+{% endblock %}

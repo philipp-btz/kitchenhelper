@@ -1,334 +1,195 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bestellungen</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
-    <style>
-      .layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:start}
-      .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-      .dish-btn{min-height:72px;padding:12px;border:1px solid #b7c1d6;border-radius:12px;font-size:16px;font-weight:650;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;touch-action:manipulation}
-      .dish-btn.selected-dish{box-shadow:inset 0 0 0 3px #1f7a1f,0 8px 18px rgba(0,0,0,0.12);transform:translateY(-1px)}
-      .config-panel{position:sticky;top:12px}
-      #selected-area h3{margin:0 0 6px 0}
-      #selected-area{display:none}
-      .extras-wrap{display:flex;flex-wrap:wrap;gap:6px}
-      .extra-btn{min-height:42px;padding:8px 10px;border-radius:999px;border:1px solid #b8c2d8;background:#eef1f8;font-size:15px}
-      .extra-btn.selected{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
-      .qty-row{display:flex;align-items:center;gap:8px}
-      #selected-area #sel-extras{margin-top:6px}
-      #selected-area .qty-row{margin-top:10px}
-      #selected-area .actions-row{margin-top:10px}
-      .qty-val{font-size:18px;min-width:24px;text-align:center}
-      #cart-items{display:flex;flex-direction:column;gap:8px}
-      .cart-item{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px;border:1px solid #e2e8f4;border-radius:10px;background:#fafcff}
-      .cart-text{font-size:15px;line-height:1.35}
-      .cart-actions{display:flex;gap:6px}
-      .small-btn{min-height:38px;padding:6px 10px;font-size:15px}
-      .actions-row{display:flex;gap:8px;flex-wrap:wrap}
-      #notes{margin-top:4px}
-      #toast-container{pointer-events:none}
-      .toast-message{pointer-events:auto}
-      @media (max-width:980px){
-        .layout{grid-template-columns:1fr}
-        .config-panel{position:static}
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap stack">
-      <header class="topbar">
-        <h1>{{ menu_name }}</h1>
-        <div class="actions-row">
-          <a href="/menus" class="btn">Speisekarten Auswahl</a>
-          <a href="/orders" class="btn">Bestellungen</a>
-        </div>
-      </header>
-
-      <div class="layout">
-        <section class="card stack">
-          <div id="menu-grid" class="menu-grid">
-            {% for it in menu %}
-            <button class="dish-btn" data-name="{{ it.name }}" data-extras='{{ it.extras|tojson|e }}' {% if it.bg_color %}style="background: {{ it.bg_color }};"{% endif %}>
-              {{ it.name }}
-            </button>
-            {% endfor %}
-          </div>
-        </section>
-
-        <aside id="config-panel" class="stack config-panel">
-          <section id="selected-area" class="card stack">
-            <h3 id="sel-name"></h3>
-            <div id="sel-extras" class="extras-wrap"></div>
-            <div class="qty-row">
-              <span>Menge:</span>
-              <button id="qty-decr" class="btn small-btn" type="button">−</button>
-              <span id="qty" class="qty-val">1</span>
-              <button id="qty-incr" class="btn small-btn" type="button">+</button>
-            </div>
-            <div class="actions-row">
-              <button id="add-to-cart" class="btn primary" type="button">Zum Bestellkorb hinzufügen</button>
-              <button id="cancel-item" class="btn" type="button">Abbrechen</button>
-            </div>
-          </section>
-
-          <section id="cart" class="card stack">
-            <h3>Aktueller Bestellkorb</h3>
-            <div id="cart-items"></div>
-            <div>
-              <label for="notes">Bestell-Notiz (optional)</label>
-              <input id="notes" placeholder="z. B. ohne Zwiebeln">
-            </div>
-            <div class="actions-row">
-              <button id="send-order" class="btn secondary" type="button">Bestellung absenden</button>
-            </div>
-          </section>
-        </aside>
-      </div>
+{% extends "base.html" %}
+{% block title %}{{ menu_name }}{% endblock %}
+{% block head %}
+<style>
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:start}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .dish-btn{min-height:72px;padding:12px;border:1px solid #b7c1d6;border-radius:12px;font-size:16px;font-weight:650;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;touch-action:manipulation}
+  .dish-btn.selected-dish{box-shadow:inset 0 0 0 3px #1f7a1f,0 8px 18px rgba(0,0,0,0.12);transform:translateY(-1px)}
+  .config-panel{position:sticky;top:12px}
+  #selected-area h3{margin:0 0 6px 0}
+  #selected-area{display:none}
+  .extras-wrap{display:flex;flex-wrap:wrap;gap:6px}
+  .extra-btn{min-height:42px;padding:8px 10px;border-radius:999px;border:1px solid #b8c2d8;background:#eef1f8;font-size:15px}
+  .extra-btn.selected{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
+  .qty-row{display:flex;align-items:center;gap:8px}
+  #selected-area #sel-extras{margin-top:6px}
+  #selected-area .qty-row{margin-top:10px}
+  #selected-area .actions-row{margin-top:10px}
+  .qty-val{font-size:18px;min-width:24px;text-align:center}
+  #cart-items{display:flex;flex-direction:column;gap:8px}
+  .cart-item{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px;border:1px solid #e2e8f4;border-radius:10px;background:#fafcff}
+  .cart-text{font-size:15px;line-height:1.35}
+  .cart-actions{display:flex;gap:6px}
+  .small-btn{min-height:38px;padding:6px 10px;font-size:15px}
+  .actions-row{display:flex;gap:8px;flex-wrap:wrap}
+  #notes{margin-top:4px}
+  #toast-container{pointer-events:none}
+  .toast-message{pointer-events:auto}
+  @media(max-width:980px){.layout{grid-template-columns:1fr}.config-panel{position:static}}
+</style>
+{% endblock %}
+{% block body %}
+<div class="wrap stack">
+  <header class="topbar">
+    <h1>{{ menu_name }}</h1>
+    <div class="actions-row">
+      <a href="/menus" class="btn">Speisekarten Auswahl</a>
+      <a href="/orders" class="btn primary">Bestellungen</a>
     </div>
+  </header>
+  <div class="layout">
+    <section class="card stack">
+      <div id="menu-grid" class="menu-grid">
+        {% for it in menu %}
+        <button class="dish-btn" data-name="{{ it.name }}" data-extras='{{ it.extras|tojson }}'
+          {% if it.bg_color %}style="background:{{ it.bg_color }};"{% endif %}>
+          {{ it.name }}
+        </button>
+        {% endfor %}
+      </div>
+    </section>
+    <aside id="config-panel" class="stack config-panel">
+      <section id="selected-area" class="card stack">
+        <h3 id="sel-name"></h3>
+        <div id="sel-extras" class="extras-wrap"></div>
+        <div class="qty-row">
+          <span>Menge:</span>
+          <button id="qty-decr" class="btn small-btn" type="button">−</button>
+          <span id="qty" class="qty-val">1</span>
+          <button id="qty-incr" class="btn small-btn" type="button">+</button>
+        </div>
+        <div class="actions-row">
+          <button id="add-to-cart" class="btn primary" type="button">Zum Bestellkorb hinzufügen</button>
+          <button id="cancel-item" class="btn" type="button">Abbrechen</button>
+        </div>
+      </section>
+      <section id="cart" class="card stack">
+        <h3>Aktueller Bestellkorb</h3>
+        <div id="cart-items"></div>
+        <div>
+          <label for="notes">Bestell-Notiz (optional)</label>
+          <input id="notes" placeholder="z. B. ohne Zwiebeln">
+        </div>
+        <div class="actions-row">
+          <button id="send-order" class="btn secondary" type="button">Bestellung absenden</button>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>
+<div id="toast-container" aria-live="polite" style="position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:9999"></div>
+<script>
+  const menu = {{ menu|tojson }};
+  const menuGrid = document.getElementById('menu-grid');
+  const selectedArea = document.getElementById('selected-area');
+  const selName = document.getElementById('sel-name');
+  const selExtras = document.getElementById('sel-extras');
+  const qtyEl = document.getElementById('qty');
+  const addToCartBtn = document.getElementById('add-to-cart');
+  const cancelItemBtn = document.getElementById('cancel-item');
+  const cartItemsDiv = document.getElementById('cart-items');
+  const notesInput = document.getElementById('notes');
+  let current = null;
+  let cart = [];
 
-    <div id="toast-container" aria-live="polite" style="position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:9999"></div>
+  function showSelected(name, extras){
+    current = {name, extras: extras||[], qty:1};
+    selName.textContent = name;
+    selExtras.innerHTML = '';
+    (extras||[]).forEach(e=>{
+      const btn=document.createElement('button');
+      btn.type='button';btn.className='extra-btn';btn.dataset.value=e;btn.textContent=e;
+      btn.addEventListener('click',()=>btn.classList.toggle('selected'));
+      selExtras.appendChild(btn);
+    });
+    qtyEl.textContent='1';
+    selectedArea.style.display='block';
+  }
 
-    <script>
-      const menu = {{ menu|tojson }};
-      const menuGrid = document.getElementById('menu-grid');
-      const selectedArea = document.getElementById('selected-area');
-      const selName = document.getElementById('sel-name');
-      const selExtras = document.getElementById('sel-extras');
-      const qtyEl = document.getElementById('qty');
-      const qtyIncr = document.getElementById('qty-incr');
-      const qtyDecr = document.getElementById('qty-decr');
-      const addToCartBtn = document.getElementById('add-to-cart');
-      const cancelItemBtn = document.getElementById('cancel-item');
-      const cartItemsDiv = document.getElementById('cart-items');
-      const sendOrderBtn = document.getElementById('send-order');
-      const notesInput = document.getElementById('notes');
+  menuGrid.addEventListener('click',ev=>{
+    const btn=ev.target.closest('.dish-btn');
+    if(!btn)return;
+    showSelected(btn.dataset.name,JSON.parse(btn.dataset.extras||'[]'));
+    document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish'));
+    btn.classList.add('selected-dish');
+    setContrastForTiles();
+  });
 
-      let current = null;
-      let cart = [];
+  document.getElementById('qty-incr').addEventListener('click',()=>{if(current){current.qty++;qtyEl.textContent=String(current.qty);}});
+  document.getElementById('qty-decr').addEventListener('click',()=>{if(current&&current.qty>1){current.qty--;qtyEl.textContent=String(current.qty);}});
 
-      function showSelected(name, extras){
-        current = {name, extras: extras || [], qty: 1};
-        selName.textContent = name;
-        selExtras.innerHTML = '';
-        if (extras && extras.length){
-          extras.forEach(e => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'extra-btn';
-            btn.dataset.value = e;
-            btn.textContent = e;
-            btn.addEventListener('click', () => btn.classList.toggle('selected'));
-            selExtras.appendChild(btn);
-          });
-        }
-        qtyEl.textContent = '1';
-        selectedArea.style.display = 'block';
-      }
+  cancelItemBtn.addEventListener('click',()=>{
+    selectedArea.style.display='none';current=null;
+    document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish'));
+    setContrastForTiles();
+  });
 
-      menuGrid.addEventListener('click', ev => {
-        const btn = ev.target.closest('.dish-btn');
-        if (!btn) return;
-        const name = btn.dataset.name;
-        const extras = JSON.parse(btn.dataset.extras || '[]');
-        showSelected(name, extras);
-        document.querySelectorAll('.dish-btn').forEach(b => b.classList.remove('selected-dish'));
-        btn.classList.add('selected-dish');
-        setContrastForTiles();
-      });
+  function sameExtras(a,b){a=a||[];b=b||[];if(a.length!==b.length)return false;return a.slice().sort().join('|')===b.slice().sort().join('|');}
 
-      qtyIncr.addEventListener('click', () => {
-        if (!current) return;
-        current.qty++;
-        qtyEl.textContent = String(current.qty);
-      });
+  function renderCart(){
+    cartItemsDiv.innerHTML='';
+    if(!cart.length){cartItemsDiv.innerHTML='<div class="muted">(leer)</div>';return;}
+    cart.forEach((it,idx)=>{
+      const d=document.createElement('div');d.className='cart-item';
+      const txt=document.createElement('div');txt.className='cart-text';
+      txt.textContent=(it.qty>1?it.qty+'x ':'')+it.name+(it.extras&&it.extras.length?' ('+it.extras.join(', ')+')':'');
+      d.appendChild(txt);
+      const actions=document.createElement('div');actions.className='cart-actions';
+      const rem=document.createElement('button');rem.type='button';rem.className='btn small-btn';rem.textContent='−';
+      rem.addEventListener('click',()=>{if(it.qty>1)it.qty--;else cart.splice(idx,1);renderCart();});
+      const add=document.createElement('button');add.type='button';add.className='btn small-btn';add.textContent='+';
+      add.addEventListener('click',()=>{it.qty++;renderCart();});
+      actions.appendChild(rem);actions.appendChild(add);d.appendChild(actions);
+      cartItemsDiv.appendChild(d);
+    });
+  }
 
-      qtyDecr.addEventListener('click', () => {
-        if (!current) return;
-        if (current.qty > 1) current.qty--;
-        qtyEl.textContent = String(current.qty);
-      });
+  addToCartBtn.addEventListener('click',()=>{
+    if(!current)return;
+    const chosen=Array.from(selExtras.querySelectorAll('.extra-btn.selected')).map(b=>b.dataset.value);
+    const found=cart.find(c=>c.name===current.name&&sameExtras(c.extras,chosen));
+    if(found)found.qty+=current.qty;else cart.push({name:current.name,extras:chosen,qty:current.qty});
+    selectedArea.style.display='none';current=null;
+    document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('selected-dish'));
+    setContrastForTiles();renderCart();
+  });
 
-      cancelItemBtn.addEventListener('click', () => {
-        selectedArea.style.display = 'none';
-        current = null;
-        document.querySelectorAll('.dish-btn').forEach(b => b.classList.remove('selected-dish'));
-        setContrastForTiles();
-      });
+  function showToast(msg,type){
+    const c=document.getElementById('toast-container');
+    const el=document.createElement('div');el.className='toast-message';
+    el.style.cssText=`background:${type==='error'?'#ffefef':'#1f2430'};color:${type==='error'?'#7c1111':'#fff'};border:1px solid ${type==='error'?'#f3bcbc':'#2f3b4f'};padding:10px 14px;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,0.16);margin-top:8px;min-width:220px;text-align:center`;
+    el.textContent=msg;c.appendChild(el);
+    setTimeout(()=>{el.style.transition='opacity 250ms';el.style.opacity='0';setTimeout(()=>el.remove(),260);},2600);
+  }
 
-      function sameExtras(a, b){
-        a = a || [];
-        b = b || [];
-        if (a.length !== b.length) return false;
-        return a.slice().sort().join('|') === b.slice().sort().join('|');
-      }
+  document.getElementById('send-order').addEventListener('click',async()=>{
+    if(!cart.length){showToast('Der Bestellkorb ist leer','error');return;}
+    const formData=new FormData();
+    formData.append('items',JSON.stringify(cart.map(c=>({name:c.name,extras:c.extras,qty:c.qty}))));
+    formData.append('notes',notesInput.value||'');
+    try{
+      const resp=await fetch('/order',{method:'POST',body:formData,headers:{'X-Requested-With':'XMLHttpRequest','Accept':'application/json'}});
+      if(resp.ok){
+        const data=await resp.json();
+        cart=[];notesInput.value='';renderCart();
+        showToast('Bestellung aufgenommen (Nr. '+(data.order_number||'?')+')');
+      }else{showToast('Fehler beim Absenden','error');}
+    }catch(e){showToast('Netzwerkfehler','error');}
+  });
 
-      function renderCart(){
-        cartItemsDiv.innerHTML = '';
-        if (!cart.length){
-          cartItemsDiv.innerHTML = '<div class="muted">(leer)</div>';
-          return;
-        }
-        cart.forEach((it, idx) => {
-          const d = document.createElement('div');
-          d.className = 'cart-item';
+  function parseRgb(v){const m=v.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);return m?[+m[1],+m[2],+m[3]]:null;}
+  function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255];}
+  function luminance(r,g,b){return 0.2126*c(r)+0.7152*c(g)+0.0722*c(b);function c(v){v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);}}
+  function contrastRatio(l1,l2){const a=Math.max(l1,l2),b=Math.min(l1,l2);return(a+0.05)/(b+0.05);}
+  function setContrastForTiles(){
+    document.querySelectorAll('.dish-btn').forEach(btn=>{
+      const s=getComputedStyle(btn);let rgb=parseRgb(s.backgroundColor);
+      if(!rgb){const m=(btn.getAttribute('style')||'').match(/background:\s*([^;]+)/i);if(m&&m[1].trim().startsWith('#'))rgb=hexToRgb(m[1].trim());}
+      if(rgb){const lum=luminance(...rgb);const cw=contrastRatio(1,lum),cb=contrastRatio(lum,0);btn.style.color=cw>=cb?'#fff':'#000';}
+    });
+  }
 
-          const txt = document.createElement('div');
-          txt.className = 'cart-text';
-          txt.textContent = (it.qty > 1 ? it.qty + 'x ' : '') + it.name + (it.extras && it.extras.length ? ' (' + it.extras.join(', ') + ')' : '');
-          d.appendChild(txt);
-
-          const actions = document.createElement('div');
-          actions.className = 'cart-actions';
-
-          const rem = document.createElement('button');
-          rem.type = 'button';
-          rem.className = 'btn small-btn';
-          rem.textContent = '−';
-          rem.addEventListener('click', () => {
-            if (it.qty > 1) it.qty--;
-            else cart.splice(idx, 1);
-            renderCart();
-          });
-
-          const add = document.createElement('button');
-          add.type = 'button';
-          add.className = 'btn small-btn';
-          add.textContent = '+';
-          add.addEventListener('click', () => {
-            it.qty++;
-            renderCart();
-          });
-
-          actions.appendChild(rem);
-          actions.appendChild(add);
-          d.appendChild(actions);
-          cartItemsDiv.appendChild(d);
-        });
-      }
-
-      addToCartBtn.addEventListener('click', () => {
-        if (!current) return;
-        const chosenElems = selExtras.querySelectorAll('.extra-btn.selected');
-        const chosen = Array.from(chosenElems).map(b => b.dataset.value);
-        const found = cart.find(c => c.name === current.name && sameExtras(c.extras, chosen));
-        if (found) found.qty += current.qty;
-        else cart.push({name: current.name, extras: chosen, qty: current.qty});
-        selectedArea.style.display = 'none';
-        current = null;
-        document.querySelectorAll('.dish-btn').forEach(b => b.classList.remove('selected-dish'));
-        setContrastForTiles();
-        renderCart();
-      });
-
-      function showToast(message, type){
-        const container = document.getElementById('toast-container');
-        const msg = document.createElement('div');
-        msg.className = 'toast-message';
-        msg.style.background = type === 'error' ? '#ffefef' : '#1f2430';
-        msg.style.color = type === 'error' ? '#7c1111' : '#fff';
-        msg.style.border = type === 'error' ? '1px solid #f3bcbc' : '1px solid #2f3b4f';
-        msg.style.padding = '10px 14px';
-        msg.style.borderRadius = '10px';
-        msg.style.boxShadow = '0 4px 14px rgba(0,0,0,0.16)';
-        msg.style.marginTop = '8px';
-        msg.style.minWidth = '220px';
-        msg.style.textAlign = 'center';
-        msg.textContent = message;
-        container.appendChild(msg);
-        setTimeout(() => {
-          msg.style.transition = 'opacity 250ms';
-          msg.style.opacity = '0';
-          setTimeout(() => msg.remove(), 260);
-        }, 2600);
-      }
-
-      sendOrderBtn.addEventListener('click', async () => {
-        if (!cart.length){
-          showToast('Der Bestellkorb ist leer', 'error');
-          return;
-        }
-        const items = cart.map(c => ({name: c.name, extras: c.extras, qty: c.qty}));
-        const formData = new FormData();
-        formData.append('items', JSON.stringify(items));
-        formData.append('notes', notesInput.value || '');
-        try{
-          const resp = await fetch('/order', {method: 'POST', body: formData, headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}});
-          if (resp.ok){
-            const data = await resp.json();
-            cart = [];
-            notesInput.value = '';
-            renderCart();
-            const orderNumber = (data.order_number !== undefined && data.order_number !== null) ? data.order_number : '?';
-            showToast('Bestellung aufgenommen (Nr. ' + orderNumber + ')');
-          } else {
-            showToast('Fehler beim Absenden der Bestellung', 'error');
-          }
-        } catch (e){
-          console.error(e);
-          showToast('Netzwerkfehler beim Absenden', 'error');
-        }
-      });
-
-      function parseRgb(value){
-        const m = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-        if (m) return [parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10)];
-        return null;
-      }
-
-      function hexToRgb(hex){
-        hex = hex.replace('#', '');
-        if (hex.length === 3) hex = hex.split('').map(h => h + h).join('');
-        const num = parseInt(hex, 16);
-        return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
-      }
-
-      function luminance(r, g, b){
-        const a = [r, g, b].map(v => {
-          v = v / 255;
-          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-        });
-        return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
-      }
-
-      function contrastRatio(l1, l2){
-        const a = Math.max(l1, l2);
-        const b = Math.min(l1, l2);
-        return (a + 0.05) / (b + 0.05);
-      }
-
-      function setContrastForTiles(){
-        document.querySelectorAll('.dish-btn').forEach(btn => {
-          const style = getComputedStyle(btn);
-          let rgb = parseRgb(style.backgroundColor);
-          if (!rgb){
-            const inline = btn.getAttribute('style') || '';
-            const m = inline.match(/background:\s*([^;]+);?/i);
-            if (m){
-              const val = m[1].trim();
-              if (val.startsWith('#')) rgb = hexToRgb(val);
-            }
-          }
-          if (rgb){
-            const lum = luminance(rgb[0], rgb[1], rgb[2]);
-            const contrastWithWhite = contrastRatio(1.0, lum);
-            const contrastWithBlack = contrastRatio(lum, 0.0);
-            const chosen = contrastWithWhite >= contrastWithBlack ? '#fff' : '#000';
-            btn.style.color = chosen;
-            const bestContrast = Math.max(contrastWithWhite, contrastWithBlack);
-            if (bestContrast < 4.5){
-              const shadowColor = chosen === '#fff' ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.45)';
-              btn.style.textShadow = '0 1px 1px ' + shadowColor;
-            } else {
-              btn.style.textShadow = '';
-            }
-          }
-        });
-      }
-
-      renderCart();
-      setContrastForTiles();
-    </script>
-  </body>
-</html>
+  renderCart();setContrastForTiles();
+</script>
+{% endblock %}

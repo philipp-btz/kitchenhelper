@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote
 
 from fastapi import APIRouter, Form, Request, UploadFile
 from fastapi.responses import RedirectResponse
@@ -61,30 +62,31 @@ async def menus_save(
     import json
     menu_name = menu_name.strip()
     if not menu_name:
-        return RedirectResponse(f"/menus/editor?menu_file={loaded_file}&error=Bitte+einen+Menü-Namen+angeben.", status_code=303)
+        return RedirectResponse(f"/menus/editor?menu_file={quote(loaded_file)}&error=Bitte+einen+Menü-Namen+angeben.", status_code=303)
 
     safe_name = menu_module.secure_name(menu_name)
     if not safe_name:
-        return RedirectResponse(f"/menus/editor?menu_file={loaded_file}&error=Ungültiger+Menü-Name.", status_code=303)
+        return RedirectResponse(f"/menus/editor?menu_file={quote(loaded_file)}&error=Ungültiger+Menü-Name.", status_code=303)
     if not safe_name.lower().endswith(".json"):
         safe_name += ".json"
 
     path = menu_module.menu_path(safe_name)
     if not path:
-        return RedirectResponse(f"/menus/editor?menu_file={loaded_file}&error=Ungültiger+Dateiname.", status_code=303)
+        return RedirectResponse(f"/menus/editor?menu_file={quote(loaded_file)}&error=Ungültiger+Dateiname.", status_code=303)
 
     try:
         raw = json.loads(items_json) if items_json.strip() else []
     except Exception:
-        return RedirectResponse(f"/menus/editor?menu_file={loaded_file}&error=Menüdaten+ungültig.", status_code=303)
+        return RedirectResponse(f"/menus/editor?menu_file={quote(loaded_file)}&error=Menüdaten+ungültig.", status_code=303)
 
     items = [menu_module.normalize_item(it) for it in raw if isinstance(it, dict) and it.get("name")]
     if not items:
-        return RedirectResponse(f"/menus/editor?menu_file={loaded_file}&error=Mindestens+ein+Item+mit+Namen+erforderlich.", status_code=303)
+        return RedirectResponse(f"/menus/editor?menu_file={quote(loaded_file)}&error=Mindestens+ein+Item+mit+Namen+erforderlich.", status_code=303)
 
     os.makedirs(MENU_DIR, exist_ok=True)
     menu_module.save_menu(path, items)
-    return RedirectResponse(f"/menus?selected={os.path.splitext(safe_name)[0]}&saved={safe_name}", status_code=303)
+    stem = os.path.splitext(safe_name)[0]
+    return RedirectResponse(f"/menus?selected={quote(stem)}&saved={quote(safe_name)}", status_code=303)
 
 
 @router.post("/menus/select")
@@ -96,7 +98,7 @@ async def menus_select(menu_file: str = Form("")):
         return RedirectResponse("/menus", status_code=303)
     config.set_active_menu_path(path)
     menu_name = os.path.splitext(menu_file)[0]
-    return RedirectResponse(f"/menus?selected={menu_name}", status_code=303)
+    return RedirectResponse(f"/menus?selected={quote(menu_name)}", status_code=303)
 
 
 @router.post("/menus/delete")
@@ -126,7 +128,7 @@ async def menus_upload(
         if replace == "1":
             if os.path.exists(tmp):
                 os.replace(tmp, dest)
-            return RedirectResponse(f"/menus?selected={os.path.splitext(safe)[0]}", status_code=303)
+            return RedirectResponse(f"/menus?selected={quote(os.path.splitext(safe)[0])}", status_code=303)
         else:
             if os.path.exists(tmp):
                 os.remove(tmp)
@@ -153,4 +155,4 @@ async def menus_upload(
 
     with open(dest, "wb") as f:
         f.write(content)
-    return RedirectResponse(f"/menus?selected={os.path.splitext(safe)[0]}", status_code=303)
+    return RedirectResponse(f"/menus?selected={quote(os.path.splitext(safe)[0])}", status_code=303)

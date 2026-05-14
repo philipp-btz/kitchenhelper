@@ -1,160 +1,313 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Speisekarte bearbeiten</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
-    <style>
-      .item{display:grid;grid-template-columns:2fr 120px 160px 2fr auto;gap:10px;align-items:start;padding:12px;border:1px solid #e7ebf3;border-radius:10px;background:#fcfdff}
-      .item label{font-weight:600;font-size:14px}
-      .extras-list{display:flex;flex-direction:column;gap:6px}
-      .extra-row{display:flex;gap:6px;align-items:center}
-      .extra-row input{flex:1}
-      .color-preview{margin-top:6px;height:30px;border-radius:8px;border:1px solid #99a5bf}
-      .btn.small{min-height:34px;margin-top:6px;padding:6px 10px;font-size:14px}
-      @media (max-width:980px){
-        .item{grid-template-columns:1fr}
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap stack">
-      <div class="topbar">
-        <h1>Speisekarte bearbeiten</h1>
-        <a href="/menus" class="btn">Zurück zur Speisekarten-Auswahl</a>
-      </div>
+{% extends "base.html" %}
+{% block title %}Speisekarte bearbeiten{% endblock %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<style>
+  /* ── Shared ── */
+  .item-card {
+    border: 1px solid #d0d8f0; border-radius: 10px;
+    padding: 10px 12px; background: #fcfdff; margin-bottom: 10px;
+    display: flex; flex-direction: column;
+  }
+  .drag-handle {
+    color: #aaa; cursor: grab; font-size: 18px;
+    user-select: none; flex-shrink: 0; line-height: 1;
+  }
+  .drag-handle:active { cursor: grabbing; }
+  .extra-drag-handle {
+    color: #bbb; cursor: grab; font-size: 14px;
+    user-select: none; flex-shrink: 0;
+  }
+  .extra-drag-handle:active { cursor: grabbing; }
+  .field-name {
+    flex: 1; padding: 6px 8px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 14px; min-width: 0;
+  }
+  .field-printer {
+    padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px;
+    font-size: 14px; min-width: 90px; flex-shrink: 0;
+  }
+  .field-bg {
+    width: 38px; height: 32px; padding: 2px;
+    border: 1px solid #ccc; border-radius: 6px; cursor: pointer; flex-shrink: 0;
+  }
+  .btn-danger {
+    background: #fdd; color: #c00; border: 1px solid #f3bcbc;
+    border-radius: 6px; padding: 5px 9px; cursor: pointer; font-size: 13px; flex-shrink: 0;
+  }
+  .btn-add-extra {
+    background: none; border: 1px dashed #aab; border-radius: 6px;
+    padding: 4px 10px; cursor: pointer; font-size: 12px; color: #556; margin-top: 4px;
+  }
+  .extra-row { display: flex; gap: 6px; align-items: center; }
+  .extra-row input {
+    flex: 1; padding: 5px 8px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 14px;
+  }
+  .extras-list { display: flex; flex-direction: column; gap: 5px; }
 
-      {% if error %}
-      <div class="error">{{ error }}</div>
-      {% endif %}
+  /* ── Wide (≥640px): Option C ── */
+  .item-mobile-hdr { display: none; }
+  .mobile-lbl { display: none; }
+  .item-fields { display: flex; align-items: center; gap: 8px; }
+  .item-extras { margin-top: 8px; margin-left: 26px; }
+  .extras-summary {
+    font-size: 12px; font-weight: 600; color: #666;
+    cursor: pointer; user-select: none; list-style: none;
+  }
+  .extras-summary::marker { display: none; }
 
-      <form method="post" action="/menus/save" id="menu-form" class="stack">
-        <section class="card stack">
-          <label for="menu_name"><strong>Name</strong></label>
-          <input id="menu_name" name="menu_name" type="text" value="{{ menu_name }}" placeholder="z. B. Fruehlingsfest_2026" required>
-          <p class="muted">Wird als Dateiname im Ordner <code>.local/menu_list</code> gespeichert.</p>
-          <input type="hidden" name="loaded_file" value="{{ loaded_file }}">
-          <input type="hidden" name="items_json" id="items_json">
-        </section>
+  /* ── Narrow (<640px): Option B ── */
+  @media (max-width: 639px) {
+    .item-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 8px;
+    }
+    .item-mobile-hdr {
+      grid-column: 1 / -1; grid-row: 1;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .wide-drag { display: none; }
+    .wide-del  { display: none; }
+    .item-fields {
+      grid-column: 1; grid-row: 2;
+      flex-direction: column; align-items: flex-start; gap: 6px;
+    }
+    .item-fields .field-name,
+    .item-fields .field-printer { width: 100%; box-sizing: border-box; min-width: 0; }
+    .mobile-lbl {
+      display: block; font-size: 11px; font-weight: 700;
+      color: #666; text-transform: uppercase;
+    }
+    .item-extras { grid-column: 2; grid-row: 2; margin: 0; }
+    /* Always show extras — override UA <details> hiding */
+    .extras-details > summary { display: none; }
+    .extras-details > *:not(summary) { display: block !important; }
+    .extras-list { display: flex !important; flex-direction: column; gap: 5px; }
+  }
+</style>
+{% endblock %}
+{% block body %}
+<div class="wrap stack">
+  <header class="topbar">
+    <h1>Speisekarte bearbeiten</h1>
+    <a href="/menus" class="btn">Zurück</a>
+  </header>
 
-        <section class="card stack">
-          <div class="topbar">
-            <h2>Menü-Items</h2>
-            <button type="button" id="add-item" class="btn">+ Item hinzufügen</button>
-          </div>
-          <div id="items-list" class="stack"></div>
-        </section>
+  {% if error %}<div class="card" style="background:#ffefef;border-color:#f3bcbc">{{ error }}</div>{% endif %}
 
-        <section class="card">
-          <button type="submit" class="btn primary">Speisekarte speichern</button>
-        </section>
-      </form>
-    </div>
+  <form method="post" action="/menus/save" class="stack" id="menu-form">
+    <input type="hidden" name="loaded_file" value="{{ loaded_file }}">
+    <section class="card stack">
+      <label>Menü-Name:
+        <input type="text" name="menu_name" value="{{ menu_name }}" required
+          style="margin-left:8px;padding:6px;border:1px solid #ccc;border-radius:6px">
+      </label>
+    </section>
 
-    <template id="item-template">
-      <div class="item">
-        <div>
-          <label>Name</label>
-          <input class="field-name" type="text" placeholder="Item-Name" required>
-        </div>
-        <div>
-          <label>Drucker</label>
-          <select class="field-printer">
-            <option value="1">1</option>
-            <option value="2">2</option>
-          </select>
-        </div>
-        <div>
-          <label>Farbe</label>
-          <input class="field-bg" type="color" value="#ffffff">
-        </div>
-        <div>
-          <label>Extras</label>
-          <div class="extras-list"></div>
-          <button type="button" class="btn small add-extra">+ Extra</button>
-        </div>
-        <div>
-          <label>&nbsp;</label>
-          <button type="button" class="btn small danger remove-item">Löschen</button>
-        </div>
-      </div>
-    </template>
+    <section class="card stack">
+      <h2>Items</h2>
+      <div id="items-container"></div>
+      <button type="button" id="add-item" class="btn">+ Item hinzufügen</button>
+    </section>
 
-    <script>
-      const existingItems = {{ items|tojson }};
-      const list = document.getElementById('items-list');
-      const tpl = document.getElementById('item-template');
+    <input type="hidden" name="items_json" id="items-json">
+    <button type="submit" class="btn primary">Speichern</button>
+  </form>
+</div>
 
-      function addExtraRow(extrasList, value){
-        const row = document.createElement('div');
-        row.className = 'extra-row';
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'field-extra';
-        input.placeholder = 'z. B. Extra Kaese';
-        input.value = value || '';
-        const remove = document.createElement('button');
-        remove.type = 'button';
-        remove.className = 'btn small danger';
-        remove.textContent = 'X';
-        remove.addEventListener('click', () => row.remove());
-        row.appendChild(input);
-        row.appendChild(remove);
-        extrasList.appendChild(row);
-      }
+<script>
+const PRINTER_NAMES = {{ printer_names|tojson }};
+const EXISTING_ITEMS = {{ items|tojson }};
 
-      function addItemRow(item){
-        const node = tpl.content.cloneNode(true);
-        const row = node.querySelector('.item');
-        row.querySelector('.field-name').value = item?.name || '';
-        row.querySelector('.field-printer').value = String(item?.printer || 1);
-        row.querySelector('.field-bg').value = item?.bg_color || '#ffffff';
-        const extrasList = row.querySelector('.extras-list');
-        const extras = item?.extras || [];
-        if (extras.length){
-          extras.forEach(ex => addExtraRow(extrasList, ex));
-        } else {
-          addExtraRow(extrasList, '');
-        }
-        row.querySelector('.add-extra').addEventListener('click', () => addExtraRow(extrasList, ''));
-        row.querySelector('.remove-item').addEventListener('click', () => row.remove());
-        list.appendChild(row);
-      }
+function printerOptions(selected) {
+  const none = '<option value="">— kein Drucker —</option>';
+  return none + PRINTER_NAMES.map(p =>
+    `<option value="${p}"${p === selected ? ' selected' : ''}>${p}</option>`
+  ).join('');
+}
 
-      if (existingItems.length){
-        existingItems.forEach(addItemRow);
-      } else {
-        addItemRow({name: '', printer: 1, bg_color: '#ffffff', extras: []});
-      }
+function updateSummary(extrasSection) {
+  const summary = extrasSection.querySelector('.extras-summary');
+  if (!summary) return;
+  const count = extrasSection.querySelectorAll('.field-extra').length;
+  summary.textContent = (count > 0 ? '▾' : '▸') + ' Extras (' + count + ')';
+}
 
-      document.getElementById('add-item').addEventListener('click', () => {
-        addItemRow({name: '', printer: 1, bg_color: '#ffffff', extras: []});
-      });
+function makeExtraRow(value) {
+  const div = document.createElement('div');
+  div.className = 'extra-row';
+  const handle = document.createElement('span');
+  handle.className = 'extra-drag-handle';
+  handle.textContent = '⠿';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'field-extra';
+  input.placeholder = 'z. B. ohne Zwiebeln';
+  input.value = value || '';
+  const rm = document.createElement('button');
+  rm.type = 'button';
+  rm.className = 'btn-danger';
+  rm.textContent = '✕';
+  rm.addEventListener('click', () => {
+    const section = div.closest('.item-extras');
+    div.remove();
+    if (section) updateSummary(section);
+  });
+  div.appendChild(handle);
+  div.appendChild(input);
+  div.appendChild(rm);
+  return div;
+}
 
-      document.getElementById('menu-form').addEventListener('submit', (ev) => {
-        const rows = Array.from(document.querySelectorAll('.item'));
-        const items = rows.map((row, idx) => {
-          const extras = Array.from(row.querySelectorAll('.field-extra'))
-            .map(input => (input.value || '').trim())
-            .filter(Boolean);
-          return {
-            id: idx + 1,
-            name: (row.querySelector('.field-name').value || '').trim(),
-            printer: Number(row.querySelector('.field-printer').value || 1),
-            bg_color: row.querySelector('.field-bg').value || '',
-            extras
-          };
-        });
+function makeItemCard(item) {
+  item = item || { name: '', printer: '', bg_color: '#ffffff', extras: [] };
+  const extras = item.extras || [];
+  const card = document.createElement('div');
+  card.className = 'item-card';
 
-        const hasName = items.some(it => it.name);
-        if (!hasName) {
-          ev.preventDefault();
-          alert('Bitte mindestens ein Menü-Item mit Namen eintragen.');
-          return;
-        }
-        document.getElementById('items_json').value = JSON.stringify(items);
-      });
-    </script>
-  </body>
-</html>
+  // ── Mobile-only header (hidden on wide via CSS) ──
+  const mobileHdr = document.createElement('div');
+  mobileHdr.className = 'item-mobile-hdr';
+  const mobileDragHandle = document.createElement('span');
+  mobileDragHandle.className = 'drag-handle';
+  mobileDragHandle.textContent = '⠿';
+  const nameLbl = document.createElement('span');
+  nameLbl.style.cssText = 'font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+  nameLbl.textContent = item.name || 'Neues Item';
+  const mobileDel = document.createElement('button');
+  mobileDel.type = 'button';
+  mobileDel.className = 'btn-danger remove-item';
+  mobileDel.textContent = '✕';
+  mobileHdr.appendChild(mobileDragHandle);
+  mobileHdr.appendChild(nameLbl);
+  mobileHdr.appendChild(mobileDel);
+  card.appendChild(mobileHdr);
+
+  // ── Fields row (wide: flex row; mobile: left column via CSS grid) ──
+  const fieldsRow = document.createElement('div');
+  fieldsRow.className = 'item-fields';
+
+  const wideDrag = document.createElement('span');
+  wideDrag.className = 'drag-handle wide-drag';
+  wideDrag.textContent = '⠿';
+
+  const nameLblEl = document.createElement('label');
+  nameLblEl.className = 'mobile-lbl';
+  nameLblEl.textContent = 'Name';
+
+  const nameInput = document.createElement('input');
+  nameInput.className = 'field-name';
+  nameInput.type = 'text';
+  nameInput.placeholder = 'Name';
+  nameInput.value = item.name || '';
+
+  const printerLblEl = document.createElement('label');
+  printerLblEl.className = 'mobile-lbl';
+  printerLblEl.textContent = 'Drucker';
+
+  const printerSel = document.createElement('select');
+  printerSel.className = 'field-printer';
+  printerSel.innerHTML = printerOptions(item.printer || '');
+
+  const colorLblEl = document.createElement('label');
+  colorLblEl.className = 'mobile-lbl';
+  colorLblEl.textContent = 'Farbe';
+
+  const colorInput = document.createElement('input');
+  colorInput.className = 'field-bg';
+  colorInput.type = 'color';
+  colorInput.value = item.bg_color || '#ffffff';
+
+  const wideDel = document.createElement('button');
+  wideDel.type = 'button';
+  wideDel.className = 'btn-danger remove-item wide-del';
+  wideDel.textContent = '✕';
+
+  fieldsRow.appendChild(wideDrag);
+  fieldsRow.appendChild(nameLblEl);
+  fieldsRow.appendChild(nameInput);
+  fieldsRow.appendChild(printerLblEl);
+  fieldsRow.appendChild(printerSel);
+  fieldsRow.appendChild(colorLblEl);
+  fieldsRow.appendChild(colorInput);
+  fieldsRow.appendChild(wideDel);
+  card.appendChild(fieldsRow);
+
+  // Keep mobile name label in sync with name input
+  nameInput.addEventListener('input', () => {
+    nameLbl.textContent = nameInput.value || 'Neues Item';
+  });
+
+  // ── Extras section (wide: below fields; mobile: right column via CSS grid) ──
+  const extrasSection = document.createElement('div');
+  extrasSection.className = 'item-extras';
+
+  const details = document.createElement('details');
+  details.className = 'extras-details';
+  details.open = true;
+
+  const summary = document.createElement('summary');
+  summary.className = 'extras-summary';
+
+  const extrasList = document.createElement('div');
+  extrasList.className = 'extras-list';
+  extras.forEach(ex => extrasList.appendChild(makeExtraRow(ex)));
+
+  const addExtraBtn = document.createElement('button');
+  addExtraBtn.type = 'button';
+  addExtraBtn.className = 'btn-add-extra';
+  addExtraBtn.textContent = '+ Extra';
+  addExtraBtn.addEventListener('click', () => {
+    extrasList.appendChild(makeExtraRow(''));
+    updateSummary(extrasSection);
+    details.open = true;
+  });
+
+  details.appendChild(summary);
+  details.appendChild(extrasList);
+  details.appendChild(addExtraBtn);
+  extrasSection.appendChild(details);
+  updateSummary(extrasSection);
+  card.appendChild(extrasSection);
+
+  // Wire remove buttons
+  card.querySelectorAll('.remove-item').forEach(btn => {
+    btn.addEventListener('click', () => card.remove());
+  });
+
+  // SortableJS for extras list
+  if (typeof Sortable !== 'undefined') {
+    new Sortable(extrasList, { handle: '.extra-drag-handle', animation: 150 });
+  }
+
+  return card;
+}
+
+const container = document.getElementById('items-container');
+(EXISTING_ITEMS.length ? EXISTING_ITEMS : [null]).forEach(item => {
+  container.appendChild(makeItemCard(item));
+});
+
+if (typeof Sortable !== 'undefined') {
+  new Sortable(container, { handle: '.drag-handle', animation: 150 });
+}
+
+document.getElementById('add-item').addEventListener('click', () => {
+  container.appendChild(makeItemCard(null));
+});
+
+document.getElementById('menu-form').addEventListener('submit', () => {
+  const items = Array.from(document.querySelectorAll('.item-card')).map(card => ({
+    name: (card.querySelector('.field-name').value || '').trim(),
+    printer: card.querySelector('.field-printer').value || '',
+    bg_color: card.querySelector('.field-bg').value || '#ffffff',
+    extras: Array.from(card.querySelectorAll('.field-extra'))
+      .map(i => i.value.trim()).filter(Boolean),
+  })).filter(it => it.name);
+  document.getElementById('items-json').value = JSON.stringify(items);
+});
+</script>
+{% endblock %}

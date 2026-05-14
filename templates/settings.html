@@ -1,36 +1,27 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Einstellungen</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
-  </head>
-  <body>
-    <div class="wrap stack">
-      <header class="topbar">
-        <h1>Einstellungen</h1>
-        <div class="actions-row">
-          <a href="/" class="btn">Zurück</a>
-        </div>
-      </header>
-
-      <section class="card stack">
-        <form action="/update_settings" method="post">
-          <div class="stack">
-            {% for key, value in settings.items() %}
-            <label class="checkbox-label">
-              <input type="checkbox" name="{{ key }}" {% if value %}checked{% endif %}>
-              <span>{{ key.replace('_', ' ') | title }}</span>
-            </label>
-            {% endfor %}
-          </div>
-          <div class="actions-row" style="margin-top: 14px;">
-            <button type="submit" class="btn primary">Anwenden</button>
-            <a href="/settings" class="btn">Verwerfen</a>
-          </div>
-        </form>
-      </section>
-    </div>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %}Einstellungen{% endblock %}
+{% block body %}
+<div class="wrap stack">
+  <header class="topbar">
+    <h1>Einstellungen</h1>
+    <a href="/" class="btn">Zurück</a>
+  </header>
+  <section class="card stack">
+    <form method="post" action="/settings" class="stack">
+      <label style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" name="print_customer_double" {% if settings.get('print_customer_double') %}checked{% endif %}>
+        Kundenbon doppelt drucken
+      </label>
+      <label style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" name="print_extra_order_nr" {% if settings.get('print_extra_order_nr') %}checked{% endif %}>
+        Extra-Bestellnummer-Bon drucken
+      </label>
+      <label style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" name="kitchen_buzzer" {% if settings.get('kitchen_buzzer') %}checked{% endif %}>
+        Küchensummer aktivieren
+      </label>
+      <button class="btn primary" type="submit">Speichern</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

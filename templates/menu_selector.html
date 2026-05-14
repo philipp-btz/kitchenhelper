@@ -1,111 +1,53 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Speisekarte wählen</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
-    <style>
-      .menu-item{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;border:1px solid #e7ebf3;border-radius:10px;background:#fcfdff}
-      .menu-title{font-size:18px;font-weight:700}
-      .menu-actions{display:flex;gap:8px;flex-wrap:wrap}
-      .empty{padding:14px;border:1px dashed #cfd8e7;border-radius:10px;background:#f9fbff}
-      .upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-      .upload-row input{flex:1;min-width:220px}
-      .settings-wrap{display:flex;flex-wrap:wrap;gap:8px}
-      .setting-btn{min-height:42px;padding:8px 12px;border-radius:999px;border:1px solid #b8c2d8;background:#eef1f8;font-size:15px;cursor:pointer}
-      .setting-btn.selected{background:#1f7a1f;color:#fff;border-color:#1f7a1f}
-    </style>
-  </head>
-  <body>
-    <div class="wrap stack">
-      <div class="topbar">
-        <h1>Speisekarte wählen</h1>
-        <a href="/" class="btn">Zurück zur Speisekarte</a>
-      </div>
-      <p class="muted">Wähle eine vorhandene Speisekarte oder erstelle eine neue direkt im Browser.</p>
-
-      <section class="card stack">
-        <div class="topbar">
-          <h2>Verfügbare Speisekarten</h2>
-          <a href="/menus/editor" class="btn primary">+ Neue Speisekarte</a>
-        </div>
-
-        {% if selected %}
-        <div class="ok">Ausgewählte Speisekarte: <strong>{{ selected }}</strong></div>
-        {% endif %}
-        {% if saved %}
-        <div class="ok">Gespeichert: <strong>{{ saved }}</strong></div>
-        {% endif %}
-
-        {% for m in menus %}
-        <div class="menu-item">
-          <div class="menu-title">{{ m.title }}</div>
-          <div class="menu-actions">
-            <form method="post" action="/menus/select">
-              <input type="hidden" name="menu_file" value="{{ m.file }}">
-              <button type="submit" class="btn primary">Auswählen</button>
-            </form>
-            <a href="/menus/editor?menu_file={{ m.file }}" class="btn">Bearbeiten</a>
-            <form method="post" action="/menus/delete" onsubmit="return confirm('Möchten Sie dieses Menü wirklich löschen?');">
-              <input type="hidden" name="menu_file" value="{{ m.file }}">
-              <button type="submit" class="btn danger">Löschen</button>
-            </form>
-          </div>
-        </div>
-        {% endfor %}
-        {% if not menus %}
-        <div class="empty">(keine Menü-Dateien gefunden)</div>
-        {% endif %}
-      </section>
-
-      <section class="card stack">
-        <h2>Speisekarte hochladen</h2>
-        <form method="post" action="/menus/upload" enctype="multipart/form-data">
-          <div class="upload-row">
-            <input type="file" name="menu_file" accept=".json" required>
-            <button type="submit" class="btn">Hochladen</button>
-          </div>
-        </form>
-        <p class="muted">Dateien müssen im <code>.json</code>-Format vorliegen. Bei bestehender Datei wirst du gefragt, ob sie ersetzt werden soll.</p>
-      </section>
-
-      <section class="card stack">
-        <h2>System Einstellungen</h2>
-        <form id="settings-form" action="/update_settings" method="post">
-          <div class="settings-wrap">
-            {% for key, value in settings.items() %}
-            <button type="button" class="setting-btn {% if value %}selected{% endif %}" data-key="{{ key }}">
-              {{ key.replace('_', ' ') | title }}
-            </button>
-            <input type="hidden" name="{{ key }}" id="input-{{ key }}" value="{{ 'on' if value else 'off' }}">
-            {% endfor %}
-          </div>
-          <div class="actions-row" style="margin-top: 14px;">
-            <button type="submit" class="btn primary">Anwenden</button>
-            <a href="/menus" class="btn">Verwerfen</a>
-          </div>
-        </form>
-      </section>
+{% extends "base.html" %}
+{% block title %}Speisekarten{% endblock %}
+{% block body %}
+<div class="wrap stack">
+  <header class="topbar">
+    <h1>Speisekarten</h1>
+    <div class="actions-row">
+      <a href="/" class="btn">Zurück</a>
+      <a href="/settings" class="btn">Einstellungen</a>
     </div>
+  </header>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const settingsForm = document.getElementById('settings-form');
-        if (settingsForm) {
-          settingsForm.addEventListener('click', (event) => {
-            const target = event.target;
-            if (target.classList.contains('setting-btn')) {
-              target.classList.toggle('selected');
-              const key = target.dataset.key;
-              const hiddenInput = document.getElementById('input-' + key);
-              if (hiddenInput) {
-                hiddenInput.value = target.classList.contains('selected') ? 'on' : 'off';
-              }
-            }
-          });
-        }
-      });
-    </script>
-  </body>
-</html>
+  {% if saved %}<div class="card" style="background:#e8f5e9;border-color:#4caf50">„{{ saved }}" gespeichert.</div>{% endif %}
+  {% if selected %}<div class="card" style="background:#e3f2fd;border-color:#2196f3">Aktive Speisekarte: <strong>{{ selected }}</strong></div>{% endif %}
+
+  <section class="card stack">
+    <h2>Neue Speisekarte hochladen</h2>
+    <form method="post" action="/menus/upload" enctype="multipart/form-data" class="actions-row">
+      <input type="file" name="menu_file" accept=".json" required>
+      <button class="btn primary" type="submit">Hochladen</button>
+    </form>
+  </section>
+
+  <section class="card stack">
+    <h2>Neue Speisekarte erstellen</h2>
+    <a href="/menus/editor" class="btn">Neue Speisekarte</a>
+  </section>
+
+  <section class="card stack">
+    <h2>Vorhandene Speisekarten</h2>
+    {% if not menus %}
+    <p class="muted">Keine Speisekarten vorhanden.</p>
+    {% else %}
+    {% for m in menus %}
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #e2e8f4">
+      <span style="flex:1;font-weight:{% if m.title == active_menu_name %}bold{% else %}normal{% endif %}">
+        {{ m.title }}{% if m.title == active_menu_name %} ✓{% endif %}
+      </span>
+      <form method="post" action="/menus/select" style="display:inline">
+        <input type="hidden" name="menu_file" value="{{ m.file }}">
+        <button class="btn small-btn" type="submit">Aktivieren</button>
+      </form>
+      <a href="/menus/editor?menu_file={{ m.file }}" class="btn small-btn">Bearbeiten</a>
+      <form method="post" action="/menus/delete" style="display:inline" onsubmit="return confirm('Löschen?')">
+        <input type="hidden" name="menu_file" value="{{ m.file }}">
+        <button class="btn small-btn" type="submit" style="color:#c0392b">Löschen</button>
+      </form>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -74,7 +74,7 @@
         <tr style="border-top:1px solid #e2e8f4">
           <td style="padding:8px">{{ o.order_number }}</td>
           <td style="padding:8px">{{ o.created_at }}</td>
-          <td style="padding:8px">{% for it in o.items %}{{ it.qty }}x {{ it.name }}<br>{% endfor %}</td>
+          <td style="padding:8px">{% for it in o['items'] %}{{ it.qty }}x {{ it.name }}<br>{% endfor %}</td>
           <td style="padding:8px">{{ o.notes }}</td>
         </tr>
         {% else %}

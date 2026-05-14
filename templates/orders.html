@@ -1,134 +1,69 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bestellungen</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
-    <style>
-      .actions{display:flex;gap:8px;flex-wrap:wrap}
-      .order-list{display:flex;flex-direction:column;gap:12px}
-      .order-card{border:1px solid #dbe2f0;border-radius:12px;background:#fff;padding:12px}
-      .order-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:flex-start}
-      .order-no{font-size:24px;font-weight:800;line-height:1}
-      .items{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-      .item-row{padding:9px;border:1px solid #e5eaf5;border-radius:10px;background:#fafcff}
-      .notes{margin-top:10px}
-      .status-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-      .status-block{padding:8px 10px;border-radius:10px;border:1px solid #d6deee;background:#f5f8ff}
-      .order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-      .order-actions form{display:inline}
-      .empty{padding:14px;border:1px dashed #cfd8e7;border-radius:10px;background:#f9fbff}
-    </style>
-  </head>
-  <body>
-    <div class="wrap stack">
-      <header class="topbar">
-        <h1>Aktuelle Bestellungen</h1>
-        <div class="actions">
-          <a href="/" class="btn primary">Neue Bestellung</a>
-          <a href="/customer_display" class="btn">Kundenanzeige</a>
-          <a href="/kitchen_display" class="btn">Küchenanzeige</a>
-          <a href="/report/daily" class="btn warning">Tagesreport Drucken</a>
-        </div>
-      </header>
-
-      <section class="order-list">
-        {% for o in orders %}
-        <article class="order-card">
-          <div class="order-head">
-            <div>
-              <div class="order-no">#{{ o.order_number }}</div>
-              <div class="muted">{{ o.created_at }}</div>
-            </div>
-          </div>
-
-          <div class="items">
-            {% for it in o['items'] %}
-            <div class="item-row">
-              {% if it['qty'] and it['qty'] > 1 %}{{ it['qty'] }}x {% endif %}{{ it['name'] }}{% if it['extras'] %} ({{ it['extras'] | join(', ') }}){% endif %}
-            </div>
-            {% endfor %}
-          </div>
-
-          {% if o.notes %}
-          <div class="notes">
-            <strong>Notiz:</strong> {{ o.notes }}
-          </div>
-          {% endif %}
-
-          <div class="status-row">
-            <div class="status-block">Gekocht: <span class="status-cooked">{{ o.cooked or '' }}</span></div>
-            <div class="status-block">Abgeholt: <span class="status-fulfilled">{{ o.fulfilled or '' }}</span></div>
-          </div>
-
-          <div class="order-actions">
-            <form method="post" action="/cooked/{{ o.id }}" class="cooked-form">
-              <button type="submit" class="btn secondary">GEKOCHT</button>
-            </form>
-            <form method="post" action="/fulfilled/{{ o.id }}" class="fulfilled-form">
-              <button type="submit" class="btn primary">ABGEHOLT</button>
-            </form>
-            <a href="/order/print_customer/{{ o.order_number }}" target="_parent" class="btn print-btn">Kundenbon</a>
-            <a href="/order/print_kitchen/{{ o.order_number }}" target="_parent" class="btn print-btn">Küchenbon</a>
-          </div>
-        </article>
-        {% else %}
-        <div class="empty">Keine Bestellungen</div>
-        {% endfor %}
-      </section>
+{% extends "base.html" %}
+{% block title %}Bestellungen{% endblock %}
+{% block body %}
+<div class="wrap stack">
+  <header class="topbar">
+    <h1>Bestellungen</h1>
+    <div class="actions-row">
+      <a href="/" class="btn">Neue Bestellung</a>
+      <a href="/reports" class="btn">Berichte</a>
     </div>
+  </header>
 
-    <script>
-      document.querySelectorAll('.fulfilled-form').forEach(form => {
-        form.addEventListener('submit', async ev => {
-          ev.preventDefault();
-          const action = form.getAttribute('action');
-          try {
-            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}});
-            if (!resp.ok) return;
-            const data = await resp.json();
-            if (data && data.fulfilled !== undefined) {
-              const card = form.closest('.order-card');
-              const slot = card ? card.querySelector('.status-fulfilled') : null;
-              if (slot) slot.textContent = data.fulfilled && data.fulfilled !== '--' ? data.fulfilled : '';
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        });
-      });
+  <section class="card stack">
+    <form method="get" action="/orders" class="actions-row">
+      <label>Von: <input type="datetime-local" name="from_dt" value="{{ from_dt }}"></label>
+      <label>Bis: <input type="datetime-local" name="to_dt" value="{{ to_dt }}"></label>
+      <button class="btn" type="submit">Filtern</button>
+      <a href="/orders" class="btn">Zurücksetzen</a>
+    </form>
+  </section>
 
-      document.querySelectorAll('.cooked-form').forEach(form => {
-        form.addEventListener('submit', async ev => {
-          ev.preventDefault();
-          const action = form.getAttribute('action');
-          try {
-            const resp = await fetch(action, {method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}});
-            if (!resp.ok) return;
-            const data = await resp.json();
-            if (data && data.cooked !== undefined) {
-              const card = form.closest('.order-card');
-              const slot = card ? card.querySelector('.status-cooked') : null;
-              if (slot) slot.textContent = data.cooked && data.cooked !== '--' ? data.cooked : '';
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        });
-      });
-
-      document.querySelectorAll('.print-btn').forEach(btn => {
-        btn.addEventListener('click', async ev => {
-          ev.preventDefault();
-          const href = btn.getAttribute('href');
-          try {
-            await fetch(href);
-          } catch (e) {
-            console.error(e);
-          }
-        });
-      });
-    </script>
-  </body>
-</html>
+  <section class="card">
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:8px">Nr.</th>
+          <th style="text-align:left;padding:8px">Zeit</th>
+          <th style="text-align:left;padding:8px">Drucker</th>
+          <th style="text-align:left;padding:8px">Items</th>
+          <th style="text-align:left;padding:8px">Notiz</th>
+          <th style="text-align:left;padding:8px">Gekocht</th>
+          <th style="text-align:left;padding:8px">Abgeholt</th>
+          <th style="text-align:left;padding:8px">Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr style="border-top:1px solid #e2e8f4">
+          <td style="padding:8px">{{ o.order_number }}</td>
+          <td style="padding:8px">{{ o.created_at }}</td>
+          <td style="padding:8px">{{ o.kitchen }}</td>
+          <td style="padding:8px">
+            {% for it in o['items'] %}
+            {{ it.qty }}x {{ it.name }}{% if it.extras %} ({{ it.extras|join(', ') }}){% endif %}<br>
+            {% endfor %}
+          </td>
+          <td style="padding:8px">{{ o.notes }}</td>
+          <td style="padding:8px">{{ o.cooked_at or '—' }}</td>
+          <td style="padding:8px">{{ o.fulfilled_at or '—' }}</td>
+          <td style="padding:8px">
+            <div class="actions-row">
+              <a href="/orders/{{ o.order_number }}/export" class="btn small-btn">Export</a>
+              <form method="post" action="/orders/{{ o.order_number }}/print_kitchen" style="display:inline">
+                <button class="btn small-btn" type="submit">🖨 Küche</button>
+              </form>
+              <form method="post" action="/orders/{{ o.order_number }}/print_customer" style="display:inline">
+                <button class="btn small-btn" type="submit">🖨 Kunde</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="padding:16px;text-align:center;color:#556173">Keine Bestellungen.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}

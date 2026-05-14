@@ -15,9 +15,15 @@ def test_index_loads(client):
     assert resp.status_code == 200
 
 
-def test_orders_loads(client):
+def test_orders_loads_with_data(client):
+    import json
+    # Seed an order so the template renders rows (not just the empty branch)
+    items = json.dumps([{"name": "Burger", "qty": 2, "extras": ["Cheese"], "printer": "kitchen"}])
+    client.post("/order", data={"items": items, "notes": "test note"},
+                headers={"X-Requested-With": "XMLHttpRequest"})
     resp = client.get("/orders")
     assert resp.status_code == 200
+    assert b"Burger" in resp.content
 
 
 def test_kitchen_display_loads(client):

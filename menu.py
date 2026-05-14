@@ -43,7 +43,6 @@ def normalize_item(raw: dict[str, Any]) -> dict[str, Any]:
     name = raw.get("name") or raw.get("name_de") or raw.get("name_en") or ""
     return {
         "name": str(name).strip(),
-        "price": float(raw.get("price", 0)),
         "extras": [str(e) for e in (raw.get("extras") or []) if e],
         "printer": str(raw.get("printer", "")).strip(),
         "bg_color": str(raw.get("bg_color", "")).strip(),

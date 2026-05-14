@@ -7,7 +7,7 @@ def test_normalize_item_basic():
     raw = {"name": "Burger", "price": 9.5, "extras": ["Cheese"], "printer": "kitchen1"}
     result = menu.normalize_item(raw)
     assert result["name"] == "Burger"
-    assert result["price"] == 9.5
+    assert "price" not in result
     assert result["extras"] == ["Cheese"]
     assert result["printer"] == "kitchen1"
     assert result["bg_color"] == ""
@@ -51,6 +51,7 @@ def test_load_menu(tmp_local):
     items = menu.load_menu(str(tmp_local / "menus" / "test.json"))
     assert len(items) == 1
     assert items[0]["name"] == "Pizza"
+    assert "price" not in items[0]
 
 
 def test_soft_delete_moves_file(tmp_local):

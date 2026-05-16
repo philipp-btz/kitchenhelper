@@ -2,9 +2,18 @@ import os
 import shutil
 from pathlib import Path
 import pytest
+from fastapi.testclient import TestClient
 
 # Absolute path to the project root (one level above tests/)
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+@pytest.fixture
+def client(tmp_local):
+    """Shared HTTP test client.  Raises on 5xx so failures are visible."""
+    from app import app
+    with TestClient(app) as c:
+        yield c
 
 
 @pytest.fixture

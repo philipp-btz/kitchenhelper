@@ -1,64 +1,68 @@
-```
-***** this is outdated *****
-```
+# KitchenHelper
 
+Bestellaufnahme, Küchenanzeige und Ausgabemanagement für Veranstaltungen mit ESC/POS-Bondrucker-Integration.
 
-
-# KitchenHelper - Bestellaufnahme
-
-### KITCHENHELPER_DB_PATH="/app/data/orders.db"
-
-Kleines Beispiel: Flask-App, die die Speisekarte aus `menu.json` lädt und Bestellungen annimmt.
-
-Schnellstart (venv aktivieren, dann):
+## Schnellstart
 
 ```bash
-pip install -r requirements.txt
-python app.py
+uv sync
+uv run uvicorn app:app --reload
 ```
 
-Öffne dann im Browser `http://localhost:5000`.
+Öffne dann im Browser `http://localhost:8000`.
 
+## Konfiguration
 
-Die Speisekarte ist in der Datei [backup_menu.json](.defaults/backup_menu.json) und kann einfach ausgetauscht oder geändert werden.
+Einstellungen werden über Umgebungsvariablen gesetzt (`.env`-Datei oder Docker `environment:`):
 
-Einstellungen sind in `config.json` konfigurierbar. Standardwerte sind:
+| Variable | Beschreibung | Standard |
+|---|---|---|
+| `KITCHENHELPER_PRINTER_MODE` | `Thermo` (Netzwerkdrucker) oder `Dummy` (Testmodus) | `Dummy` |
+| `KITCHENHELPER_PRINTER_DICT` | JSON-Mapping: Druckername → IP, z.B. `{"kitchen1": "192.168.1.10", "customer": "192.168.1.11"}` | `{}` |
+| `KITCHENHELPER_DB_PATH` | Pfad zur SQLite-Datenbank | `.local/orders.db` |
+| `KITCHENHELPER_HOST` | Bind-Adresse | `0.0.0.0` |
+| `KITCHENHELPER_PORT` | Port | `8000` |
+
+## Docker
+
+```bash
+docker-compose up -d
+```
+
+Oder manuell:
+
+```bash
+docker build -t kitchen-helper .
+docker run -p 8000:8000 -v ./kitchen_data:/app/.local kitchen-helper
+```
+
+Das Docker-Image (`philippbtz/kitchen-helper:latest`) wird automatisch via GitHub Actions gebaut und unterstützt ARM64 (Raspberry Pi) und AMD64.
+
+## Datenspeicherung
+
+Persistente Daten liegen in `.local/` (Docker-Volume: `/app/.local`):
+- `.local/orders.db` — SQLite-Datenbank mit allen Bestellungen
+- `.local/menus/` — Speisekarten als JSON-Dateien
+- `.local/settings.json` — Benutzereinstellungen
+- `.local/active_menu.json` — Aktive Speisekarte
+
+## Speisekarten-Format
+
+Speisekarten sind JSON-Dateien mit einer Liste von Artikeln:
 
 ```json
-{
-	"host": "0.0.0.0",
-	"port": 5099,
-	"debug": true,
-	"menu_path": "menu.json",
-	"db_path": "app/data/orders.db",
-	"auto_print_on_open": true
-}
+[
+  {
+    "name": "Burger",
+    "extras": ["ohne Zwiebeln", "extra Käse"],
+    "printer": "kitchen1",
+    "bg_color": "#f0f0f0"
+  }
+]
 ```
 
-Bestellungen werden in einer eingebetteten SQLite-Datenbank (standard: `orders.db`) im Projektverzeichnis gespeichert.
-Jede Bestellung enthält Metadaten wie `order_number` (autoincrement), `id` (uuid), `created_at`, `extras`, `notes` und `printed`.
-
-Für einfache Backups reicht das Kopieren der angegebenen DB-Datei.
-
-**Production / WSGI**
-
-This project includes a WSGI entrypoint at `wsgi.py` exposing the Flask app as the callable `application`.
-
-- Windows (recommended): install `waitress` and run:
-
-```powershell
-pip install -r requirements.txt
-waitress-serve --listen=*:5099 wsgi:application
-```
-
-- Linux / WSL / container: install `gunicorn` and run:
+## Tests
 
 ```bash
-pip install -r requirements.txt
-gunicorn --bind 0.0.0.0:5099 wsgi:application
+uv run pytest
 ```
-
-Make sure `config.json` has `debug` set to `false` for production and adjust `port`/`host` as needed.
-
-For containers, prefer running with Gunicorn inside the container or using a process manager + reverse proxy (e.g., Nginx).
-
